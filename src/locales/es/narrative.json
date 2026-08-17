@@ -1,0 +1,5 @@
+{
+  "pilot": {
+    "summary": "{{name}}, conocido como {{nickname}}, tiene {{age}} años y pertenece a {{faction}}."
+  }
+}
