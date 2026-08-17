@@ -1,30 +1,30 @@
 # Cicatrices de Acero
 
-Juego de aventura textual sobre la carrera de un piloto de Zoids.
+Text adventure game about the career of a Zoids pilot.
 
-## Requisitos
+## Requirements
 
-- Node.js 20.19 o una versión compatible posterior.
+- Node.js 20.19 or a later compatible version.
 - npm.
 
-El proyecto usa el registro público de npm mediante su archivo `.npmrc`.
+The project uses the public npm registry through its `.npmrc` file.
 
-## Instalación
+## Installation
 
 ```sh
 npm install --registry=https://registry.npmjs.org/
 ```
 
-El parámetro `--registry` también evita que una variable de entorno sustituya el
-registro del proyecto.
+The `--registry` option prevents an environment variable from replacing the
+project registry.
 
-## Desarrollo
+## Development
 
 ```sh
 npm run dev
 ```
 
-## Verificación
+## Verification
 
 ```sh
 npm run typecheck
@@ -34,6 +34,5 @@ npm run test:run
 npm run build
 ```
 
-Usa `npm test` para ejecutar las pruebas en modo interactivo. Usa `npm run
-lint:fix` o `npm run format` para corregir archivos. Usa `npm run preview` para
-servir el build local.
+Run `npm test` to run tests in watch mode. Run `npm run lint:fix` or `npm run
+format` to fix files. Run `npm run preview` to serve the local build.
