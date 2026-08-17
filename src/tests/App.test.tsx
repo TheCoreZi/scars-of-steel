@@ -3,10 +3,13 @@ import { expect, test } from "vitest";
 
 import { App } from "../app/App";
 
-test("shows the game title", () => {
+test("shows the localized introduction", () => {
   render(<App />);
 
   expect(
-    screen.getByRole("heading", { name: "Cicatrices de Acero" }),
+    screen.getByRole("heading", { name: "Scars of Steel" }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText("Your career as a pilot is about to begin."),
   ).toBeInTheDocument();
 });

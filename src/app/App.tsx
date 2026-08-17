@@ -1,8 +1,12 @@
+import { useTranslation } from "react-i18next";
+
 export function App() {
+  const { t } = useTranslation("interface");
+
   return (
     <main>
-      <h1>Cicatrices de Acero</h1>
-      <p>Tu carrera como piloto está a punto de comenzar.</p>
+      <h1>{t("app.title")}</h1>
+      <p>{t("app.introduction")}</p>
     </main>
   );
 }
