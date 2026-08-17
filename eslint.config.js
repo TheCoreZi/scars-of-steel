@@ -26,6 +26,14 @@ export default defineConfig([
     },
     rules: {
       "i18next/no-literal-string": ["error", { mode: "jsx-only" }],
+      "no-restricted-properties": [
+        "error",
+        {
+          message: "Use RandomGenerator instead.",
+          object: "Math",
+          property: "random",
+        },
+      ],
     },
   },
 ]);
