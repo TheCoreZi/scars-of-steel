@@ -12,5 +12,33 @@
   "factions": {
     "guylos": "Imperio de Guylos",
     "helic": "República de Helic"
+  },
+  "pilotCreation": {
+    "badge": "Expediente de piloto desbloqueado",
+    "description": "La configuración del piloto continuará aquí en la próxima actualización de misión.",
+    "title": "Tu carrera comienza ahora"
+  },
+  "welcome": {
+    "badge": "Transmisión de reclutamiento",
+    "callToAction": "Conviértete en leyenda o queda en el olvido.",
+    "colorMode": {
+      "light": "Modo claro"
+    },
+    "description": "En el planeta Zi, más allá de la Vía Láctea, existen Zoids de acero con destacada capacidad de combate.",
+    "facts": {
+      "decisions": "decisiones",
+      "factions": "facciones",
+      "label": "Alcance de la carrera",
+      "paths": "caminos posibles",
+      "wars": "guerra por decidir"
+    },
+    "journey": "En este mundo, cada soldado comienza desde abajo y toma las decisiones que forjarán su camino hasta la cima. Esta es tu historia.",
+    "language": {
+      "en": "Inglés",
+      "es": "Español",
+      "label": "Idioma"
+    },
+    "start": "Inicia tu carrera",
+    "title": "Cicatrices de Acero"
   }
 }
