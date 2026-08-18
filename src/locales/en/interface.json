@@ -12,5 +12,33 @@
   "factions": {
     "guylos": "Guylos Empire",
     "helic": "Helic Republic"
+  },
+  "pilotCreation": {
+    "badge": "Pilot file unlocked",
+    "description": "Pilot configuration will continue here in the next mission update.",
+    "title": "Your career begins now"
+  },
+  "welcome": {
+    "badge": "Pilot recruitment transmission",
+    "callToAction": "Become a legend or fade into obscurity.",
+    "colorMode": {
+      "light": "Light mode"
+    },
+    "description": "On planet Zi, beyond the Milky Way, steel Zoids possess outstanding combat capabilities.",
+    "facts": {
+      "decisions": "decisions",
+      "factions": "factions",
+      "label": "Career scope",
+      "paths": "possible paths",
+      "wars": "war to decide"
+    },
+    "journey": "In this world, every soldier starts at the bottom and makes the decisions that will forge their path to the top. This is your story.",
+    "language": {
+      "en": "English",
+      "es": "Spanish",
+      "label": "Language"
+    },
+    "start": "Begin your career",
+    "title": "Scars of Steel"
   }
 }
