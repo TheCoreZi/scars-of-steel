@@ -1,0 +1,63 @@
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+
+export type ColorMode = "dark" | "light";
+type Language = "en" | "es";
+
+const languages: Language[] = ["en", "es"];
+
+interface AppControlsProps {
+  colorMode: ColorMode;
+  onColorModeChange: (colorMode: ColorMode) => void;
+}
+
+export function AppControls({
+  colorMode,
+  onColorModeChange,
+}: AppControlsProps) {
+  const { i18n, t } = useTranslation("interface");
+
+  useEffect(() => {
+    document.documentElement.lang = i18n.resolvedLanguage ?? "en";
+  }, [i18n.resolvedLanguage]);
+
+  function changeLanguage(language: Language) {
+    void i18n.changeLanguage(language);
+  }
+
+  function toggleColorMode() {
+    onColorModeChange(colorMode === "dark" ? "light" : "dark");
+  }
+
+  return (
+    <div className="app-controls">
+      <div
+        aria-label={t("welcome.language.label")}
+        className="language-selector"
+        role="group"
+      >
+        {languages.map((language) => (
+          <button
+            aria-label={t(`welcome.language.${language}`)}
+            aria-pressed={i18n.resolvedLanguage === language}
+            key={language}
+            onClick={() => changeLanguage(language)}
+            type="button"
+          >
+            {language.toUpperCase()}
+          </button>
+        ))}
+      </div>
+      <button
+        aria-checked={colorMode === "light"}
+        aria-label={t("welcome.colorMode.light")}
+        className="color-mode-toggle"
+        onClick={toggleColorMode}
+        role="switch"
+        type="button"
+      >
+        <span aria-hidden="true" className="color-mode-toggle__icon" />
+      </button>
+    </div>
+  );
+}

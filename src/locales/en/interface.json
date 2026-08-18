@@ -3,6 +3,11 @@
     "introduction": "Your career as a pilot is about to begin.",
     "title": "Scars of Steel"
   },
+  "academyEvent": {
+    "badge": "Academy transmission",
+    "description": "Cadet {{name}}, report for your first exercises.",
+    "title": "Your first assignment"
+  },
   "aspirations": {
     "commander": "Commander",
     "shadow": "Shadow",
@@ -14,9 +19,33 @@
     "helic": "Helic Republic"
   },
   "pilotCreation": {
-    "badge": "Pilot file unlocked",
-    "description": "Pilot configuration will continue here in the next mission update.",
-    "title": "Your career begins now"
+    "aspiration": "Requested specialization",
+    "aspirations": {
+      "commander": "Aspires to command units, rise through the ranks, and shape the course of the war.",
+      "shadow": "Operates outside public recognition and completes decisive missions without leaving a trace.",
+      "war-hero": "Seeks to protect others, earn recognition, and become a symbol of the chosen faction.",
+      "zoid-ace": "Wants to master a Zoid, surpass every rival, and pilot exceptional machines."
+    },
+    "badge": "Academy recruitment command",
+    "confirm": "Submit enlistment",
+    "description": "Complete this service record to enlist as a cadet in the planetary war.",
+    "faction": "Nation",
+    "name": {
+      "label": "Recruit name",
+      "placeholder": "Enter recruit name"
+    },
+    "stats": {
+      "charisma": "Charisma",
+      "pending": "Assessment pending",
+      "pendingDescription": "Your initial aptitude profile will appear in this section.",
+      "piloting": "Piloting",
+      "strength": "Strength",
+      "synchrony": "Synchrony",
+      "tactics": "Tactics",
+      "technique": "Technique",
+      "title": "Aptitude assessment"
+    },
+    "title": "Cadet enlistment form"
   },
   "welcome": {
     "badge": "Pilot recruitment transmission",

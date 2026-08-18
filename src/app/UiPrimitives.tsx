@@ -10,6 +10,7 @@ interface BadgeProps extends PropsWithChildren {
 
 interface MeterProps {
   label: string;
+  max?: number;
   value: number;
 }
 
@@ -35,19 +36,25 @@ export function Button({
   );
 }
 
-export function Meter({ label, value }: MeterProps) {
+export function Meter({ label, max = 100, value }: MeterProps) {
   return (
     <div className="meter">
-      <span className="meter__label">{label}</span>
+      <span className="meter__heading">
+        <span className="meter__label">{label}</span>
+        <span className="meter__number">{value}</span>
+      </span>
       <div
         aria-label={label}
-        aria-valuemax={100}
+        aria-valuemax={max}
         aria-valuemin={0}
         aria-valuenow={value}
         className="meter__track"
         role="progressbar"
       >
-        <span className="meter__value" style={{ width: `${value}%` }} />
+        <span
+          className="meter__value"
+          style={{ width: `${(value / max) * 100}%` }}
+        />
       </div>
     </div>
   );

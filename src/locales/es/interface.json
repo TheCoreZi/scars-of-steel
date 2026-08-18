@@ -3,6 +3,11 @@
     "introduction": "Tu carrera como piloto está a punto de comenzar.",
     "title": "Cicatrices de Acero"
   },
+  "academyEvent": {
+    "badge": "Transmisión de la Academia",
+    "description": "Cadete {{name}}, preséntate a tus primeros ejercicios.",
+    "title": "Tu primera misión"
+  },
   "aspirations": {
     "commander": "Comandante",
     "shadow": "Sombra",
@@ -14,9 +19,33 @@
     "helic": "República de Helic"
   },
   "pilotCreation": {
-    "badge": "Expediente de piloto desbloqueado",
-    "description": "La configuración del piloto continuará aquí en la próxima actualización de misión.",
-    "title": "Tu carrera comienza ahora"
+    "aspiration": "Especialización solicitada",
+    "aspirations": {
+      "commander": "Aspira a dirigir unidades, ascender e influir en el rumbo de la guerra.",
+      "shadow": "Opera fuera del reconocimiento público y cumple misiones decisivas sin dejar rastro.",
+      "war-hero": "Busca proteger a otros, ganar reconocimiento y convertirse en símbolo de su facción.",
+      "zoid-ace": "Quiere dominar su Zoid, superar a sus rivales y pilotar máquinas excepcionales."
+    },
+    "badge": "Comando de reclutamiento de la Academia",
+    "confirm": "Enviar solicitud",
+    "description": "Completa este expediente de servicio para alistarte como cadete en la guerra planetaria.",
+    "faction": "Nación",
+    "name": {
+      "label": "Nombre del recluta",
+      "placeholder": "Escribe el nombre del recluta"
+    },
+    "stats": {
+      "charisma": "Carisma",
+      "pending": "Evaluación pendiente",
+      "pendingDescription": "Tu perfil de aptitud inicial aparecerá en esta sección.",
+      "piloting": "Pilotaje",
+      "strength": "Fuerza",
+      "synchrony": "Sincronía",
+      "tactics": "Táctica",
+      "technique": "Técnica",
+      "title": "Evaluación de aptitud"
+    },
+    "title": "Solicitud de alistamiento"
   },
   "welcome": {
     "badge": "Transmisión de reclutamiento",
