@@ -2,5 +2,15 @@
   "app": {
     "introduction": "Tu carrera como piloto está a punto de comenzar.",
     "title": "Cicatrices de Acero"
+  },
+  "aspirations": {
+    "commander": "Comandante",
+    "shadow": "Sombra",
+    "warHero": "Héroe de guerra",
+    "zoidAce": "As de Zoids"
+  },
+  "factions": {
+    "guylos": "Imperio de Guylos",
+    "helic": "República de Helic"
   }
 }

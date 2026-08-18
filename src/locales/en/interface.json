@@ -2,5 +2,15 @@
   "app": {
     "introduction": "Your career as a pilot is about to begin.",
     "title": "Scars of Steel"
+  },
+  "aspirations": {
+    "commander": "Commander",
+    "shadow": "Shadow",
+    "warHero": "War hero",
+    "zoidAce": "Zoid Ace"
+  },
+  "factions": {
+    "guylos": "Guylos Empire",
+    "helic": "Helic Republic"
   }
 }
