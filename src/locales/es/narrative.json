@@ -1,4 +1,26 @@
 {
+  "academy": {
+    "firstExercises": {
+      "introduction": "El día que esperaste desde que cruzaste las puertas de la Academia ha llegado. Los Zoids aguardan en el hangar y una sola elección marcará el inicio de tu leyenda. Tres caminos se abren ante ti.",
+      "title": "Día de la Asignación"
+    },
+    "humanitarianMission": {
+      "introduction": "Un desastre ha dejado aislada a una comunidad, sin alimentos, medicinas ni transporte para sus heridos. La Academia pide voluntarios, pero cada día lejos del campo de entrenamiento puede decidir tu futuro como piloto.",
+      "title": "Misión humanitaria"
+    },
+    "mechanicsProgram": {
+      "introduction": "El equipo mecánico del cuartel te ofrece un año entre motores, blindaje y Zoids excepcionales. El taller guarda conocimientos que ningún campo de batalla puede enseñar, pero aceptarlos te mantendrá lejos de la acción.",
+      "title": "Programa de Mecánica y Mantenimiento"
+    },
+    "strayZoid": {
+      "introduction": "La prueba de campo apenas ha comenzado cuando un Zoid errante irrumpe cerca del campamento. Está fuera de control, sus armas siguen activas y la seguridad de todos depende de lo que hagas ahora.",
+      "title": "Defender el campamento"
+    },
+    "veteranOffer": {
+      "introduction": "Mientras te preparas para una práctica, recibes un mensaje de un veterano condecorado. Ha observado tu talento y te ofrece un Zoid excepcionalmente raro junto con su recomendación a cambio de algunos «favores».",
+      "title": "La oferta"
+    }
+  },
   "pilot": {
     "summary": "{{name}}, conocido como {{nickname}}, tiene {{age}} años y pertenece a {{faction}}."
   }

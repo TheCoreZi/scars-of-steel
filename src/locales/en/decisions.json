@@ -1,5 +1,75 @@
 {
-  "continue": {
-    "label": "Continue"
-  }
+  "academy": {
+    "firstExercises": {
+      "acceptStandard": {
+        "description": "They are the backbone of the army.",
+        "label": "Take a basic Zoid"
+      },
+      "controlRare": {
+        "description": "You are certain you can master it.",
+        "label": "Take the rare Zoid"
+      },
+      "requestStandard": {
+        "description": "None of them suit your style.",
+        "label": "Request another Zoid"
+      }
+    },
+    "humanitarianMission": {
+      "ignore": {
+        "description": "Focus on your training.",
+        "label": "Ignore the call"
+      },
+      "organize": {
+        "description": "You will coordinate supplies from the Academy in your free time.",
+        "label": "Support them from the Academy"
+      },
+      "volunteer": {
+        "description": "There are people who need help.",
+        "label": "Volunteer to help"
+      }
+    },
+    "mechanicsProgram": {
+      "help": {
+        "description": "You will learn from both programs, although it will be exhausting.",
+        "label": "Join the program part-time"
+      },
+      "join": {
+        "description": "You will sacrifice a year of training to learn the secrets of the Zoids.",
+        "label": "Join the program full-time"
+      },
+      "reject": {
+        "description": "Focus on becoming a relentless pilot.",
+        "label": "Reject the offer"
+      }
+    },
+    "strayZoid": {
+      "capture": {
+        "description": "If you can master it, its power could serve the army.",
+        "label": "Capture it and take it to headquarters"
+      },
+      "destroy": {
+        "description": "It is dangerous and suffering.",
+        "label": "Destroy it with the test Zoid"
+      },
+      "protect": {
+        "description": "Protect the camp and your new Zoids alongside your classmates.",
+        "label": "Coordinate your classmates and drive it away"
+      }
+    },
+    "veteranOffer": {
+      "accept": {
+        "description": "That Zoid could change your career, and you are willing to pay the price.",
+        "label": "Accept the deal"
+      },
+      "report": {
+        "description": "Report him before he continues to disgrace the uniform.",
+        "label": "Reject and report the veteran"
+      },
+      "silence": {
+        "description": "You have no time for this. You must focus on training.",
+        "label": "Reject it and remain silent"
+      }
+    }
+  },
+  "continue": { "label": "Continue" }
 }

@@ -1,6 +1,7 @@
 import { createInstance } from "i18next";
 import { initReactI18next } from "react-i18next";
 
+import type { TranslationKey } from "./domain/types";
 import achievementsEn from "./locales/en/achievements.json";
 import decisionsEn from "./locales/en/decisions.json";
 import interfaceEn from "./locales/en/interface.json";
@@ -61,3 +62,10 @@ void i18n.use(initReactI18next).init({
   saveMissing: import.meta.env.DEV,
   supportedLngs: ["en", "es"],
 });
+
+export function translate(
+  key: TranslationKey,
+  options?: Record<string, number | string>,
+): string {
+  return i18n.t(key as never, options as never) as unknown as string;
+}

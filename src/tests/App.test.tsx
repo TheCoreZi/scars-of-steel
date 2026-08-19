@@ -308,7 +308,7 @@ describe("pilot creation", () => {
     });
   });
 
-  test("creates the pilot and opens the initial Academy event", () => {
+  test("creates the pilot and opens the initial event", () => {
     render(<App />);
     fireEvent.click(screen.getByRole("button", { name: "Begin your career" }));
     fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
@@ -318,13 +318,13 @@ describe("pilot creation", () => {
     fireEvent.click(screen.getByRole("radio", { name: "Zoid Ace" }));
     fireEvent.click(screen.getByRole("button", { name: "Submit enlistment" }));
 
-    const heading = screen.getByRole("heading", {
-      name: "Your first assignment",
-    });
+    const heading = screen.getByRole("heading", { level: 1 });
     expect(heading).toHaveFocus();
-    expect(
-      screen.getByText("Cadet Léna Steel, report for your first exercises."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Choose your response")).toBeInTheDocument();
+    expect(document.querySelectorAll(".decision-option")).toHaveLength(3);
+    expect(screen.getByLabelText("Career status")).toBeInTheDocument();
+    expect(screen.queryByText("Zoid unassigned")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Zoid")).toHaveLength(2);
     expect(heading.closest(".app-shell")).toHaveAttribute(
       "data-faction",
       "helic",
@@ -335,6 +335,32 @@ describe("pilot creation", () => {
       screen.getByRole("switch", { name: "Light mode" }),
     ).toBeInTheDocument();
     expect(screen.queryByText(/choose.*zoid/iu)).not.toBeInTheDocument();
+  });
+
+  test("resolves an initial decision only once", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: "Begin your career" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
+      target: { value: "Lena" },
+    });
+    fireEvent.click(screen.getByRole("radio", { name: "Helic Republic" }));
+    fireEvent.click(screen.getByRole("radio", { name: "War hero" }));
+    fireEvent.click(screen.getByRole("button", { name: "Submit enlistment" }));
+
+    const decision =
+      document.querySelector<HTMLButtonElement>(".decision-option");
+    expect(decision).not.toBeNull();
+    fireEvent.click(decision!);
+    fireEvent.click(decision!);
+
+    const decisions = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".decision-option"),
+    );
+    expect(decisions).toHaveLength(3);
+    expect(
+      decisions.filter((option) => option.ariaPressed === "true"),
+    ).toHaveLength(1);
+    expect(decisions.filter((option) => option.disabled)).toHaveLength(2);
   });
 
   test("starts again at the welcome screen after remounting", () => {

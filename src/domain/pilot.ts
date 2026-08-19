@@ -3,6 +3,7 @@ import {
   createWarState,
   type Aspiration,
   type Faction,
+  type LifeStage,
   type PilotId,
   type PilotWithoutZoid,
   type StatName,
@@ -56,6 +57,15 @@ export const factionNameKeys = {
   guylos: "interface:factions.guylos",
   helic: "interface:factions.helic",
 } as const satisfies Record<Faction, TranslationKey<"interface">>;
+
+export const lifeStageNameKeys = {
+  academy: "interface:careerStatus.lifeStages.academy",
+  "early-service": "interface:careerStatus.lifeStages.earlyService",
+  "elite-command": "interface:careerStatus.lifeStages.eliteCommand",
+  legacy: "interface:careerStatus.lifeStages.legacy",
+  "path-to-glory": "interface:careerStatus.lifeStages.pathToGlory",
+  "soldier-life": "interface:careerStatus.lifeStages.soldierLife",
+} as const satisfies Record<LifeStage, TranslationKey<"interface">>;
 
 export interface InitialPilotData {
   aspiration: Aspiration;
@@ -112,4 +122,24 @@ export function getInitialStats(aspiration: Aspiration): Stats {
     tactics: createBoundedValue(stats.tactics),
     technique: createBoundedValue(stats.technique),
   };
+}
+
+export function getLifeStage(age: number): LifeStage {
+  if (age < 15) {
+    return "academy";
+  }
+
+  if (age < 21) {
+    return "early-service";
+  }
+
+  if (age < 26) {
+    return "soldier-life";
+  }
+
+  if (age < 35) {
+    return "path-to-glory";
+  }
+
+  return age < 45 ? "elite-command" : "legacy";
 }

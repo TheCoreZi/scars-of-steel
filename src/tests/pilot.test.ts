@@ -5,6 +5,7 @@ import {
   createInitialPilot,
   factionNameKeys,
   getInitialStats,
+  getLifeStage,
   normalizePilotName,
 } from "../domain/pilot";
 import type { Aspiration, Faction } from "../domain/types";
@@ -29,6 +30,24 @@ describe("getInitialStats", () => {
     ["zoid-ace", [3, 3, 2, 5, 3, 4]],
   ] as const)("assigns the fixed profile to %s", (aspiration, expected) => {
     expect(Object.values(getInitialStats(aspiration))).toEqual(expected);
+  });
+});
+
+describe("getLifeStage", () => {
+  test.each([
+    [12, "academy"],
+    [14, "academy"],
+    [15, "early-service"],
+    [20, "early-service"],
+    [21, "soldier-life"],
+    [25, "soldier-life"],
+    [26, "path-to-glory"],
+    [34, "path-to-glory"],
+    [35, "elite-command"],
+    [44, "elite-command"],
+    [45, "legacy"],
+  ] as const)("maps age %s to %s", (age, stage) => {
+    expect(getLifeStage(age)).toBe(stage);
   });
 });
 
