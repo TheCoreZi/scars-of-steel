@@ -3,16 +3,47 @@
     "introduction": "Tu carrera como piloto está a punto de comenzar.",
     "title": "Cicatrices de Acero"
   },
-  "academyEvent": {
-    "badge": "Transmisión de la Academia",
-    "description": "Cadete {{name}}, preséntate a tus primeros ejercicios.",
-    "title": "Tu primera misión"
-  },
   "aspirations": {
     "commander": "Comandante",
     "shadow": "Sombra",
     "warHero": "Héroe de guerra",
     "zoidAce": "As de Zoids"
+  },
+  "careerStatus": {
+    "age": "Edad",
+    "ageCompact": "Edad {{age}}",
+    "combatPower": "Potencia de combate",
+    "guylos": "Guylos",
+    "helic": "Helic",
+    "label": "Estado de la carrera",
+    "lifeStages": {
+      "academy": "Academia",
+      "earlyService": "Servicio inicial",
+      "eliteCommand": "Élite o mando",
+      "legacy": "Legado",
+      "pathToGlory": "Camino a la gloria",
+      "soldierLife": "Vida de soldado"
+    },
+    "percentage": "{{value}}%",
+    "powerLabel": "Potencia de combate: {{value}} de 100",
+    "unassigned": "Zoid sin asignar",
+    "warLabel": "Control territorial: Helic {{helic}}%, Guylos {{guylos}}%",
+    "warState": "Estado de la guerra",
+    "year": "Año",
+    "yearCompact": "Año {{year}}",
+    "zoid": "Zoid",
+    "zoidLabel": "Zoid: {{name}}"
+  },
+  "decisionScreen": {
+    "badge": "Decisión prioritaria",
+    "channel": "Comando de guerra // transmisión segura",
+    "choose": "Elige tu respuesta",
+    "locked": "Decisión confirmada: {{decision}}. Las otras opciones están bloqueadas.",
+    "probabilityLabel": "Éxito {{success}}%, fallo {{failure}}%",
+    "risk": "Con riesgo",
+    "riskOptionLabel": "{{decision}}. Con riesgo. Éxito {{success}}%, fallo {{failure}}%.",
+    "safe": "Segura",
+    "safeOptionLabel": "{{decision}}. Segura."
   },
   "factions": {
     "guylos": "Imperio de Guylos",

@@ -1,5 +1,75 @@
 {
-  "continue": {
-    "label": "Continuar"
-  }
+  "academy": {
+    "firstExercises": {
+      "acceptStandard": {
+        "description": "Son la base del ejército.",
+        "label": "Tomar un Zoid básico"
+      },
+      "controlRare": {
+        "description": "Estás seguro de poder dominarlo.",
+        "label": "Tomar el Zoid raro"
+      },
+      "requestStandard": {
+        "description": "Ninguno encaja con tu estilo.",
+        "label": "Solicitar otro Zoid"
+      }
+    },
+    "humanitarianMission": {
+      "ignore": {
+        "description": "Concéntrate en tu entrenamiento.",
+        "label": "Ignorar el llamado"
+      },
+      "organize": {
+        "description": "Coordinarás suministros desde la Academia en tu tiempo libre.",
+        "label": "Apoyar desde la Academia"
+      },
+      "volunteer": {
+        "description": "Hay personas que necesitan ayuda.",
+        "label": "Ir como voluntario"
+      }
+    },
+    "mechanicsProgram": {
+      "help": {
+        "description": "Aprenderás de ambos programas, aunque será agotador.",
+        "label": "Inscribirte en el programa a medio tiempo"
+      },
+      "join": {
+        "description": "Sacrificarás un año de prácticas para aprender los secretos de los Zoids.",
+        "label": "Entrar al programa a tiempo completo"
+      },
+      "reject": {
+        "description": "Concéntrate en convertirte en un piloto implacable.",
+        "label": "Rechazar la oferta"
+      }
+    },
+    "strayZoid": {
+      "capture": {
+        "description": "Si consigues dominarlo, su poder podría servir al ejército.",
+        "label": "Atraparlo y llevarlo al cuartel"
+      },
+      "destroy": {
+        "description": "Es peligroso y está sufriendo.",
+        "label": "Destruirlo con el Zoid de prueba"
+      },
+      "protect": {
+        "description": "Protege el campamento y sus nuevos Zoids junto a tus compañeros.",
+        "label": "Coordinar a tus compañeros y ahuyentarlo"
+      }
+    },
+    "veteranOffer": {
+      "accept": {
+        "description": "Ese Zoid puede cambiar tu carrera, y estás dispuesto a pagar el precio.",
+        "label": "Aceptar el trato"
+      },
+      "report": {
+        "description": "Denúncialo antes de que siga mancillando el uniforme.",
+        "label": "Rechazar y denunciar al veterano"
+      },
+      "silence": {
+        "description": "No tienes tiempo para estas cosas. Debes concentrarte en las prácticas.",
+        "label": "Rechazarlo y guardar silencio"
+      }
+    }
+  },
+  "continue": { "label": "Continuar" }
 }

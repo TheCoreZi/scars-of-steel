@@ -1,4 +1,26 @@
 {
+  "academy": {
+    "firstExercises": {
+      "introduction": "The day you have awaited since entering the Academy has arrived. The Zoids wait in the hangar, and one choice will mark the beginning of your legend. Three paths lie before you.",
+      "title": "Assignment Day"
+    },
+    "humanitarianMission": {
+      "introduction": "A disaster has left a community isolated, without food, medicine, or transport for its wounded. The Academy requests volunteers, but every day away from the training field could decide your future as a pilot.",
+      "title": "Humanitarian Mission"
+    },
+    "mechanicsProgram": {
+      "introduction": "The base mechanics team offers you a year among engines, armor, and exceptional Zoids. The workshop holds knowledge that no battlefield can teach, but accepting will keep you away from the action.",
+      "title": "Mechanics and Maintenance Program"
+    },
+    "strayZoid": {
+      "introduction": "The field test has barely begun when a stray Zoid charges toward the camp. It is out of control, its weapons remain active, and everyone's safety depends on what you do now.",
+      "title": "Defend the Camp"
+    },
+    "veteranOffer": {
+      "introduction": "As you prepare for a training exercise, you receive a message from a decorated veteran. He has observed your talent and offers you an exceptionally rare Zoid and his recommendation in exchange for a few ‘favors.’",
+      "title": "The Offer"
+    }
+  },
   "pilot": {
     "summary": "{{name}}, known as {{nickname}}, is {{age}} years old and belongs to the {{faction}}."
   }

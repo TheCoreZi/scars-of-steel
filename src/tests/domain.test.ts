@@ -37,8 +37,10 @@ const chanceDecision = {
   id: "decision:control-rare",
   kind: "chance",
   labelKey: "decisions:academy.controlRare.label",
-  primaryStat: "piloting",
-  secondaryStats: ["synchrony"],
+  probabilityStats: [
+    { stat: "piloting", weight: 0.3 },
+    { stat: "synchrony", weight: 0.15 },
+  ],
   successOutcome: outcome,
 } as const satisfies ChanceDecision;
 
@@ -125,15 +127,14 @@ const invalidChanceDecision: Decision = {
   id: "decision:invalid-chance",
   kind: "chance",
   labelKey: "decisions:academy.invalid.label",
-  primaryStat: "piloting",
-  secondaryStats: [],
+  probabilityStats: [{ stat: "piloting", weight: 0.3 }],
 };
 
 const choosingState = {
-  eventId: "academy-event:first-exercises",
+  eventId: "event:first-exercises",
   phase: "choosing",
   pilot: pilotWithoutZoid,
-  screen: "academy-event",
+  screen: "event",
 } as const satisfies GameState;
 
 // @ts-expect-error Resolving an event requires a stored resolution.
@@ -144,7 +145,7 @@ const invalidResolvingState: GameState = {
 
 const invalidFinalState: GameState = {
   achievementIds: [],
-  eventId: "academy-event:first-exercises",
+  eventId: "event:first-exercises",
   nicknameKey: "nicknames:default.guardian",
   // @ts-expect-error The final screen requires a pilot with a signature Zoid.
   pilot: pilotWithoutZoid,

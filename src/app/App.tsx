@@ -1,22 +1,27 @@
-import { useEffect, useId, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useRef, useState } from "react";
 
+import { selectInitialEvent } from "../domain/eventPools";
+import { getEvent, resolveDecision } from "../domain/events";
 import { createInitialPilot } from "../domain/pilot";
+import { createSecureRandomGenerator } from "../domain/random";
 import type {
-  ChoosingAcademyEventGameState,
+  ChoosingEventGameState,
+  Decision,
   Faction,
+  ResolvingEventGameState,
   WelcomeGameState,
 } from "../domain/types";
 import { AppControls, type ColorMode } from "./AppControls";
+import { DecisionScreen } from "./DecisionScreen";
 import {
   PilotCreationScreen,
   type PilotConfiguration,
 } from "./PilotCreationScreen";
-import { Badge, Panel } from "./UiPrimitives";
 import { WelcomeScreen } from "./WelcomeScreen";
 
 type IntroGameState =
-  | ChoosingAcademyEventGameState
+  | ChoosingEventGameState
+  | ResolvingEventGameState
   | { screen: "pilot-creation" }
   | WelcomeGameState;
 
@@ -26,10 +31,13 @@ export function App() {
     screen: "welcome",
   });
   const [selectedFaction, setSelectedFaction] = useState<Faction | null>(null);
-  const pilotCreatedRef = useRef(false);
+  const hasResolvedDecisionRef = useRef(false);
+  const hasCreatedPilotRef = useRef(false);
+  const randomRef = useRef(createSecureRandomGenerator());
 
   function startGame() {
-    pilotCreatedRef.current = false;
+    hasResolvedDecisionRef.current = false;
+    hasCreatedPilotRef.current = false;
     setSelectedFaction(null);
     setGameState((currentState) =>
       currentState.screen === "welcome"
@@ -39,28 +47,44 @@ export function App() {
   }
 
   function confirmPilot(configuration: PilotConfiguration) {
-    if (pilotCreatedRef.current) {
+    if (hasCreatedPilotRef.current) {
       return;
     }
 
-    pilotCreatedRef.current = true;
+    hasCreatedPilotRef.current = true;
     const pilot = createInitialPilot({
       ...configuration,
       id: `pilot:${crypto.randomUUID()}`,
     });
+    const event = selectInitialEvent(randomRef.current);
 
     setGameState({
-      eventId: "academy-event:first-exercises",
+      eventId: event.id,
       phase: "choosing",
       pilot,
-      screen: "academy-event",
+      screen: "event",
+    });
+  }
+
+  function chooseDecision(decision: Decision) {
+    if (
+      hasResolvedDecisionRef.current ||
+      gameState.screen !== "event" ||
+      gameState.phase !== "choosing"
+    ) {
+      return;
+    }
+
+    hasResolvedDecisionRef.current = true;
+    setGameState({
+      ...gameState,
+      phase: "resolving",
+      resolution: resolveDecision(decision, gameState.pilot, randomRef.current),
     });
   }
 
   const faction =
-    gameState.screen === "academy-event"
-      ? gameState.pilot.faction
-      : selectedFaction;
+    "pilot" in gameState ? gameState.pilot.faction : selectedFaction;
 
   return (
     <div
@@ -78,7 +102,14 @@ export function App() {
           onFactionChange={setSelectedFaction}
         />
       ) : (
-        <AcademyEventStart pilotName={gameState.pilot.name} />
+        <DecisionScreen
+          event={getEvent(gameState.eventId)}
+          onDecision={chooseDecision}
+          pilot={gameState.pilot}
+          resolution={
+            gameState.phase === "resolving" ? gameState.resolution : undefined
+          }
+        />
       )}
     </div>
   );
@@ -101,31 +132,5 @@ function BackgroundDamage() {
         <span />
       </div>
     </div>
-  );
-}
-
-interface AcademyEventStartProps {
-  pilotName: string;
-}
-
-function AcademyEventStart({ pilotName }: AcademyEventStartProps) {
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const titleId = useId();
-  const { t } = useTranslation("interface");
-
-  useEffect(() => {
-    headingRef.current?.focus();
-  }, []);
-
-  return (
-    <main className="screen screen--centered">
-      <Panel className="academy-event-start" labelledBy={titleId}>
-        <Badge>{t("academyEvent.badge")}</Badge>
-        <h1 id={titleId} ref={headingRef} tabIndex={-1}>
-          {t("academyEvent.title")}
-        </h1>
-        <p>{t("academyEvent.description", { name: pilotName })}</p>
-      </Panel>
-    </main>
   );
 }

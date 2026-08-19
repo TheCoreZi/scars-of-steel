@@ -3,16 +3,47 @@
     "introduction": "Your career as a pilot is about to begin.",
     "title": "Scars of Steel"
   },
-  "academyEvent": {
-    "badge": "Academy transmission",
-    "description": "Cadet {{name}}, report for your first exercises.",
-    "title": "Your first assignment"
-  },
   "aspirations": {
     "commander": "Commander",
     "shadow": "Shadow",
     "warHero": "War hero",
     "zoidAce": "Zoid Ace"
+  },
+  "careerStatus": {
+    "age": "Age",
+    "ageCompact": "Age {{age}}",
+    "combatPower": "Combat power",
+    "guylos": "Guylos",
+    "helic": "Helic",
+    "label": "Career status",
+    "lifeStages": {
+      "academy": "Academy",
+      "earlyService": "Early service",
+      "eliteCommand": "Elite or command",
+      "legacy": "Legacy",
+      "pathToGlory": "Path to glory",
+      "soldierLife": "Soldier's life"
+    },
+    "percentage": "{{value}}%",
+    "powerLabel": "Combat power: {{value}} of 100",
+    "unassigned": "Zoid unassigned",
+    "warLabel": "Territorial control: Helic {{helic}}%, Guylos {{guylos}}%",
+    "warState": "War state",
+    "year": "Year",
+    "yearCompact": "Year {{year}}",
+    "zoid": "Zoid",
+    "zoidLabel": "Zoid: {{name}}"
+  },
+  "decisionScreen": {
+    "badge": "Priority decision",
+    "channel": "War command // secure transmission",
+    "choose": "Choose your response",
+    "locked": "Decision confirmed: {{decision}}. The other options are locked.",
+    "probabilityLabel": "Success {{success}}%, failure {{failure}}%",
+    "risk": "With risk",
+    "riskOptionLabel": "{{decision}}. With risk. Success {{success}}%, failure {{failure}}%.",
+    "safe": "Safe",
+    "safeOptionLabel": "{{decision}}. Safe."
   },
   "factions": {
     "guylos": "Guylos Empire",

@@ -1,5 +1,26 @@
 {
-  "victory": {
-    "title": "Victory"
-  }
+  "academy": {
+    "firstExercisesAcceptStandard": "At first glance, the Zoid does not seem extraordinary. However, it responds to every command, and you soon discover that a reliable machine can be as lethal as the pilot at its controls.",
+    "firstExercisesControlRareFailure": "The Zoid rejects your commands, breaks free, and throws you across the hangar floor in front of the entire Academy. As laughter spreads through the crowd, the instructors decide that a ‘safer’ machine would suit you better.",
+    "firstExercisesControlRareSuccess": "The controls are unlike anything you have faced. Instead of forcing your will upon the machine, you remain calm and search for its rhythm. Its roar fades; the Zoid accepts you and becomes an extension of yourself.",
+    "firstExercisesRequestStandard": "The instructors grant your request and let you find a machine suited to your fighting style. However, questioning their judgment remains on your record.",
+    "humanitarianMissionIgnore": "Others leave to answer the call while you spend the year training without rest beside your new Zoid. As your skills grow, the news shows a worsening tragedy and a death toll that rises each day.",
+    "humanitarianMissionOrganize": "Every day ends the same way: cockpit drills followed by long nights coordinating supplies. Exhaustion nearly breaks you, but images of the community safe confirm that every sacrifice was worthwhile.",
+    "humanitarianMissionVolunteerFailure": "While you help evacuate the community, the enemy army attacks the area. A medical team returns you to the Academy wounded. You missed the Zoid assignment, and only the unit that nobody wanted remains.",
+    "humanitarianMissionVolunteerSuccess": "For months, you work beside the community to raise it from the ruins. When it is time to return, the residents entrust you with the Zoid that protected them for years. From now on, their guardian will fight beside you.",
+    "mechanicsProgramHelpFailure": "The workload finally crushes you. You fail both in training and in the workshop. At the end of the year, the only machine they can assign to you is a Zoid in such poor condition that it looks like scrap.",
+    "mechanicsProgramHelpSuccess": "You live at the limit between the hangar and the training field, but you endure until the end. In recognition, the maintenance team entrusts you with the Zoid that you rebuilt with your own hands.",
+    "mechanicsProgramJoin": "Few cadets receive an opportunity like this. After a year among steel and oil, you master techniques that few pilots know. When you activate the Zoid you restored for the first time, the machine responds only to you. It is no longer a project; it is your partner.",
+    "mechanicsProgramReject": "You devote the entire year to mastering your assigned Zoid. Your skill grows with every exercise, although the grinding of its joints reminds you of the maintenance lessons you chose to reject.",
+    "strayZoidCaptureFailure": "A stray Zoid is not easy prey. You survive the encounter, but your test machine is destroyed. Now you must settle for one of the forgotten units in reserve.",
+    "strayZoidCaptureSuccess": "The creature is fierce, but it attacks only by instinct. You read every movement, close the trap, and subdue it. The Academy offers you a deal: if you can restore the Zoid, it will be yours.",
+    "strayZoidDestroyFailure": "The Zoid's survival instinct defeats your calculations. It tears apart your test machine and drags away the remains before disappearing. You survive, but you can only replace your Zoid with the scrap left in the hangar.",
+    "strayZoidDestroySuccess": "With a precise strike, you end the threat and the creature's suffering. Your companions watch the field in silence. Before you return to camp, rumors are already spreading about you and the test Zoid you now pilot.",
+    "strayZoidProtect": "Your plan holds the squad together. You drive away the stray Zoid without losing a single machine. When the danger passes, you return to training with your new Zoids and confidence forged under fire.",
+    "veteranOfferAccept": "The veteran keeps his word: you receive an exceptional Zoid and a recommendation for elite programs. Nobody needs to know anything, you tell yourself, but other cadets soon report him and the rumors begin to follow you.",
+    "veteranOfferReportFailure": "It is a cadet's word against that of a high-ranking veteran. The board dismisses your report, and he destroys your reputation. From then on, you are permitted to pilot only the scrap forgotten in the hangar.",
+    "veteranOfferReportSuccess": "The lack of evidence nearly buries your report, but the hearing inspires other cadets to break their silence. The veteran receives his punishment. You do not need a rare Zoid to prove your skill; you will do it with the same machine as everyone else.",
+    "veteranOfferSilence": "You reject the deal and bury the secret to focus on your new Zoid. Soon afterward, other cadets find the courage to report the veteran. This time, justice catches up with him."
+  },
+  "victory": { "title": "Victory" }
 }

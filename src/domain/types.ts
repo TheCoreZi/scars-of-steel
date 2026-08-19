@@ -2,13 +2,20 @@ declare const boundedValueBrand: unique symbol;
 declare const warStateBrand: unique symbol;
 
 export type AchievementId = `achievement:${string}`;
-export type AcademyEventId = `academy-event:${string}`;
 export type Aspiration = "commander" | "shadow" | "war-hero" | "zoid-ace";
 export type BoundedValue = number & {
   readonly [boundedValueBrand]: "BoundedValue";
 };
 export type DecisionId = `decision:${string}`;
+export type EventId = `event:${string}`;
 export type Faction = "guylos" | "helic";
+export type LifeStage =
+  | "academy"
+  | "early-service"
+  | "elite-command"
+  | "legacy"
+  | "path-to-glory"
+  | "soldier-life";
 export type MilitaryRank =
   | "cadet"
   | "captain"
@@ -117,9 +124,9 @@ export type Pilot = PilotWithoutZoid | PilotWithZoid;
 
 export interface Zoid {
   basePower: BoundedValue;
-  category: ZoidCategory;
   faction: Faction;
   id: ZoidId;
+  imagePath?: string;
   nameKey: TranslationKey<"zoids">;
 }
 
@@ -158,13 +165,17 @@ interface DecisionData {
   labelKey: TranslationKey<"decisions">;
 }
 
+export interface ProbabilityStat {
+  stat: StatName;
+  weight: number;
+}
+
 export interface ChanceDecision extends DecisionData {
   baseSuccessChance: BoundedValue;
   failureOutcome: Outcome;
   kind: "chance";
   outcome?: never;
-  primaryStat: StatName;
-  secondaryStats: readonly StatName[];
+  probabilityStats: readonly [ProbabilityStat, ...ProbabilityStat[]];
   successOutcome: Outcome;
 }
 
@@ -173,16 +184,15 @@ export interface SafeDecision extends DecisionData {
   failureOutcome?: never;
   kind: "safe";
   outcome: Outcome;
-  primaryStat?: never;
-  secondaryStats?: never;
+  probabilityStats?: never;
   successOutcome?: never;
 }
 
 export type Decision = ChanceDecision | SafeDecision;
 
-export interface AcademyEvent {
+export interface DecisionEvent {
   decisions: readonly [Decision, Decision, Decision];
-  id: AcademyEventId;
+  id: EventId;
   introductionKey: TranslationKey<"narrative">;
   titleKey: TranslationKey<"narrative">;
 }
@@ -226,24 +236,24 @@ export interface PilotCreationGameState {
   screen: "pilot-creation";
 }
 
-export interface ChoosingAcademyEventGameState {
-  eventId: AcademyEventId;
+export interface ChoosingEventGameState {
+  eventId: EventId;
   phase: "choosing";
   pilot: PilotWithoutZoid;
-  screen: "academy-event";
+  screen: "event";
 }
 
-export interface ResolvingAcademyEventGameState {
-  eventId: AcademyEventId;
+export interface ResolvingEventGameState {
+  eventId: EventId;
   phase: "resolving";
   pilot: PilotWithoutZoid;
   resolution: DecisionResolution;
-  screen: "academy-event";
+  screen: "event";
 }
 
 export interface OutcomeGameState {
   battleRecord: BattleRecord;
-  eventId: AcademyEventId;
+  eventId: EventId;
   pilot: PilotWithZoid;
   resolution: DecisionResolution;
   screen: "outcome";
@@ -251,7 +261,7 @@ export interface OutcomeGameState {
 
 export interface FinalGameState {
   achievementIds: readonly AchievementId[];
-  eventId: AcademyEventId;
+  eventId: EventId;
   nicknameKey: TranslationKey<"nicknames">;
   pilot: PilotWithZoid;
   resolution: DecisionResolution;
@@ -260,11 +270,11 @@ export interface FinalGameState {
 }
 
 export type GameState =
-  | ChoosingAcademyEventGameState
+  | ChoosingEventGameState
   | FinalGameState
   | OutcomeGameState
   | PilotCreationGameState
-  | ResolvingAcademyEventGameState
+  | ResolvingEventGameState
   | WelcomeGameState;
 
 export function createBoundedValue(value: number): BoundedValue {
