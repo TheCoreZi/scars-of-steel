@@ -4,13 +4,18 @@ import {
   type Aspiration,
   type Faction,
   type LifeStage,
+  type MilitaryRank,
+  type Pilot,
   type PilotId,
   type PilotWithoutZoid,
+  type SpecialRank,
   type StatName,
   type Stats,
   type TranslationKey,
 } from "./types";
+import { getZoid } from "./zoids";
 
+const zoidPotentialWeight = 0.25;
 const initialStats = {
   commander: {
     charisma: 5,
@@ -53,9 +58,19 @@ export const aspirationNameKeys = {
   "zoid-ace": "interface:aspirations.zoidAce",
 } as const satisfies Record<Aspiration, TranslationKey<"interface">>;
 
+export const battleFactionNameKeys = {
+  guylos: "interface:outcomeScreen.factions.guylos",
+  helic: "interface:outcomeScreen.factions.helic",
+} as const satisfies Record<Faction, TranslationKey<"interface">>;
+
 export const factionNameKeys = {
   guylos: "interface:factions.guylos",
   helic: "interface:factions.helic",
+} as const satisfies Record<Faction, TranslationKey<"interface">>;
+
+export const factionShortNameKeys = {
+  guylos: "interface:careerStatus.factions.guylos",
+  helic: "interface:careerStatus.factions.helic",
 } as const satisfies Record<Faction, TranslationKey<"interface">>;
 
 export const lifeStageNameKeys = {
@@ -66,6 +81,37 @@ export const lifeStageNameKeys = {
   "path-to-glory": "interface:careerStatus.lifeStages.pathToGlory",
   "soldier-life": "interface:careerStatus.lifeStages.soldierLife",
 } as const satisfies Record<LifeStage, TranslationKey<"interface">>;
+
+export const militaryRankNameKeys = {
+  cadet: "interface:careerStatus.ranks.cadet",
+  captain: "interface:careerStatus.ranks.captain",
+  commander: "interface:careerStatus.ranks.commander",
+  corporal: "interface:careerStatus.ranks.corporal",
+  general: "interface:careerStatus.ranks.general",
+  lieutenant: "interface:careerStatus.ranks.lieutenant",
+  major: "interface:careerStatus.ranks.major",
+  sergeant: "interface:careerStatus.ranks.sergeant",
+  soldier: "interface:careerStatus.ranks.soldier",
+} as const satisfies Record<MilitaryRank, TranslationKey<"interface">>;
+
+export const specialRankNameKeys = {
+  "blitz-orbit": "interface:careerStatus.specialRanks.blitzOrbit",
+  "eizen-dragoons": "interface:careerStatus.specialRanks.eizenDragoons",
+  "leo-master": "interface:careerStatus.specialRanks.leoMaster",
+  "machinery-four": "interface:careerStatus.specialRanks.machineryFour",
+  "prozen-knight": "interface:careerStatus.specialRanks.prozenKnight",
+  "tactical-master": "interface:careerStatus.specialRanks.tacticalMaster",
+  traitor: "interface:careerStatus.specialRanks.traitor",
+} as const satisfies Record<SpecialRank, TranslationKey<"interface">>;
+
+export const statNameKeys = {
+  charisma: "interface:pilotCreation.stats.charisma",
+  piloting: "interface:pilotCreation.stats.piloting",
+  strength: "interface:pilotCreation.stats.strength",
+  synchrony: "interface:pilotCreation.stats.synchrony",
+  tactics: "interface:pilotCreation.stats.tactics",
+  technique: "interface:pilotCreation.stats.technique",
+} as const satisfies Record<StatName, TranslationKey<"interface">>;
 
 export interface InitialPilotData {
   aspiration: Aspiration;
@@ -85,20 +131,32 @@ export function createInitialPilot({
   return {
     age: 12,
     aspiration,
-    baseCombatPower: zero,
+    basePotential: zero,
     career: {
       factionTrust: zero,
       fame: zero,
       militaryRank: "cadet",
       specialRank: null,
-      warState: createWarState(50, 50),
+      warState: createWarState("helic", 50, "guylos", 50),
     },
+    condition: "active",
     faction,
     id,
     name: normalizePilotName(name),
+    potential: zero,
     stats: getInitialStats(aspiration),
     zoids: null,
   };
+}
+
+export function calculatePotential(pilot: Pilot) {
+  const zoidBonus = pilot.zoids
+    ? getZoid(pilot.zoids.signatureId).basePower * zoidPotentialWeight
+    : 0;
+
+  return createBoundedValue(
+    Math.min(100, Math.round(pilot.basePotential + zoidBonus)),
+  );
 }
 
 export function normalizePilotName(name: string): string {

@@ -1,10 +1,18 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
+import { useState } from "react";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
 import { App } from "../app/App";
 import { PilotCreationScreen } from "../app/PilotCreationScreen";
 import { WelcomeScreen } from "../app/WelcomeScreen";
 import { i18n } from "../i18n";
+import type { PilotDraft } from "../domain/types";
 
 afterEach(() => {
   cleanup();
@@ -52,7 +60,13 @@ describe("welcome screen", () => {
   test("shows Spanish content", async () => {
     await i18n.changeLanguage("es");
 
-    render(<WelcomeScreen onStart={() => undefined} />);
+    render(
+      <WelcomeScreen
+        onReducedMotionChange={() => undefined}
+        onStart={() => undefined}
+        reducedMotion={false}
+      />,
+    );
 
     expect(
       screen.getByRole("heading", { name: "Cicatrices de Acero" }),
@@ -79,7 +93,13 @@ describe("welcome screen", () => {
   test("starts the flow only once", () => {
     const onStart = vi.fn();
 
-    render(<WelcomeScreen onStart={onStart} />);
+    render(
+      <WelcomeScreen
+        onReducedMotionChange={() => undefined}
+        onStart={onStart}
+        reducedMotion={false}
+      />,
+    );
 
     const button = screen.getByRole("button", { name: "Begin your career" });
     button.focus();
@@ -92,14 +112,10 @@ describe("welcome screen", () => {
     expect(button).toBeDisabled();
   });
 
-  test("moves focus to pilot creation after starting", () => {
+  test("moves focus to pilot creation after starting", async () => {
     render(<App />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Begin your career" }));
-
-    const heading = screen.getByRole("heading", {
-      name: "Cadet enlistment form",
-    });
+    const heading = await startPilotCreation();
     expect(heading).toBeInTheDocument();
     expect(heading).toHaveFocus();
     expect(document.querySelector(".welcome__damage")).toBeInTheDocument();
@@ -114,12 +130,7 @@ describe("pilot creation", () => {
   test("shows the pilot configuration in Spanish", async () => {
     await i18n.changeLanguage("es");
 
-    render(
-      <PilotCreationScreen
-        onConfirm={() => undefined}
-        onFactionChange={() => undefined}
-      />,
-    );
+    render(<PilotCreationTestScreen onConfirm={() => undefined} />);
 
     expect(
       screen.getByRole("heading", { name: "Solicitud de alistamiento" }),
@@ -133,9 +144,9 @@ describe("pilot creation", () => {
     ).toBeInTheDocument();
   });
 
-  test("requires a non-empty name, faction, and aspiration", () => {
+  test("requires a non-empty name, faction, and aspiration", async () => {
     render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: "Begin your career" }));
+    await startPilotCreation();
 
     expect(screen.getByText("Assessment pending")).toBeInTheDocument();
     expect(
@@ -228,12 +239,7 @@ describe("pilot creation", () => {
       },
     ],
   ])("previews the %s stats", (aspiration, expectedStats) => {
-    render(
-      <PilotCreationScreen
-        onConfirm={() => undefined}
-        onFactionChange={() => undefined}
-      />,
-    );
+    render(<PilotCreationTestScreen onConfirm={() => undefined} />);
 
     const aspirationOption = screen.getByRole("radio", { name: aspiration });
     fireEvent.click(aspirationOption);
@@ -255,9 +261,9 @@ describe("pilot creation", () => {
   test.each([
     ["Guylos Empire", "guylos"],
     ["Helic Republic", "helic"],
-  ])("applies the %s faction theme", (faction, theme) => {
+  ])("applies the %s faction theme", async (faction, theme) => {
     render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: "Begin your career" }));
+    await startPilotCreation();
 
     const option = screen.getByRole("radio", { name: faction });
     option.focus();
@@ -280,12 +286,7 @@ describe("pilot creation", () => {
 
   test("submits a complete configuration only once", () => {
     const onConfirm = vi.fn();
-    render(
-      <PilotCreationScreen
-        onConfirm={onConfirm}
-        onFactionChange={() => undefined}
-      />,
-    );
+    render(<PilotCreationTestScreen onConfirm={onConfirm} />);
 
     fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
       target: { value: "  Le\u0301na  Steel  " },
@@ -308,9 +309,9 @@ describe("pilot creation", () => {
     });
   });
 
-  test("creates the pilot and opens the initial event", () => {
+  test("creates the pilot and opens the initial event", async () => {
     render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: "Begin your career" }));
+    await startPilotCreation();
     fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
       target: { value: "  Le\u0301na  Steel  " },
     });
@@ -318,13 +319,14 @@ describe("pilot creation", () => {
     fireEvent.click(screen.getByRole("radio", { name: "Zoid Ace" }));
     fireEvent.click(screen.getByRole("button", { name: "Submit enlistment" }));
 
+    await screen.findByText("Choose your response");
     const heading = screen.getByRole("heading", { level: 1 });
     expect(heading).toHaveFocus();
     expect(screen.getByText("Choose your response")).toBeInTheDocument();
     expect(document.querySelectorAll(".decision-option")).toHaveLength(3);
     expect(screen.getByLabelText("Career status")).toBeInTheDocument();
     expect(screen.queryByText("Zoid unassigned")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Zoid")).toHaveLength(2);
+    expect(screen.getByText("Zoid")).toBeInTheDocument();
     expect(heading.closest(".app-shell")).toHaveAttribute(
       "data-faction",
       "helic",
@@ -337,9 +339,9 @@ describe("pilot creation", () => {
     expect(screen.queryByText(/choose.*zoid/iu)).not.toBeInTheDocument();
   });
 
-  test("resolves an initial decision only once", () => {
+  test("resolves a safe initial decision once and opens its outcome", async () => {
     render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: "Begin your career" }));
+    await startPilotCreation();
     fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
       target: { value: "Lena" },
     });
@@ -347,28 +349,28 @@ describe("pilot creation", () => {
     fireEvent.click(screen.getByRole("radio", { name: "War hero" }));
     fireEvent.click(screen.getByRole("button", { name: "Submit enlistment" }));
 
-    const decision =
-      document.querySelector<HTMLButtonElement>(".decision-option");
+    await screen.findByText("Choose your response");
+    const decision = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".decision-option"),
+    ).find((option) => option.ariaLabel?.includes(". Safe."));
     expect(decision).not.toBeNull();
     fireEvent.click(decision!);
     fireEvent.click(decision!);
 
-    const decisions = Array.from(
-      document.querySelectorAll<HTMLButtonElement>(".decision-option"),
+    await waitFor(() => {
+      expect(document.querySelectorAll(".decision-option")).toHaveLength(0);
+      expect(document.querySelector(".decision-screen__choices")).toBeNull();
+    });
+    expect(document.querySelectorAll(".decision-screen__prompt")).toHaveLength(
+      8,
     );
-    expect(decisions).toHaveLength(3);
-    expect(
-      decisions.filter((option) => option.ariaPressed === "true"),
-    ).toHaveLength(1);
-    expect(decisions.filter((option) => option.disabled)).toHaveLength(2);
+    expect(document.querySelector(".outcome-screen h1")).toHaveFocus();
+    expect(screen.getByLabelText("Career status")).toBeInTheDocument();
   });
 
-  test("starts again at the welcome screen after remounting", () => {
+  test("starts again at the welcome screen after remounting", async () => {
     const firstRender = render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: "Begin your career" }));
-    expect(
-      screen.getByRole("heading", { name: "Cadet enlistment form" }),
-    ).toBeInTheDocument();
+    expect(await startPilotCreation()).toBeInTheDocument();
 
     firstRender.unmount();
     render(<App />);
@@ -378,6 +380,12 @@ describe("pilot creation", () => {
     ).toBeInTheDocument();
   });
 });
+
+async function startPilotCreation() {
+  fireEvent.click(screen.getByRole("button", { name: "Begin your career" }));
+
+  return screen.findByRole("heading", { name: "Cadet enlistment form" });
+}
 
 test("changes between dark and light modes", () => {
   render(<App />);
@@ -391,6 +399,30 @@ test("changes between dark and light modes", () => {
     .closest(".app-shell");
   expect(colorModeSwitch).toBeChecked();
   expect(app).toHaveAttribute("data-color-mode", "light");
+});
+
+test("turns animations on and off", () => {
+  render(<App />);
+
+  const animationSwitch = screen.getByRole("switch", {
+    name: "Animations ON",
+  });
+  const app = screen
+    .getByRole("heading", { name: "Scars of Steel" })
+    .closest(".app-shell");
+
+  expect(animationSwitch).toBeChecked();
+  expect(animationSwitch.parentElement).toHaveClass("welcome__panel");
+  expect(
+    animationSwitch.querySelector(".animation-toggle__icon"),
+  ).toBeInTheDocument();
+  expect(app).not.toHaveAttribute("data-reduced-motion");
+
+  fireEvent.click(animationSwitch);
+
+  expect(animationSwitch).not.toBeChecked();
+  expect(animationSwitch).toHaveAccessibleName("Animations OFF");
+  expect(app).toHaveAttribute("data-reduced-motion", "true");
 });
 
 test("changes the interface language", async () => {
@@ -408,3 +440,25 @@ test("changes the interface language", async () => {
   ).toBeInTheDocument();
   expect(document.documentElement).toHaveAttribute("lang", "es");
 });
+
+interface PilotCreationTestScreenProps {
+  onConfirm: React.ComponentProps<typeof PilotCreationScreen>["onConfirm"];
+}
+
+function PilotCreationTestScreen({ onConfirm }: PilotCreationTestScreenProps) {
+  const [draft, setDraft] = useState<PilotDraft>({
+    aspiration: null,
+    faction: null,
+    name: "",
+  });
+
+  return (
+    <PilotCreationScreen
+      draft={draft}
+      onConfirm={onConfirm}
+      onDraftChange={setDraft}
+      onReducedMotionChange={() => undefined}
+      reducedMotion={false}
+    />
+  );
+}

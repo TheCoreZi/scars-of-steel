@@ -61,3 +61,38 @@ export function AppControls({
     </div>
   );
 }
+
+interface AnimationToggleProps {
+  onReducedMotionChange: (reducedMotion: boolean) => void;
+  reducedMotion: boolean;
+}
+
+export function AnimationToggle({
+  onReducedMotionChange,
+  reducedMotion,
+}: AnimationToggleProps) {
+  const { t } = useTranslation("interface");
+  const animationsEnabled = !reducedMotion;
+
+  return (
+    <button
+      aria-checked={animationsEnabled}
+      aria-label={t(
+        animationsEnabled ? "welcome.animations.on" : "welcome.animations.off",
+      )}
+      className="animation-toggle"
+      onClick={() => onReducedMotionChange(animationsEnabled)}
+      role="switch"
+      type="button"
+    >
+      <span className="animation-toggle__text">
+        {t(
+          animationsEnabled
+            ? "welcome.animations.on"
+            : "welcome.animations.off",
+        )}
+      </span>
+      <span aria-hidden="true" className="animation-toggle__icon" />
+    </button>
+  );
+}

@@ -342,17 +342,30 @@ const events = Object.values(eventCatalog);
 const eventById = new Map<EventId, DecisionEvent>(
   events.map((event) => [event.id, event]),
 );
+const defaultProbabilityNeutralStat = 2;
+const probabilityStatImpactScale = 8;
 
 export function calculateAdjustedSuccessChance(
   decision: ChanceDecision,
   stats: Stats,
 ) {
-  const statMultiplier = decision.probabilityStats.reduce(
-    (total, { stat, weight }) => total + weight * Math.sqrt(stats[stat] / 5),
-    1,
+  const neutralStat =
+    decision.probabilityNeutralStat ?? defaultProbabilityNeutralStat;
+  const statImpact = decision.probabilityStats.reduce(
+    (total, { stat, weight }) => {
+      const distance = stats[stat] - neutralStat;
+
+      return (
+        total +
+        weight *
+          probabilityStatImpactScale *
+          Math.sign(distance) *
+          Math.sqrt(Math.abs(distance))
+      );
+    },
+    0,
   );
-  const multiplier = Math.min(2.5, statMultiplier);
-  const adjustedChance = Math.round(decision.baseSuccessChance * multiplier);
+  const adjustedChance = Math.round(decision.baseSuccessChance + statImpact);
 
   return createBoundedValue(Math.min(95, Math.max(5, adjustedChance)));
 }
@@ -365,6 +378,25 @@ export function getEvent(id: EventId): DecisionEvent {
   }
 
   return event;
+}
+
+export function getOutcome(
+  event: DecisionEvent,
+  outcomeId: OutcomeId,
+): Outcome {
+  for (const decision of event.decisions) {
+    const outcomes =
+      decision.kind === "safe"
+        ? [decision.outcome]
+        : [decision.successOutcome, decision.failureOutcome];
+    const result = outcomes.find((outcome) => outcome.id === outcomeId);
+
+    if (result) {
+      return result;
+    }
+  }
+
+  throw new RangeError(`Unknown outcome identifier: ${outcomeId}.`);
 }
 
 export function resolveDecision(
@@ -448,6 +480,17 @@ function validateDecision(
     }
 
     if (
+      decision.probabilityNeutralStat !== undefined &&
+      (!Number.isFinite(decision.probabilityNeutralStat) ||
+        decision.probabilityNeutralStat < 0 ||
+        decision.probabilityNeutralStat > 100)
+    ) {
+      throw new TypeError(
+        `Decision ${decision.id} has an invalid neutral stat.`,
+      );
+    }
+
+    if (
       decision.probabilityStats.some(
         ({ weight }) => !Number.isFinite(weight) || weight <= 0,
       )
@@ -479,8 +522,9 @@ function validateDecision(
     }
 
     if (
-      !hasInitialZoidPool(result.zoidReward, "guylos") ||
-      !hasInitialZoidPool(result.zoidReward, "helic")
+      result.zoidReward &&
+      (!hasInitialZoidPool(result.zoidReward, "guylos") ||
+        !hasInitialZoidPool(result.zoidReward, "helic"))
     ) {
       throw new TypeError(
         `Outcome ${result.id} uses an unavailable Zoid category.`,

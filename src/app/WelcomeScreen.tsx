@@ -1,6 +1,7 @@
 import { useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { AnimationToggle } from "./AppControls";
 import { Badge, Button, Panel } from "./UiPrimitives";
 
 const welcomeFacts = {
@@ -11,10 +12,16 @@ const welcomeFacts = {
 } as const;
 
 interface WelcomeScreenProps {
+  onReducedMotionChange: (reducedMotion: boolean) => void;
   onStart: () => void;
+  reducedMotion: boolean;
 }
 
-export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
+export function WelcomeScreen({
+  onReducedMotionChange,
+  onStart,
+  reducedMotion,
+}: WelcomeScreenProps) {
   const [started, setStarted] = useState(false);
   const startedRef = useRef(false);
   const titleId = useId();
@@ -33,6 +40,10 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps) {
   return (
     <main className="screen welcome">
       <Panel className="welcome__panel" labelledBy={titleId}>
+        <AnimationToggle
+          onReducedMotionChange={onReducedMotionChange}
+          reducedMotion={reducedMotion}
+        />
         <div className="welcome__signal" aria-hidden="true">
           <span />
           <span />

@@ -6,7 +6,13 @@ import {
   factionNameKeys,
   getInitialStats,
 } from "../domain/pilot";
-import type { Aspiration, Faction, StatName } from "../domain/types";
+import type {
+  Aspiration,
+  Faction,
+  PilotDraft,
+  StatName,
+} from "../domain/types";
+import { AnimationToggle } from "./AppControls";
 import { Badge, Button, Meter, Panel } from "./UiPrimitives";
 
 const aspirations = Object.keys(aspirationNameKeys) as Aspiration[];
@@ -40,49 +46,62 @@ export interface PilotConfiguration {
 }
 
 interface PilotCreationScreenProps {
+  draft: PilotDraft;
   onConfirm: (configuration: PilotConfiguration) => void;
-  onFactionChange: (faction: Faction) => void;
+  onDraftChange: (draft: PilotDraft) => void;
+  onReducedMotionChange: (reducedMotion: boolean) => void;
+  reducedMotion: boolean;
 }
 
 export function PilotCreationScreen({
+  draft,
   onConfirm,
-  onFactionChange,
+  onDraftChange,
+  onReducedMotionChange,
+  reducedMotion,
 }: PilotCreationScreenProps) {
-  const [aspiration, setAspiration] = useState<Aspiration | null>(null);
-  const [faction, setFaction] = useState<Faction | null>(null);
-  const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const submittedRef = useRef(false);
   const titleId = useId();
   const { i18n, t } = useTranslation("interface");
-  const stats = aspiration ? getInitialStats(aspiration) : null;
-  const isComplete = Boolean(name.trim() && aspiration && faction);
+  const stats = draft.aspiration ? getInitialStats(draft.aspiration) : null;
+  const isComplete = Boolean(
+    draft.name.trim() && draft.aspiration && draft.faction,
+  );
 
   useEffect(() => {
     headingRef.current?.focus();
   }, []);
 
-  function changeFaction(selectedFaction: Faction) {
-    setFaction(selectedFaction);
-    onFactionChange(selectedFaction);
-  }
-
   function submitPilot(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!aspiration || !faction || !isComplete || submittedRef.current) {
+    if (
+      !draft.aspiration ||
+      !draft.faction ||
+      !isComplete ||
+      submittedRef.current
+    ) {
       return;
     }
 
     submittedRef.current = true;
     setSubmitted(true);
-    onConfirm({ aspiration, faction, name });
+    onConfirm({
+      aspiration: draft.aspiration,
+      faction: draft.faction,
+      name: draft.name,
+    });
   }
 
   return (
     <main className="pilot-creation screen">
       <Panel className="pilot-creation__panel" labelledBy={titleId}>
+        <AnimationToggle
+          onReducedMotionChange={onReducedMotionChange}
+          reducedMotion={reducedMotion}
+        />
         <form className="pilot-creation__form" onSubmit={submitPilot}>
           <header className="pilot-creation__heading">
             <Badge>{t("pilotCreation.badge")}</Badge>
@@ -99,11 +118,13 @@ export function PilotCreationScreen({
                 autoComplete="name"
                 disabled={submitted}
                 name="pilot-name"
-                onChange={(event) => setName(event.target.value)}
+                onChange={(event) =>
+                  onDraftChange({ ...draft, name: event.target.value })
+                }
                 placeholder={t("pilotCreation.name.placeholder")}
                 required
                 type="text"
-                value={name}
+                value={draft.name}
               />
             </label>
 
@@ -118,9 +139,11 @@ export function PilotCreationScreen({
                   >
                     <input
                       aria-label={i18n.t(factionNameKeys[factionOption])}
-                      checked={faction === factionOption}
+                      checked={draft.faction === factionOption}
                       name="faction"
-                      onChange={() => changeFaction(factionOption)}
+                      onChange={() =>
+                        onDraftChange({ ...draft, faction: factionOption })
+                      }
                       required
                       type="radio"
                       value={factionOption}
@@ -152,9 +175,11 @@ export function PilotCreationScreen({
                 >
                   <input
                     aria-label={i18n.t(aspirationNameKeys[aspirationOption])}
-                    checked={aspiration === aspirationOption}
+                    checked={draft.aspiration === aspirationOption}
                     name="aspiration"
-                    onChange={() => setAspiration(aspirationOption)}
+                    onChange={() =>
+                      onDraftChange({ ...draft, aspiration: aspirationOption })
+                    }
                     required
                     type="radio"
                     value={aspirationOption}

@@ -1,5 +1,11 @@
 {
-  "firstVictory": {
-    "name": "First victory"
+  "bornInWorkshop": {
+    "name": "Born in the workshop"
+  },
+  "notOnMyWatch": {
+    "name": "Not on my watch"
+  },
+  "trueSoldier": {
+    "name": "A true soldier"
   }
 }
