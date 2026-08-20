@@ -1,11 +1,15 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 import { getZoid, validateZoids, zoids } from "../domain/zoids";
 import {
   hasInitialZoidPool,
   initialZoidPools,
+  selectInitialZoid,
+  selectZoidFromPool,
   validateZoidPools,
+  type ZoidPools,
 } from "../domain/zoidPools";
+import { createSeededRandomGenerator } from "../domain/random";
 import { translate } from "../i18n";
 
 describe("initial Zoid catalog", () => {
@@ -63,6 +67,45 @@ describe("initial Zoid catalog", () => {
         Object.values(categories).flat(),
       ),
     ).toHaveLength(56);
+  });
+
+  test("selects a Zoid with default pool weights", () => {
+    const zoid = selectInitialZoid(
+      "rare",
+      "helic",
+      createSeededRandomGenerator(42),
+    );
+
+    expect(initialZoidPools.helic.rare.map(({ id }) => id)).toContain(zoid.id);
+  });
+
+  test("passes default and explicit weights to the random generator", () => {
+    const random = createSeededRandomGenerator(42);
+    const weighted = vi.spyOn(random, "weighted");
+
+    selectZoidFromPool(
+      [{ id: "zoid:command-wolf" }, { id: "zoid:gordos", weight: 3 }],
+      random,
+    );
+
+    expect(weighted).toHaveBeenCalledWith([
+      { value: "zoid:command-wolf", weight: 1 },
+      { value: "zoid:gordos", weight: 3 },
+    ]);
+  });
+
+  test("rejects an invalid explicit pool weight", () => {
+    const pools = {
+      ...initialZoidPools,
+      helic: {
+        ...initialZoidPools.helic,
+        rare: initialZoidPools.helic.rare.map((entry, index) =>
+          index === 0 ? { ...entry, weight: 0 } : entry,
+        ),
+      },
+    } satisfies ZoidPools;
+
+    expect(() => validateZoidPools(pools)).toThrow("invalid pool weight");
   });
 
   test("provides a localized name for every Zoid", () => {

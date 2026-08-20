@@ -1,7 +1,10 @@
 declare const boundedValueBrand: unique symbol;
 declare const warStateBrand: unique symbol;
 
-export type AchievementId = `achievement:${string}`;
+export type AchievementId =
+  | "achievement:born-in-workshop"
+  | "achievement:not-on-my-watch"
+  | "achievement:true-soldier";
 export type Aspiration = "commander" | "shadow" | "war-hero" | "zoid-ace";
 export type BoundedValue = number & {
   readonly [boundedValueBrand]: "BoundedValue";
@@ -28,6 +31,7 @@ export type MilitaryRank =
   | "soldier";
 export type OutcomeId = `outcome:${string}`;
 export type OutcomeTag = `outcome-tag:${string}`;
+export type PilotCondition = "active" | "dead" | "injured";
 export type PilotId = `pilot:${string}`;
 export type SpecialRank =
   | "blitz-orbit"
@@ -51,6 +55,7 @@ export type TranslationNamespace =
   | "outcomes"
   | "titles"
   | "zoids";
+export type WarIntensity = "active" | "fierce" | "low";
 export type ZoidCategory = "rare" | "standard" | "super-rare" | "weak";
 export type ZoidId = `zoid:${string}`;
 
@@ -63,9 +68,14 @@ export interface Stats {
   technique: BoundedValue;
 }
 
+export interface WarFactionState {
+  control: BoundedValue;
+  faction: Faction;
+}
+
 export interface WarState {
-  guylos: BoundedValue;
-  helic: BoundedValue;
+  intensity: WarIntensity;
+  sides: readonly [WarFactionState, WarFactionState];
   readonly [warStateBrand]: "WarState";
 }
 
@@ -83,9 +93,9 @@ export interface SpecialRankIndicator {
 export type RankIndicator = MilitaryRankIndicator | SpecialRankIndicator;
 
 export interface CareerIndicators {
-  combatPower: BoundedValue;
   factionTrust: BoundedValue;
   fame: BoundedValue;
+  potential: BoundedValue;
   rank: RankIndicator;
   warState: WarState;
 }
@@ -101,11 +111,13 @@ export interface StoredCareerData {
 interface PilotData {
   age: number;
   aspiration: Aspiration;
-  baseCombatPower: BoundedValue;
+  basePotential: BoundedValue;
   career: StoredCareerData;
+  condition: PilotCondition;
   faction: Faction;
   id: PilotId;
   name: string;
+  potential: BoundedValue;
   stats: Stats;
 }
 
@@ -115,6 +127,7 @@ export interface PilotWithoutZoid extends PilotData {
 
 export interface PilotWithZoid extends PilotData {
   zoids: {
+    damagedIds: readonly ZoidId[];
     reserveIds: readonly ZoidId[];
     signatureId: ZoidId;
   };
@@ -148,7 +161,7 @@ export type StatChange =
     }
   | {
       amount: number;
-      target: "base-combat-power";
+      target: "potential";
     };
 
 export interface Outcome {
@@ -156,7 +169,7 @@ export interface Outcome {
   narrativeKey: TranslationKey<"outcomes">;
   statChanges: readonly StatChange[];
   tags: readonly OutcomeTag[];
-  zoidReward: ZoidCategory;
+  zoidReward?: ZoidCategory;
 }
 
 interface DecisionData {
@@ -175,6 +188,7 @@ export interface ChanceDecision extends DecisionData {
   failureOutcome: Outcome;
   kind: "chance";
   outcome?: never;
+  probabilityNeutralStat?: BoundedValue;
   probabilityStats: readonly [ProbabilityStat, ...ProbabilityStat[]];
   successOutcome: Outcome;
 }
@@ -184,6 +198,7 @@ export interface SafeDecision extends DecisionData {
   failureOutcome?: never;
   kind: "safe";
   outcome: Outcome;
+  probabilityNeutralStat?: never;
   probabilityStats?: never;
   successOutcome?: never;
 }
@@ -217,8 +232,50 @@ export type DecisionResolution =
 
 export interface BattleRecord {
   assigned: number;
+  available: number;
+  injured: boolean;
+  killed: boolean;
   losses: number;
+  participated: number;
   wins: number;
+  zoidDamaged: boolean;
+  zoidDestroyed: boolean;
+}
+
+export type AppliedChange =
+  | {
+      current: BoundedValue;
+      previous: BoundedValue;
+      stat: StatName;
+      target: "stat";
+    }
+  | {
+      current: BoundedValue;
+      indicator: "faction-trust" | "fame";
+      previous: BoundedValue;
+      target: "career-indicator";
+    }
+  | {
+      current: BoundedValue;
+      faction: Faction;
+      previous: BoundedValue;
+      target: "war-state";
+    }
+  | {
+      current: BoundedValue;
+      previous: BoundedValue;
+      target: "potential";
+    };
+
+export interface ResolvedYear {
+  achievementIds: readonly AchievementId[];
+  battleRecord: BattleRecord;
+  changes: readonly AppliedChange[];
+  outcome: Outcome;
+  pilotAfter: Pilot;
+  pilotBefore: Pilot;
+  resolution: DecisionResolution;
+  zoidIds: readonly ZoidId[];
 }
 
 export interface PilotDraft {
@@ -239,25 +296,41 @@ export interface PilotCreationGameState {
 export interface ChoosingEventGameState {
   eventId: EventId;
   phase: "choosing";
-  pilot: PilotWithoutZoid;
+  pilot: Pilot;
   screen: "event";
 }
 
-export interface ResolvingEventGameState {
+export interface AnimatingEventGameState {
   eventId: EventId;
-  phase: "resolving";
-  pilot: PilotWithoutZoid;
-  resolution: DecisionResolution;
+  phase: "animating";
+  pilot: Pilot;
+  result: ResolvedYear & {
+    resolution: ChanceDecisionResolution;
+  };
   screen: "event";
 }
 
-export interface OutcomeGameState {
-  battleRecord: BattleRecord;
+export interface ClosedEventGameState {
   eventId: EventId;
-  pilot: PilotWithZoid;
-  resolution: DecisionResolution;
-  screen: "outcome";
+  phase: "closed";
+  pilot: Pilot;
+  result: ResolvedYear;
+  screen: "event";
 }
+
+export interface OutcomeEventGameState {
+  eventId: EventId;
+  phase: "outcome";
+  pilot: Pilot;
+  result: ResolvedYear;
+  screen: "event";
+}
+
+export type EventGameState =
+  | AnimatingEventGameState
+  | ChoosingEventGameState
+  | ClosedEventGameState
+  | OutcomeEventGameState;
 
 export interface FinalGameState {
   achievementIds: readonly AchievementId[];
@@ -270,12 +343,7 @@ export interface FinalGameState {
 }
 
 export type GameState =
-  | ChoosingEventGameState
-  | FinalGameState
-  | OutcomeGameState
-  | PilotCreationGameState
-  | ResolvingEventGameState
-  | WelcomeGameState;
+  EventGameState | FinalGameState | PilotCreationGameState | WelcomeGameState;
 
 export function createBoundedValue(value: number): BoundedValue {
   if (!Number.isFinite(value) || value < 0 || value > 100) {
@@ -285,16 +353,29 @@ export function createBoundedValue(value: number): BoundedValue {
   return value as BoundedValue;
 }
 
-export function createWarState(helic: number, guylos: number): WarState {
-  const helicControl = createBoundedValue(helic);
-  const guylosControl = createBoundedValue(guylos);
+export function createWarState(
+  firstFaction: Faction,
+  firstControl: number,
+  secondFaction: Faction,
+  secondControl: number,
+  intensity: WarIntensity = "low",
+): WarState {
+  const first = createBoundedValue(firstControl);
+  const second = createBoundedValue(secondControl);
 
-  if (helicControl + guylosControl !== 100) {
+  if (firstFaction === secondFaction) {
+    throw new RangeError("War factions must be different.");
+  }
+
+  if (first + second !== 100) {
     throw new RangeError("Faction control values must total 100.");
   }
 
   return {
-    guylos: guylosControl,
-    helic: helicControl,
-  } as WarState;
+    intensity,
+    sides: [
+      { control: first, faction: firstFaction },
+      { control: second, faction: secondFaction },
+    ],
+  } as unknown as WarState;
 }

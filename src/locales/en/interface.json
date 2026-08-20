@@ -12,7 +12,12 @@
   "careerStatus": {
     "age": "Age",
     "ageCompact": "Age {{age}}",
-    "combatPower": "Combat power",
+    "fame": "Fame",
+    "fameLabel": "Fame: {{value}} of 100",
+    "factions": {
+      "guylos": "Guylos",
+      "helic": "Helic"
+    },
     "guylos": "Guylos",
     "helic": "Helic",
     "label": "Career status",
@@ -25,10 +30,33 @@
       "soldierLife": "Soldier's life"
     },
     "percentage": "{{value}}%",
-    "powerLabel": "Combat power: {{value}} of 100",
+    "potential": "Potential",
+    "potentialCompact": "POT",
+    "potentialLabel": "Potential: {{value}} of 100",
+    "ranks": {
+      "cadet": "Cadet",
+      "captain": "Captain",
+      "commander": "Commander",
+      "corporal": "Corporal",
+      "general": "General",
+      "lieutenant": "Lieutenant",
+      "major": "Major",
+      "sergeant": "Sergeant",
+      "soldier": "Soldier"
+    },
+    "specialRanks": {
+      "blitzOrbit": "Blitz Orbit",
+      "eizenDragoons": "Eizen Dragoons",
+      "leoMaster": "Leo Master",
+      "machineryFour": "Machinery Four",
+      "prozenKnight": "Prozen Knight",
+      "tacticalMaster": "Tactical Master",
+      "traitor": "Traitor"
+    },
     "unassigned": "Zoid unassigned",
-    "warLabel": "Territorial control: Helic {{helic}}%, Guylos {{guylos}}%",
+    "warLabel": "Territorial control: {{firstFaction}} {{firstControl}}%, {{secondFaction}} {{secondControl}}%",
     "warState": "War state",
+    "warStateCompact": "War",
     "year": "Year",
     "yearCompact": "Year {{year}}",
     "zoid": "Zoid",
@@ -41,6 +69,7 @@
     "locked": "Decision confirmed: {{decision}}. The other options are locked.",
     "probabilityLabel": "Success {{success}}%, failure {{failure}}%",
     "risk": "With risk",
+    "riskCompact": "With risk · {{success}}%",
     "riskOptionLabel": "{{decision}}. With risk. Success {{success}}%, failure {{failure}}%.",
     "safe": "Safe",
     "safeOptionLabel": "{{decision}}. Safe."
@@ -78,7 +107,56 @@
     },
     "title": "Cadet enlistment form"
   },
+  "outcomeScreen": {
+    "achievementEarned": "Achievement earned",
+    "badge": "Annual report",
+    "battleInjured": "You were injured and withdrew from the remaining battles.",
+    "battleKilled": "You died in combat.",
+    "battleReport": "Of {{available}} battles for {{faction}}, you participated in {{participated}} and won {{wins}}.",
+    "battles": "Battles",
+    "channel": "Career archive // secure transmission",
+    "close": "Close year",
+    "closed": "Year closed. The record is ready to continue.",
+    "potential": "Potential",
+    "decisionRiskFailure": "Decision · With risk · Failure",
+    "decisionRiskSuccess": "Decision · With risk · Success",
+    "decisionSafe": "Decision · Without risk",
+    "factionTrust": "Faction trust",
+    "fame": "Fame",
+    "factions": {
+      "guylos": "the Guylos Empire",
+      "helic": "the Helic Republic"
+    },
+    "growthExceptional": "Your progress was exceptional. You improved tremendously as a pilot.",
+    "growthLimited": "You barely improved as a pilot this year.",
+    "growthSteady": "You improved as a pilot, and your training produced results.",
+    "growthStrong": "You improved significantly as a pilot this year.",
+    "noBattles": "You did not participate in any battles this year.",
+    "statValueLabel": "{{stat}}: {{current}} total",
+    "stats": "Pilot progress",
+    "warState": "{{faction}} status",
+    "warTerritory": {
+      "critical": "Critical advance by {{winner}}. {{loser}}'s defenses are near their limit.",
+      "major": "{{winner}} expanded its territorial control. {{loser}} is losing ground quickly.",
+      "minor": "{{winner}} gained territory this year.",
+      "stale": "The war remained stale this year."
+    },
+    "zoidDamaged": "Your active Zoid was damaged.",
+    "zoidDestroyed": "Your active Zoid was destroyed.",
+    "zoidObtained": "Zoid obtained"
+  },
+  "resolutionScreen": {
+    "badge": "Resolution in progress",
+    "indicatorFailure": "Failure",
+    "indicatorSuccess": "Success",
+    "probabilityLabel": "Resolution target. Success {{success}}%, failure {{failure}}%.",
+    "selected": "Selected order"
+  },
   "welcome": {
+    "animations": {
+      "off": "Animations OFF",
+      "on": "Animations ON"
+    },
     "badge": "Pilot recruitment transmission",
     "callToAction": "Become a legend or fade into obscurity.",
     "colorMode": {

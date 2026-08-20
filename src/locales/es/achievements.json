@@ -1,5 +1,11 @@
 {
-  "firstVictory": {
-    "name": "Primera victoria"
+  "bornInWorkshop": {
+    "name": "Nacido en el taller"
+  },
+  "notOnMyWatch": {
+    "name": "No en mi guardia"
+  },
+  "trueSoldier": {
+    "name": "Un soldado de verdad"
   }
 }

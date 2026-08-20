@@ -2,13 +2,18 @@ import { describe, expect, test } from "vitest";
 
 import {
   aspirationNameKeys,
+  calculatePotential,
   createInitialPilot,
   factionNameKeys,
   getInitialStats,
   getLifeStage,
   normalizePilotName,
 } from "../domain/pilot";
-import type { Aspiration, Faction } from "../domain/types";
+import {
+  createBoundedValue,
+  type Aspiration,
+  type Faction,
+} from "../domain/types";
 
 const aspirations = Object.keys(aspirationNameKeys) as Aspiration[];
 const factions = Object.keys(factionNameKeys) as Faction[];
@@ -62,18 +67,54 @@ describe("createInitialPilot", () => {
 
     expect(pilot).toMatchObject({
       age: 12,
-      baseCombatPower: 0,
+      basePotential: 0,
       career: {
         factionTrust: 0,
         fame: 0,
         militaryRank: "cadet",
         specialRank: null,
-        warState: { guylos: 50, helic: 50 },
+        warState: {
+          intensity: "low",
+          sides: [
+            { control: 50, faction: "helic" },
+            { control: 50, faction: "guylos" },
+          ],
+        },
       },
+      condition: "active",
       faction,
       name: "Lena Steel",
+      potential: 0,
       zoids: null,
     });
+  });
+});
+
+describe("calculatePotential", () => {
+  test("adds 25% of Zoid power without limiting pilot growth", () => {
+    const pilot = createInitialPilot({
+      aspiration: "zoid-ace",
+      faction: "helic",
+      id: "pilot:potential",
+      name: "Lena",
+    });
+    const pilotWithZoid = {
+      ...pilot,
+      basePotential: createBoundedValue(80),
+      zoids: {
+        damagedIds: [],
+        reserveIds: [],
+        signatureId: "zoid:godos",
+      },
+    } as const;
+
+    expect(calculatePotential(pilotWithZoid)).toBe(85);
+    expect(
+      calculatePotential({
+        ...pilotWithZoid,
+        basePotential: createBoundedValue(100),
+      }),
+    ).toBe(100);
   });
 });
 

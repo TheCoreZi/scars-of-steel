@@ -1,13 +1,23 @@
-import type { Faction, ZoidCategory, ZoidId } from "./types";
+import type { RandomGenerator } from "./random";
+import type { Faction, Zoid, ZoidCategory, ZoidId } from "./types";
 import { getZoid, zoids } from "./zoids";
 
+export interface ZoidPoolEntry {
+  id: ZoidId;
+  weight?: number;
+}
+
 export type ZoidPools = Readonly<
-  Record<Faction, Readonly<Record<ZoidCategory, readonly ZoidId[]>>>
+  Record<Faction, Readonly<Record<ZoidCategory, readonly ZoidPoolEntry[]>>>
 >;
+
+function createPool(ids: readonly ZoidId[]): readonly ZoidPoolEntry[] {
+  return ids.map((id) => ({ id }));
+}
 
 export const initialZoidPools = {
   guylos: {
-    rare: [
+    rare: createPool([
       "zoid:black-rhymos",
       "zoid:hel-digunner",
       "zoid:helcat",
@@ -15,8 +25,8 @@ export const initialZoidPools = {
       "zoid:redler",
       "zoid:rev-raptor",
       "zoid:twin-horn",
-    ],
-    standard: [
+    ]),
+    standard: createPool([
       "zoid:brachios",
       "zoid:geruder",
       "zoid:gun-tiger",
@@ -26,8 +36,8 @@ export const initialZoidPools = {
       "zoid:sea-panther",
       "zoid:sinker",
       "zoid:storch",
-    ],
-    "super-rare": [
+    ]),
+    "super-rare": createPool([
       "zoid:dimetrodon",
       "zoid:metal-rhymos",
       "zoid:red-horn",
@@ -35,17 +45,17 @@ export const initialZoidPools = {
       "zoid:rev-raptor-pb",
       "zoid:saber-tiger",
       "zoid:wardick",
-    ],
-    weak: [
+    ]),
+    weak: createPool([
       "zoid:gator",
       "zoid:malder",
       "zoid:merda",
       "zoid:saicurtis",
       "zoid:zatton",
-    ],
+    ]),
   },
   helic: {
-    rare: [
+    rare: createPool([
       "zoid:arosaurer",
       "zoid:bear-fighter",
       "zoid:command-wolf",
@@ -53,8 +63,8 @@ export const initialZoidPools = {
       "zoid:gorhecks",
       "zoid:mammoth",
       "zoid:stealth-viper",
-    ],
-    standard: [
+    ]),
+    standard: createPool([
       "zoid:barigator",
       "zoid:cannon-tortoise",
       "zoid:double-sworder",
@@ -63,16 +73,16 @@ export const initialZoidPools = {
       "zoid:hidocker",
       "zoid:pteras",
       "zoid:spiker",
-    ],
-    "super-rare": [
+    ]),
+    "super-rare": createPool([
       "zoid:bigasaurus",
       "zoid:command-wolf-ac",
       "zoid:dibison",
       "zoid:gun-sniper",
       "zoid:raynos",
       "zoid:shield-liger",
-    ],
-    weak: [
+    ]),
+    weak: createPool([
       "zoid:aquadon",
       "zoid:furolesios",
       "zoid:garius",
@@ -80,7 +90,7 @@ export const initialZoidPools = {
       "zoid:gorgodos",
       "zoid:gurantula",
       "zoid:pegasuros",
-    ],
+    ]),
   },
 } as const satisfies ZoidPools;
 
@@ -91,18 +101,44 @@ export function hasInitialZoidPool(
   return initialZoidPools[faction][category].length > 0;
 }
 
+export function selectInitialZoid(
+  category: ZoidCategory,
+  faction: Faction,
+  random: RandomGenerator,
+): Zoid {
+  return selectZoidFromPool(initialZoidPools[faction][category], random);
+}
+
+export function selectZoidFromPool(
+  pool: readonly ZoidPoolEntry[],
+  random: RandomGenerator,
+): Zoid {
+  const id = random.weighted(
+    pool.map(({ id, weight = 1 }) => ({
+      value: id,
+      weight,
+    })),
+  );
+
+  return getZoid(id);
+}
+
 export function validateZoidPools(pools: ZoidPools): void {
   const ids = new Set<ZoidId>();
 
   for (const [faction, categories] of Object.entries(pools)) {
     for (const pool of Object.values(categories)) {
-      for (const id of pool) {
+      for (const { id, weight = 1 } of pool) {
         if (ids.has(id)) {
           throw new TypeError(`Duplicate Zoid pool entry: ${id}.`);
         }
 
         if (getZoid(id).faction !== faction) {
           throw new TypeError(`Zoid ${id} is in the wrong faction pool.`);
+        }
+
+        if (!Number.isFinite(weight) || weight <= 0) {
+          throw new TypeError(`Zoid ${id} has an invalid pool weight.`);
         }
 
         ids.add(id);

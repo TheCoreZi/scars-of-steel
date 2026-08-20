@@ -2,9 +2,11 @@ import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
-  factionNameKeys,
   getLifeStage,
+  factionShortNameKeys,
   lifeStageNameKeys,
+  militaryRankNameKeys,
+  specialRankNameKeys,
 } from "../domain/pilot";
 import type { Pilot, Zoid } from "../domain/types";
 import { getZoid } from "../domain/zoids";
@@ -21,34 +23,27 @@ interface CareerStatusBarProps {
 }
 
 export function CareerStatusBar({ pilot }: CareerStatusBarProps) {
-  const { i18n, t } = useTranslation("interface");
+  const { t } = useTranslation("interface");
   const zoid = pilot.zoids ? getZoid(pilot.zoids.signatureId) : null;
-  const factionName = i18n.t(factionNameKeys[pilot.faction]);
+  const rankName = translate(
+    pilot.career.specialRank
+      ? specialRankNameKeys[pilot.career.specialRank]
+      : militaryRankNameKeys[pilot.career.militaryRank],
+  );
   const zoidName = zoid ? translate(zoid.nameKey) : null;
 
   return (
     <aside aria-label={t("careerStatus.label")} className="career-status">
       <div className="career-status__desktop">
         <StatusDetails
-          factionName={factionName}
+          factionName={translate(factionShortNameKeys[pilot.faction])}
           pilot={pilot}
+          rankName={rankName}
           zoid={zoid}
           zoidName={zoidName}
         />
+        <FameCrowd fame={pilot.career.fame} pilotName={pilot.name} />
       </div>
-      <details className="career-status__mobile">
-        <summary>
-          <img alt="" src={factionLogoPaths[pilot.faction]} />
-          <span>{pilot.name}</span>
-          <strong>{t("careerStatus.ageCompact", { age: pilot.age })}</strong>
-        </summary>
-        <StatusDetails
-          factionName={factionName}
-          pilot={pilot}
-          zoid={zoid}
-          zoidName={zoidName}
-        />
-      </details>
     </aside>
   );
 }
@@ -56,6 +51,7 @@ export function CareerStatusBar({ pilot }: CareerStatusBarProps) {
 interface StatusDetailsProps {
   factionName: string;
   pilot: Pilot;
+  rankName: string;
   zoid: Zoid | null;
   zoidName: string | null;
 }
@@ -63,54 +59,51 @@ interface StatusDetailsProps {
 function StatusDetails({
   factionName,
   pilot,
+  rankName,
   zoid,
   zoidName,
 }: StatusDetailsProps) {
   const { t } = useTranslation("interface");
-  const combatPower = Math.min(
-    100,
-    pilot.baseCombatPower + (zoid?.basePower ?? 0),
-  );
-  const guylosControl = pilot.career.warState.guylos;
-  const helicControl = pilot.career.warState.helic;
-  const powerStyle = {
-    "--power-percent": `${combatPower}%`,
+  const potential = pilot.potential;
+  const [firstSide, secondSide] = pilot.career.warState.sides;
+  const firstFactionName = translate(factionShortNameKeys[firstSide.faction]);
+  const secondFactionName = translate(factionShortNameKeys[secondSide.faction]);
+  const potentialStyle = {
+    "--potential-percent": `${potential}%`,
   } as CSSProperties;
 
   return (
     <div className="career-status__details">
       <ZoidPanel zoid={zoid} zoidName={zoidName} />
       <div className="career-status__pilot">
+        <span className="career-status__pilot-heading">
+          <small className="career-status__rank">{rankName}</small>
+          <small className="career-status__pilot-faction">{factionName}</small>
+        </span>
         <strong>{pilot.name}</strong>
         <span className="career-status__metadata">
-          <span>{factionName}</span>
           <span>{translate(lifeStageNameKeys[getLifeStage(pilot.age)])}</span>
           <span>{t("careerStatus.ageCompact", { age: pilot.age })}</span>
           <span>{t("careerStatus.yearCompact", { year: pilot.age - 11 })}</span>
         </span>
       </div>
-      <div
-        aria-label={t("careerStatus.powerLabel", { value: combatPower })}
-        aria-valuemax={100}
-        aria-valuemin={0}
-        aria-valuenow={combatPower}
-        className="career-status__power"
-        role="progressbar"
-        style={powerStyle}
-      >
-        <small>{t("careerStatus.combatPower")}</small>
-        <strong>{combatPower}</strong>
-      </div>
       <div className="career-status__war">
         <span className="career-status__war-heading">
-          {t("careerStatus.warState")}
+          <span className="career-status__full-label">
+            {t("careerStatus.warState")}
+          </span>
+          <span className="career-status__compact-label">
+            {t("careerStatus.warStateCompact")}
+          </span>
         </span>
         <div className="career-status__war-scale">
-          <img alt="" src={factionLogoPaths.helic} />
+          <img alt="" src={factionLogoPaths[firstSide.faction]} />
           <div
             aria-label={t("careerStatus.warLabel", {
-              guylos: guylosControl,
-              helic: helicControl,
+              firstControl: firstSide.control,
+              firstFaction: firstFactionName,
+              secondControl: secondSide.control,
+              secondFaction: secondFactionName,
             })}
             className="career-status__war-track"
             role="img"
@@ -118,23 +111,45 @@ function StatusDetails({
             <span
               aria-hidden="true"
               className="career-status__war-fill"
-              style={{ width: `${helicControl}%` }}
+              style={{ width: `${firstSide.control}%` }}
             />
           </div>
-          <img alt="" src={factionLogoPaths.guylos} />
+          <img alt="" src={factionLogoPaths[secondSide.faction]} />
         </div>
         <span className="career-status__war-values">
           <span>
-            <strong>{t("careerStatus.helic")}</strong>
-            <span>{t("careerStatus.percentage", { value: helicControl })}</span>
+            <strong>{firstFactionName}</strong>
+            <span>
+              {t("careerStatus.percentage", { value: firstSide.control })}
+            </span>
           </span>
           <span>
-            <strong>{t("careerStatus.guylos")}</strong>
+            <strong>{secondFactionName}</strong>
             <span>
-              {t("careerStatus.percentage", { value: guylosControl })}
+              {t("careerStatus.percentage", { value: secondSide.control })}
             </span>
           </span>
         </span>
+      </div>
+      <div
+        aria-label={t("careerStatus.potentialLabel", { value: potential })}
+        aria-orientation="vertical"
+        aria-valuemax={100}
+        aria-valuemin={0}
+        aria-valuenow={potential}
+        className="career-status__potential"
+        role="progressbar"
+        style={potentialStyle}
+      >
+        <small>
+          <span className="career-status__full-label">
+            {t("careerStatus.potential")}
+          </span>
+          <span className="career-status__compact-label">
+            {t("careerStatus.potentialCompact")}
+          </span>
+        </small>
+        <strong>{potential}</strong>
       </div>
     </div>
   );
@@ -173,5 +188,57 @@ function ZoidPanel({ zoid, zoidName }: ZoidPanelProps) {
         ) : null}
       </span>
     </section>
+  );
+}
+
+interface FameCrowdProps {
+  fame: number;
+  pilotName: string;
+}
+
+function FameCrowd({ fame, pilotName }: FameCrowdProps) {
+  const { t } = useTranslation("interface");
+  const fanCount = Math.ceil(fame / 2);
+  const speakingCount =
+    fame === 100 ? fanCount : Math.floor((fanCount * fame) / 100);
+
+  return (
+    <div
+      aria-label={t("careerStatus.fameLabel", { value: fame })}
+      aria-valuemax={100}
+      aria-valuemin={0}
+      aria-valuenow={fame}
+      className="career-status__fans"
+      data-mood={fame < 25 ? "indifferent" : fame < 75 ? "engaged" : "cheering"}
+      role="progressbar"
+    >
+      <span className="career-status__fans-label">
+        <small>{t("careerStatus.fame")}</small>
+      </span>
+      <span aria-hidden="true" className="career-status__crowd">
+        {Array.from({ length: fanCount }, (_, index) => {
+          const style = {
+            "--fan-delay": `${index * 35}ms`,
+            "--fan-message-delay": `${index * -180}ms`,
+          } as CSSProperties;
+
+          return (
+            <span
+              className="career-status__fan"
+              data-entering="true"
+              data-side={index % 2 === 0 ? "left" : "right"}
+              data-speaking={index < speakingCount || undefined}
+              key={index}
+              style={style}
+            >
+              <span className="career-status__fan-message">
+                {index < speakingCount ? pilotName : "?"}
+              </span>
+              <span className="career-status__fan-sprite" />
+            </span>
+          );
+        })}
+      </span>
+    </div>
   );
 }

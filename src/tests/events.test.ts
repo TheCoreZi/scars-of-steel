@@ -176,15 +176,15 @@ describe("adjusted event probability", () => {
     } as const satisfies ChanceDecision;
 
     expect(calculateAdjustedSuccessChance(decision, createStats(5, 0))).toBe(
-      44,
+      41,
     );
   });
 
   test.each([
-    [0, 0, 40],
-    [1, 0, 45],
-    [5, 0, 52],
-    [5, 5, 58],
+    [0, 0, 35],
+    [1, 0, 36],
+    [5, 0, 42],
+    [5, 5, 46],
   ])(
     "uses piloting %s and synchrony %s to produce %s percent",
     (piloting, synchrony, expected) => {
@@ -196,6 +196,71 @@ describe("adjusted event probability", () => {
       ).toBe(expected);
     },
   );
+
+  test("subtracts five points when both relevant stats are zero", () => {
+    expect(
+      calculateAdjustedSuccessChance(
+        createChanceDecision(60),
+        createStats(0, 0),
+      ),
+    ).toBe(55);
+  });
+
+  test("adds six points when both relevant stats are five", () => {
+    expect(
+      calculateAdjustedSuccessChance(
+        createChanceDecision(60),
+        createStats(5, 5),
+      ),
+    ).toBe(66);
+  });
+
+  test.each([
+    [0.3, 0, 57],
+    [0.3, 5, 64],
+    [0.8, 0, 51],
+    [0.8, 5, 71],
+    [1.6, 0, 42],
+    [1.6, 5, 82],
+  ])(
+    "uses factor %s for stat %s to produce %s percent",
+    (weight, stat, expected) => {
+      const decision = {
+        ...createChanceDecision(60),
+        probabilityStats: [{ stat: "piloting", weight }],
+      } as const satisfies ChanceDecision;
+
+      expect(
+        calculateAdjustedSuccessChance(decision, createStats(stat, 0)),
+      ).toBe(expected);
+    },
+  );
+
+  test("uses diminishing returns through stat 100", () => {
+    const decision = createChanceDecision(40);
+    const atFive = calculateAdjustedSuccessChance(decision, createStats(5, 5));
+    const atOneHundred = calculateAdjustedSuccessChance(
+      decision,
+      createStats(100, 100),
+    );
+
+    expect(atFive).toBe(46);
+    expect(atOneHundred).toBe(76);
+  });
+
+  test("uses the neutral stat configured by the decision", () => {
+    const decision = {
+      ...createChanceDecision(60),
+      probabilityNeutralStat: createBoundedValue(5),
+    } as const satisfies ChanceDecision;
+
+    expect(calculateAdjustedSuccessChance(decision, createStats(5, 5))).toBe(
+      60,
+    );
+    expect(calculateAdjustedSuccessChance(decision, createStats(2, 2))).toBe(
+      54,
+    );
+  });
 
   test("limits adjusted probability to 5 and 95 percent", () => {
     expect(
@@ -227,15 +292,15 @@ describe("decision resolution", () => {
   });
 
   test.each([
-    [0.55, "success"],
-    [0.56, "failure"],
+    [0.43, "success"],
+    [0.44, "failure"],
   ] as const)("uses the visible threshold for a %s roll", (roll, result) => {
     const random = createRandom(roll);
     const decision = eventCatalog.firstExercises.decisions[1];
     const resolution = resolveDecision(decision, pilot, random);
 
     expect(resolution).toMatchObject({
-      adjustedSuccessChance: 56,
+      adjustedSuccessChance: 44,
       result,
       roll: roll * 100,
     });

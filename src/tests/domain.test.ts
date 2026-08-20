@@ -56,17 +56,19 @@ const stats = {
 const pilotWithoutZoid = {
   age: 12,
   aspiration: "zoid-ace",
-  baseCombatPower: zero,
+  basePotential: zero,
   career: {
     factionTrust: zero,
     fame: zero,
     militaryRank: "cadet",
     specialRank: null,
-    warState: createWarState(50, 50),
+    warState: createWarState("helic", 50, "guylos", 50),
   },
+  condition: "active",
   faction: "helic",
   id: "pilot:test",
   name: "Test Pilot",
+  potential: zero,
   stats,
   zoids: null,
 } as const satisfies PilotWithoutZoid;
@@ -86,7 +88,13 @@ describe("createBoundedValue", () => {
 
 describe("createWarState", () => {
   test("accepts faction control values that total 100", () => {
-    expect(createWarState(50, 50)).toMatchObject({ guylos: 50, helic: 50 });
+    expect(createWarState("helic", 50, "guylos", 50)).toMatchObject({
+      intensity: "low",
+      sides: [
+        { control: 50, faction: "helic" },
+        { control: 50, faction: "guylos" },
+      ],
+    });
   });
 
   test.each([
@@ -94,7 +102,13 @@ describe("createWarState", () => {
     [40, 40],
     [50, Number.NaN],
   ])("rejects the invalid control values %s and %s", (helic, guylos) => {
-    expect(() => createWarState(helic, guylos)).toThrow(RangeError);
+    expect(() => createWarState("helic", helic, "guylos", guylos)).toThrow(
+      RangeError,
+    );
+  });
+
+  test("rejects a war with the same faction on both sides", () => {
+    expect(() => createWarState("helic", 50, "helic", 50)).toThrow(RangeError);
   });
 });
 
@@ -137,10 +151,10 @@ const choosingState = {
   screen: "event",
 } as const satisfies GameState;
 
-// @ts-expect-error Resolving an event requires a stored resolution.
-const invalidResolvingState: GameState = {
+// @ts-expect-error Animating an event requires a stored result.
+const invalidAnimatingState: GameState = {
   ...choosingState,
-  phase: "resolving",
+  phase: "animating",
 };
 
 const invalidFinalState: GameState = {
@@ -160,6 +174,6 @@ const invalidFinalState: GameState = {
 
 void invalidChanceDecision;
 void invalidFinalState;
-void invalidResolvingState;
+void invalidAnimatingState;
 void invalidSafeDecision;
 void invalidStats;
