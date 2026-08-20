@@ -197,24 +197,22 @@ describe("career status bar", () => {
     ).toBeInTheDocument();
   });
 
-  test("uses the fallback for a Zoid without a sprite", () => {
+  test("renders the Storch sprite", () => {
     const pilotWithZoid = {
       ...pilot,
       potential: createBoundedValue(30),
       zoids: {
         damagedIds: [],
         reserveIds: [],
-        signatureId: "zoid:arosaurer",
+        signatureId: "zoid:storch",
       },
     } satisfies PilotWithZoid;
 
     const { container } = render(<CareerStatusBar pilot={pilotWithZoid} />);
 
-    expect(screen.getByText("Arosaurer")).toBeInTheDocument();
+    expect(screen.getByText("Storch")).toBeInTheDocument();
     expect(
-      container.querySelector(
-        ".career-status__desktop .career-status__zoid-fallback",
-      ),
-    ).toBeInTheDocument();
+      container.querySelector(".career-status__desktop .career-status__zoid"),
+    ).toHaveAttribute("src", "/images/zoids/storch.png");
   });
 });

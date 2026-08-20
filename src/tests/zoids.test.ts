@@ -37,12 +37,12 @@ describe("initial Zoid catalog", () => {
     );
   });
 
-  test("associates 38 existing sprites without substitutions", () => {
+  test("associates 56 existing sprites without substitutions", () => {
     const illustratedZoids = zoids.filter((zoid) => zoid.imagePath);
 
-    expect(illustratedZoids).toHaveLength(38);
+    expect(illustratedZoids).toHaveLength(56);
     expect(new Set(illustratedZoids.map((zoid) => zoid.imagePath)).size).toBe(
-      38,
+      56,
     );
     expect(
       illustratedZoids.every((zoid) =>
@@ -57,6 +57,9 @@ describe("initial Zoid catalog", () => {
       faction: "helic",
       imagePath: "/images/zoids/command_wolf.png",
     });
+    expect(getZoid("zoid:black-rhymos").imagePath).toBe(
+      "/images/zoids/black_rhimos.png",
+    );
     expect(() => getZoid("zoid:missing")).toThrow("Unknown Zoid identifier");
   });
 
