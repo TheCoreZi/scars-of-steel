@@ -1,5 +1,6 @@
 import { describe, expect, expectTypeOf, test } from "vitest";
 
+import { createCareerHistory } from "../domain/career";
 import {
   createBoundedValue,
   createWarState,
@@ -146,6 +147,7 @@ const invalidChanceDecision: Decision = {
 
 const choosingState = {
   eventId: "event:first-exercises",
+  history: createCareerHistory(),
   phase: "choosing",
   pilot: pilotWithoutZoid,
   screen: "event",
@@ -157,23 +159,17 @@ const invalidAnimatingState: GameState = {
   phase: "animating",
 };
 
-const invalidFinalState: GameState = {
-  achievementIds: [],
-  eventId: "event:first-exercises",
-  nicknameKey: "nicknames:default.guardian",
-  // @ts-expect-error The final screen requires a pilot with a signature Zoid.
+const finalStateWithoutZoid: GameState = {
+  endReason: "no-eligible-events",
+  history: createCareerHistory(),
+  nicknameId: "nickname:guardian",
   pilot: pilotWithoutZoid,
-  resolution: {
-    decisionId: "decision:accept-standard",
-    kind: "safe",
-    outcomeId: "outcome:standard-zoid",
-  },
   screen: "final",
-  titleKey: "titles:villageHero",
+  titleId: "title:village-hero",
 };
 
 void invalidChanceDecision;
-void invalidFinalState;
+void finalStateWithoutZoid;
 void invalidAnimatingState;
 void invalidSafeDecision;
 void invalidStats;

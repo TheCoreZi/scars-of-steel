@@ -9,6 +9,14 @@ export type Aspiration = "commander" | "shadow" | "war-hero" | "zoid-ace";
 export type BoundedValue = number & {
   readonly [boundedValueBrand]: "BoundedValue";
 };
+export type CareerEndReason =
+  | "dead"
+  | "disappeared"
+  | "no-eligible-events"
+  | "non-operational"
+  | "retired"
+  | "war-lost"
+  | "war-won";
 export type DecisionId = `decision:${string}`;
 export type EventId = `event:${string}`;
 export type Faction = "guylos" | "helic";
@@ -29,6 +37,7 @@ export type MilitaryRank =
   | "major"
   | "sergeant"
   | "soldier";
+export type NicknameId = `nickname:${string}`;
 export type OutcomeId = `outcome:${string}`;
 export type OutcomeTag = `outcome-tag:${string}`;
 export type PilotCondition = "active" | "dead" | "injured";
@@ -43,6 +52,20 @@ export type SpecialRank =
   | "traitor";
 export type StatName =
   "charisma" | "piloting" | "strength" | "synchrony" | "tactics" | "technique";
+export type TitleId =
+  | "title:champion"
+  | "title:false-promise"
+  | "title:living-legend"
+  | "title:martyr"
+  | "title:nation-ace"
+  | "title:nation-idol"
+  | "title:puppeteer"
+  | "title:solid-pilot"
+  | "title:spear-of-zi"
+  | "title:veteran"
+  | "title:village-hero"
+  | "title:voice-of-command"
+  | "title:war-hero";
 export type TranslationKey<
   Namespace extends TranslationNamespace = TranslationNamespace,
 > = `${Namespace}:${string}`;
@@ -242,6 +265,18 @@ export interface BattleRecord {
   zoidDestroyed: boolean;
 }
 
+export interface CareerBattleRecord {
+  losses: number;
+  participated: number;
+  wins: number;
+}
+
+export interface CareerHistory {
+  achievementIds: readonly AchievementId[];
+  battles: CareerBattleRecord;
+  completedEventIds: readonly EventId[];
+}
+
 export type AppliedChange =
   | {
       current: BoundedValue;
@@ -295,6 +330,7 @@ export interface PilotCreationGameState {
 
 export interface ChoosingEventGameState {
   eventId: EventId;
+  history: CareerHistory;
   phase: "choosing";
   pilot: Pilot;
   screen: "event";
@@ -302,6 +338,7 @@ export interface ChoosingEventGameState {
 
 export interface AnimatingEventGameState {
   eventId: EventId;
+  history: CareerHistory;
   phase: "animating";
   pilot: Pilot;
   result: ResolvedYear & {
@@ -310,16 +347,9 @@ export interface AnimatingEventGameState {
   screen: "event";
 }
 
-export interface ClosedEventGameState {
-  eventId: EventId;
-  phase: "closed";
-  pilot: Pilot;
-  result: ResolvedYear;
-  screen: "event";
-}
-
 export interface OutcomeEventGameState {
   eventId: EventId;
+  history: CareerHistory;
   phase: "outcome";
   pilot: Pilot;
   result: ResolvedYear;
@@ -327,19 +357,15 @@ export interface OutcomeEventGameState {
 }
 
 export type EventGameState =
-  | AnimatingEventGameState
-  | ChoosingEventGameState
-  | ClosedEventGameState
-  | OutcomeEventGameState;
+  AnimatingEventGameState | ChoosingEventGameState | OutcomeEventGameState;
 
 export interface FinalGameState {
-  achievementIds: readonly AchievementId[];
-  eventId: EventId;
-  nicknameKey: TranslationKey<"nicknames">;
-  pilot: PilotWithZoid;
-  resolution: DecisionResolution;
+  endReason: CareerEndReason;
+  history: CareerHistory;
+  nicknameId: NicknameId;
+  pilot: Pilot;
   screen: "final";
-  titleKey: TranslationKey<"titles">;
+  titleId: TitleId;
 }
 
 export type GameState =

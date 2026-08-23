@@ -1,0 +1,419 @@
+.welcome__panel {
+  z-index: 1;
+  display: grid;
+  width: min(100%, 76rem);
+  min-height: min(46rem, calc(100dvh - 6rem));
+  overflow: hidden;
+  grid-template-areas:
+    "badge facts"
+    "heading facts"
+    "button facts";
+  grid-template-columns: minmax(0, 1.45fr) minmax(17rem, 0.55fr);
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(var(--space-5), 4vw, var(--space-7));
+  column-gap: clamp(var(--space-6), 6vw, var(--space-8));
+  padding: clamp(var(--space-5), 6vw, var(--space-8));
+  background:
+    linear-gradient(112deg, rgb(12 25 54 / 96%) 0 64%, transparent 64%),
+    linear-gradient(
+      112deg,
+      transparent 0 62%,
+      var(--color-accent-soft) 62% 100%
+    ),
+    var(--color-panel-raised);
+  box-shadow:
+    0 2rem 7rem rgb(3 8 24 / 70%),
+    inset 0 0 0 1px var(--color-border);
+}
+
+.app-shell[data-color-mode="light"] .welcome__panel {
+  background:
+    linear-gradient(112deg, rgb(248 250 255 / 96%) 0 64%, transparent 64%),
+    linear-gradient(
+      112deg,
+      transparent 0 62%,
+      var(--color-accent-soft) 62% 100%
+    ),
+    var(--color-panel-raised);
+}
+
+.welcome__panel::after {
+  position: absolute;
+  top: 8%;
+  right: -5rem;
+  width: 26rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      transparent 0 34%,
+      var(--color-accent-soft) 34% 35%,
+      transparent 35% 52%,
+      var(--color-accent-soft) 52% 53%,
+      transparent 53%
+    ),
+    conic-gradient(
+      from 45deg,
+      transparent 0 12%,
+      var(--color-accent-soft) 12% 15%,
+      transparent 15% 37%,
+      var(--color-accent-soft) 37% 40%,
+      transparent 40% 100%
+    );
+  content: "";
+  opacity: 0.72;
+  pointer-events: none;
+  transform: rotate(-18deg);
+}
+
+.welcome__damage {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.welcome__claws {
+  position: absolute;
+  top: 16%;
+  right: -6rem;
+  display: block;
+  width: 14rem;
+  height: 32rem;
+  opacity: 1;
+  transform: rotate(-9deg);
+}
+
+.welcome__claws span {
+  position: absolute;
+  top: 0;
+  width: 3.6rem;
+  height: 29rem;
+  background:
+    repeating-linear-gradient(
+      175deg,
+      transparent 0 1.8rem,
+      rgb(255 255 255 / 8%) 1.85rem 1.95rem,
+      transparent 2rem 3.5rem
+    ),
+    linear-gradient(
+      90deg,
+      var(--damage-dark) 0%,
+      color-mix(in srgb, var(--color-accent) 90%, var(--damage-dark)) 32%,
+      color-mix(in srgb, var(--color-accent) 58%, var(--damage-dark)) 68%,
+      var(--damage-dark) 100%
+    );
+  clip-path: polygon(
+    46% 0,
+    72% 10%,
+    55% 23%,
+    78% 35%,
+    57% 48%,
+    70% 62%,
+    47% 76%,
+    59% 100%,
+    32% 87%,
+    41% 72%,
+    20% 57%,
+    42% 43%,
+    21% 27%,
+    36% 12%
+  );
+  filter: drop-shadow(-0.24rem 0 0.08rem var(--color-heading))
+    drop-shadow(0.22rem 0 0.1rem var(--color-accent))
+    drop-shadow(0.42rem 0.55rem 0.4rem rgb(0 0 0 / 82%));
+}
+
+.welcome__claws span:nth-child(1) {
+  left: 0;
+  height: 25rem;
+  margin-top: 3rem;
+  transform: rotate(-4deg) scaleX(0.9);
+}
+
+.welcome__claws span:nth-child(2) {
+  left: 4.4rem;
+  height: 31rem;
+  transform: rotate(-1deg);
+}
+
+.welcome__claws span:nth-child(3) {
+  left: 8.8rem;
+  height: 28rem;
+  clip-path: polygon(
+    42% 0,
+    66% 12%,
+    51% 26%,
+    75% 38%,
+    49% 51%,
+    69% 64%,
+    45% 79%,
+    56% 100%,
+    29% 86%,
+    39% 70%,
+    18% 55%,
+    40% 41%,
+    17% 24%,
+    34% 10%
+  );
+  margin-top: 2rem;
+  transform: rotate(4deg) scaleX(0.92);
+}
+
+.welcome__bullets {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.welcome__bullets span {
+  position: absolute;
+  width: 4rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 45% 42%,
+    #000000 0 23%,
+    #08090a 25% 32%,
+    var(--color-border-strong) 34% 38%,
+    color-mix(in srgb, var(--damage-metal) 65%, var(--color-accent)) 40% 48%,
+    transparent 51%
+  );
+  filter: drop-shadow(0.35rem 0.5rem 0.4rem rgb(0 0 0 / 65%));
+}
+
+.welcome__bullets span::after {
+  position: absolute;
+  inset: -0.75rem;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 8deg,
+    transparent 0 19deg,
+    color-mix(in srgb, var(--damage-dark) 72%, transparent) 20deg 21deg,
+    transparent 22deg 43deg
+  );
+  content: "";
+  mask: radial-gradient(
+    circle,
+    transparent 0 43%,
+    #000000 45% 68%,
+    transparent 72%
+  );
+  -webkit-mask: radial-gradient(
+    circle,
+    transparent 0 43%,
+    #000000 45% 68%,
+    transparent 72%
+  );
+}
+
+.welcome__bullets span:nth-child(1) {
+  bottom: 0;
+  left: 5%;
+  transform: rotate(11deg) scale(0.8);
+}
+
+.welcome__bullets span:nth-child(2) {
+  top: 0;
+  left: 16%;
+  transform: rotate(-8deg) scale(1.05);
+}
+
+.welcome__bullets span:nth-child(3) {
+  right: 18%;
+  bottom: 0;
+  transform: rotate(17deg) scale(0.92);
+}
+
+.welcome__bullets span:nth-child(4) {
+  top: 1%;
+  right: 7%;
+  transform: rotate(-14deg) scale(0.72);
+}
+
+.welcome__bullets span:nth-child(5) {
+  right: 0;
+  bottom: 24%;
+  transform: rotate(21deg) scale(1.12);
+}
+
+.welcome__bullets span:nth-child(6) {
+  top: 46%;
+  left: 0;
+  transform: rotate(5deg) scale(0.58);
+}
+
+.welcome__panel > .badge {
+  z-index: 1;
+  grid-area: badge;
+  justify-self: start;
+}
+
+.welcome__signal {
+  position: absolute;
+  z-index: 1;
+  top: var(--space-5);
+  right: var(--space-5);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.welcome__signal span {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0.8rem var(--color-accent);
+}
+
+.welcome__signal span:nth-child(2) {
+  opacity: 0.55;
+}
+
+.welcome__signal span:nth-child(3) {
+  opacity: 0.2;
+}
+
+.welcome__heading {
+  z-index: 1;
+  display: grid;
+  grid-area: heading;
+  align-self: center;
+  max-width: 52rem;
+  gap: var(--space-4);
+  padding-left: var(--space-5);
+  border-left: 0.35rem solid var(--color-accent);
+}
+
+.welcome__brand {
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--space-3), 2.5vw, var(--space-5));
+}
+
+.welcome__heading h1 {
+  max-width: 10ch;
+  color: var(--title-metal-light);
+  background:
+    repeating-linear-gradient(
+      112deg,
+      transparent 0 0.12em,
+      rgb(255 255 255 / 15%) 0.14em,
+      transparent 0.17em
+    ),
+    linear-gradient(
+      180deg,
+      var(--title-metal-light) 0%,
+      var(--title-metal-mid) 32%,
+      var(--title-metal-accent) 47%,
+      var(--title-metal-light) 51%,
+      var(--title-metal-mid) 68%,
+      var(--title-metal-dark) 100%
+    );
+  background-clip: text;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 850;
+  line-height: 0.9;
+  paint-order: stroke fill;
+  text-shadow:
+    0 0.025em 0 var(--title-metal-light),
+    0 0.075em 0 var(--title-metal-dark),
+    0 0.12em 0 var(--title-metal-stroke),
+    0 0.18em 0.3em rgb(0 0 0 / 48%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px var(--title-metal-stroke);
+}
+
+.welcome__logo {
+  width: clamp(5rem, 11vw, 9rem);
+  height: auto;
+  filter: drop-shadow(0 0.75rem 1rem rgb(0 0 0 / 45%));
+}
+
+.welcome__heading p {
+  max-width: 48ch;
+}
+
+.welcome__description {
+  color: var(--color-text);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+}
+
+.welcome__journey {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.welcome__call-to-action {
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.welcome__facts {
+  z-index: 1;
+  display: grid;
+  grid-area: facts;
+  grid-template-columns: 1fr;
+  align-content: center;
+  gap: var(--space-4);
+  margin: 0;
+  padding: var(--space-5);
+  border-left: 1px solid var(--color-accent);
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-soft),
+    transparent 72%
+  );
+}
+
+.welcome__facts div {
+  position: relative;
+  display: grid;
+  min-height: 8.5rem;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-left: 0.3rem solid var(--color-accent);
+  border-radius: var(--radius-medium);
+  background: color-mix(in srgb, var(--color-panel) 82%, var(--color-accent));
+  box-shadow: 0 1rem 2rem rgb(0 0 0 / 18%);
+}
+
+.welcome__facts div:nth-child(even) {
+  margin-left: var(--space-5);
+}
+
+.welcome__facts dt {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.welcome__facts dd {
+  order: -1;
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  font-weight: 850;
+  line-height: 1;
+}
+
+.welcome .button {
+  z-index: 1;
+  grid-area: button;
+  min-width: 15rem;
+  justify-self: start;
+}

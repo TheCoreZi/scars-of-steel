@@ -31,8 +31,7 @@ export function DecisionScreen({
   const titleId = useId();
   const displayedPilot =
     state.phase === "animating" ? state.result.pilotBefore : state.pilot;
-  const transitionKey = state.phase === "closed" ? "outcome" : state.phase;
-  const phaseTitleId = `${titleId}-${transitionKey}`;
+  const phaseTitleId = `${titleId}-${state.phase}`;
 
   return (
     <main className="decision-screen screen">
@@ -45,7 +44,7 @@ export function DecisionScreen({
           />
           <ScreenTransition
             reducedMotion={reducedMotion}
-            transitionKey={transitionKey}
+            transitionKey={state.phase}
           >
             {state.phase === "choosing" ? (
               <DecisionSelectionScreen
@@ -65,7 +64,6 @@ export function DecisionScreen({
               />
             ) : (
               <DecisionOutcomeScreen
-                closed={state.phase === "closed"}
                 event={event}
                 onCloseYear={onCloseYear}
                 result={state.result}

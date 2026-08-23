@@ -32,9 +32,12 @@ describe("career status bar", () => {
     const desktopIdentity = desktop!.querySelector<HTMLElement>(
       ".career-status__pilot",
     )!;
-    expect(within(desktopIdentity).getByText("Cadet")).toHaveClass(
-      "career-status__rank",
+    expect(within(desktopIdentity).getByText("Cadet")).not.toHaveClass(
+      "sr-only",
     );
+    expect(
+      desktopIdentity.querySelector(".career-status__rank .rank-insignia"),
+    ).toBeInTheDocument();
     const pilotHeading = desktopIdentity.querySelector<HTMLElement>(
       ".career-status__pilot-heading",
     )!;
@@ -166,9 +169,7 @@ describe("career status bar", () => {
     const identity = desktop!.querySelector<HTMLElement>(
       ".career-status__pilot",
     )!;
-    expect(within(identity).getByText("Leo Master")).toHaveClass(
-      "career-status__rank",
-    );
+    expect(within(identity).getByText("Leo Master")).not.toHaveClass("sr-only");
     expect(within(identity).getByText("Lena")).toBeInTheDocument();
     expect(within(identity).queryByText("Cadet")).not.toBeInTheDocument();
   });

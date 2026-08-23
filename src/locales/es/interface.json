@@ -78,6 +78,33 @@
     "guylos": "Imperio de Guylos",
     "helic": "República de Helic"
   },
+  "finalScreen": {
+    "achievements": "Logros",
+    "age": "Edad {{age}}",
+    "badge": "Expediente final de carrera",
+    "battleRecord": "Récord de batallas",
+    "careerDuration_one": "Luchaste durante {{count}} año. Tu carrera terminó a los {{age}} años.",
+    "careerDuration_other": "Luchaste durante {{count}} años. Tu carrera terminó a los {{age}} años.",
+    "download": "Descargar PNG",
+    "downloadError": "No se pudo generar la imagen. Inténtalo de nuevo.",
+    "factionTrust": "Confianza de la facción",
+    "factions": {
+      "guylos": "el Imperio",
+      "helic": "la República"
+    },
+    "fame": "Fama",
+    "losses": "Derrotas",
+    "newRun": "Nueva partida",
+    "noAchievements": "Sin logros obtenidos",
+    "noZoid": "Terminó su carrera sin Zoids",
+    "pilotName": "{{name}} “{{nickname}}” de {{faction}}",
+    "potential": "Potencial",
+    "share": "Compartir",
+    "shareError": "No se pudo compartir la imagen. La descarga sigue disponible.",
+    "stats": "Stats finales",
+    "wins": "Victorias",
+    "zoid": "Zoid insignia"
+  },
   "pilotCreation": {
     "aspiration": "Especialización solicitada",
     "aspirations": {
@@ -115,7 +142,7 @@
     "battleReport": "De {{available}} batallas para {{faction}}, participaste en {{participated}} y venciste en {{wins}}.",
     "battles": "Batallas",
     "channel": "Archivo de carrera // transmisión segura",
-    "close": "Cerrar año",
+    "close": "Continúa tu carrera",
     "closed": "Año cerrado. El expediente queda listo para continuar.",
     "potential": "Potencial",
     "decisionRiskFailure": "Decisión · Con riesgo · Fracaso",

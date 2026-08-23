@@ -379,6 +379,43 @@ describe("pilot creation", () => {
       screen.getByRole("heading", { name: "Scars of Steel" }),
     ).toBeInTheDocument();
   });
+
+  test("ends the run when the next event pool is empty", async () => {
+    render(<App />);
+    await startPilotCreation();
+    fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
+      target: { value: "Lena" },
+    });
+    fireEvent.click(screen.getByRole("radio", { name: "Helic Republic" }));
+    fireEvent.click(screen.getByRole("radio", { name: "War hero" }));
+    fireEvent.click(screen.getByRole("button", { name: "Submit enlistment" }));
+
+    await screen.findByText("Choose your response");
+    const safeDecision = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".decision-option"),
+    ).find((option) => option.ariaLabel?.includes(". Safe."));
+    expect(safeDecision).toBeDefined();
+    fireEvent.click(safeDecision!);
+    fireEvent.click(
+      await screen.findByRole("button", { name: "Continue career" }),
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: "False promise" }),
+    ).toHaveFocus();
+    expect(
+      screen.getByText("You fought for 1 year. Your career ended at age 13."),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Signature Zoid")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Download PNG" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "New run" }));
+    expect(
+      await screen.findByRole("button", { name: "Begin your career" }),
+    ).toBeInTheDocument();
+  });
 });
 
 async function startPilotCreation() {

@@ -1,0 +1,391 @@
+.final-screen {
+  padding: clamp(0.35rem, 1.5vw, 0.75rem);
+  place-items: center;
+}
+
+.final-screen__panel {
+  display: grid;
+  width: min(42rem, 100%);
+  gap: clamp(0.75rem, 2vw, 1rem);
+  padding: clamp(0.7rem, 2vw, 1.25rem);
+  overflow: hidden;
+}
+
+.final-screen__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(12rem, 0.8fr);
+  gap: var(--space-3);
+  margin-bottom: clamp(0.4rem, 1.5vw, 0.75rem);
+}
+
+.final-screen__title {
+  align-content: center;
+  display: grid;
+  gap: var(--space-1);
+  justify-items: center;
+  text-align: center;
+}
+
+.final-screen__visual small,
+.final-screen__metrics small {
+  color: var(--color-accent);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.final-screen__title h1 {
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: clamp(1.65rem, 4.5vw, 3rem);
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+.final-screen__distinction-icon {
+  display: block;
+  object-fit: contain;
+}
+
+.final-screen__title-emblem {
+  position: relative;
+  display: grid;
+  width: 9rem;
+  height: 6rem;
+  place-items: center;
+  isolation: isolate;
+}
+
+.final-screen__title-icon {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 6rem;
+  height: 6rem;
+  filter: drop-shadow(0 0.35rem 0.5rem rgb(0 0 0 / 35%));
+  transform: translate(-50%, -50%);
+}
+
+.final-screen__spotlights {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+}
+
+.final-screen__spotlights span {
+  position: absolute;
+  bottom: 0.2rem;
+  left: var(--spotlight-origin);
+  width: 2rem;
+  height: 5.75rem;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-accent) 48%, transparent),
+    color-mix(in srgb, var(--color-accent) 14%, transparent)
+  );
+  clip-path: polygon(42% 100%, 58% 100%, 100% 0, 0 0);
+  transform: translateX(-50%) rotate(var(--spotlight-angle));
+  transform-origin: 50% 100%;
+}
+
+.final-screen__spotlights span:first-child {
+  --spotlight-angle: -30deg;
+  --spotlight-origin: 35%;
+}
+
+.final-screen__spotlights span:nth-child(2) {
+  --spotlight-angle: 0deg;
+  --spotlight-origin: 50%;
+}
+
+.final-screen__spotlights span:last-child {
+  --spotlight-angle: 30deg;
+  --spotlight-origin: 65%;
+}
+
+.final-screen__title > p:not(.final-screen__career) {
+  max-width: 58ch;
+  color: var(--color-text);
+  font-size: clamp(0.78rem, 1.6vw, 0.94rem);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.final-screen__career {
+  max-width: 50ch;
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.final-screen__visual {
+  position: relative;
+  align-self: center;
+  height: 8.25rem;
+  overflow: hidden;
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-panel-raised);
+}
+
+.final-screen__faction {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+  opacity: 0.14;
+  transform: translate(-50%, -50%);
+}
+
+.final-screen__zoid {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 72%;
+  height: 4.75rem;
+  object-fit: contain;
+  filter: drop-shadow(0 1rem 1.2rem rgb(0 0 0 / 38%));
+  transform: translate(-50%, -50%);
+}
+
+.final-screen__zoid-label {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  padding: var(--space-1);
+  background: linear-gradient(90deg, var(--color-panel-raised), transparent);
+}
+
+.final-screen__zoid-label strong {
+  font-size: 0.78rem;
+}
+
+.final-screen__rank {
+  position: absolute;
+  z-index: 2;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: inline-grid;
+  width: max-content;
+  justify-items: center;
+  gap: 0.1rem;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.final-screen__rank .rank-insignia {
+  width: 1.85rem;
+  height: 1.15rem;
+}
+
+.final-screen__metrics,
+.final-screen__stats > div {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.final-screen__metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.final-screen__metrics > div,
+.final-screen__stats > div > div {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: var(--color-panel-raised);
+}
+
+.final-screen__metrics strong {
+  color: var(--color-accent);
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  line-height: 1;
+}
+
+.final-screen__stats,
+.final-screen__achievements {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.final-screen__stats h2,
+.final-screen__achievements h2 {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.final-screen__stats > div {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.final-screen__stats > div > div {
+  gap: 0.45rem;
+  padding: 0.2rem 0;
+  border: 0;
+  background: transparent;
+}
+
+.final-screen__stats > div > div > span {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-1);
+  font-size: 0.68rem;
+}
+
+.final-screen__stats strong,
+.final-screen__record strong {
+  color: var(--color-accent);
+  font-size: 0.95rem;
+}
+
+.final-screen__stats [role="progressbar"] {
+  height: 0.18rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-border);
+}
+
+.final-screen__stats [role="progressbar"] > span {
+  display: block;
+  width: var(--final-stat);
+  height: 100%;
+  background: var(--color-accent);
+}
+
+.final-screen__record > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.final-screen__record > div > div {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding-inline: 0.3rem;
+  font-size: 0.7rem;
+}
+
+.final-screen__record {
+  align-content: center;
+}
+
+.final-screen__record > div > div + div {
+  border-left: 1px solid var(--color-border);
+}
+
+.final-screen__achievements ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.final-screen__achievements li {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  align-items: start;
+  gap: var(--space-3);
+  padding-block: 0.35rem;
+}
+
+.final-screen__achievements li > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.final-screen__achievements li strong {
+  color: var(--color-accent);
+  font-size: 0.72rem;
+}
+
+.final-screen__achievements li p {
+  color: var(--color-text-muted);
+  font-size: 0.62rem;
+  line-height: 1.35;
+}
+
+.final-screen__achievement-icon {
+  width: 2rem;
+  height: 2rem;
+  filter: drop-shadow(0 0.2rem 0.35rem rgb(0 0 0 / 35%));
+}
+
+.final-screen__achievements > p {
+  font-size: 0.72rem;
+}
+
+.final-screen__actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.final-screen__actions .button {
+  min-height: 2.15rem;
+  width: 100%;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.65rem;
+}
+
+.final-screen__export {
+  border-color: var(--color-border-strong);
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-text-muted);
+}
+
+.final-screen__export:hover:not(:disabled) {
+  background: var(--color-panel-raised);
+  box-shadow: none;
+}
+
+.final-screen [role="alert"] {
+  color: var(--color-probability-failure-strong);
+  text-align: right;
+}
+
+@media (max-width: 52rem) {
+  .final-screen__hero {
+    grid-template-columns: minmax(0, 1fr) 9rem;
+  }
+
+  .final-screen__stats > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 34rem) {
+  .final-screen__hero {
+    grid-template-columns: minmax(0, 1fr) 7.5rem;
+    gap: var(--space-2);
+  }
+
+  .final-screen__visual {
+    height: 6.75rem;
+  }
+
+  .final-screen__zoid {
+    height: 3.75rem;
+  }
+}

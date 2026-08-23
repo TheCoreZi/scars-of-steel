@@ -1,18 +1,26 @@
 import { useRef, useState } from "react";
 
-import { selectInitialEvent } from "../domain/eventPools";
+import { getEligibleEventIds, selectEvent } from "../domain/eventPools";
 import { getEvent } from "../domain/events";
+import {
+  advanceCareerYear,
+  createCareerHistory,
+  getCareerEndReason,
+  recordResolvedYear,
+} from "../domain/career";
+import { selectNickname } from "../domain/nicknames";
 import { createInitialPilot } from "../domain/pilot";
 import { createSecureRandomGenerator } from "../domain/random";
 import type {
   Decision,
-  EventGameState,
+  GameState,
   PilotCreationGameState,
-  WelcomeGameState,
 } from "../domain/types";
+import { selectTitle } from "../domain/titles";
 import { resolveYear } from "../domain/year";
 import { AppControls, type ColorMode } from "./AppControls";
 import { DecisionScreen } from "./DecisionScreen";
+import { FinalScreen } from "./FinalScreen";
 import {
   PilotCreationScreen,
   type PilotConfiguration,
@@ -20,20 +28,19 @@ import {
 import { ScreenTransition } from "./ScreenTransition";
 import { WelcomeScreen } from "./WelcomeScreen";
 
-type IntroGameState =
-  EventGameState | PilotCreationGameState | WelcomeGameState;
-
 export function App() {
   const [colorMode, setColorMode] = useState<ColorMode>("dark");
-  const [gameState, setGameState] = useState<IntroGameState>({
+  const [gameState, setGameState] = useState<GameState>({
     screen: "welcome",
   });
   const [reducedMotion, setReducedMotion] = useState(false);
   const hasResolvedDecisionRef = useRef(false);
+  const hasClosedYearRef = useRef(false);
   const hasCreatedPilotRef = useRef(false);
   const randomRef = useRef(createSecureRandomGenerator());
 
   function startGame() {
+    hasClosedYearRef.current = false;
     hasResolvedDecisionRef.current = false;
     hasCreatedPilotRef.current = false;
     setGameState((currentState) =>
@@ -64,10 +71,15 @@ export function App() {
       ...configuration,
       id: `pilot:${crypto.randomUUID()}`,
     });
-    const event = selectInitialEvent(randomRef.current);
+    const history = createCareerHistory();
+    const event = selectEvent(
+      getEligibleEventIds(pilot.age, history.completedEventIds),
+      randomRef.current,
+    );
 
     setGameState({
       eventId: event.id,
+      history,
       phase: "choosing",
       pilot,
       screen: "event",
@@ -92,8 +104,10 @@ export function App() {
     );
 
     hasResolvedDecisionRef.current = true;
+    hasClosedYearRef.current = false;
     setGameState({
       eventId: gameState.eventId,
+      history: gameState.history,
       ...(result.resolution.kind === "chance"
         ? {
             phase: "animating" as const,
@@ -110,6 +124,7 @@ export function App() {
       currentState.screen === "event" && currentState.phase === "animating"
         ? {
             eventId: currentState.eventId,
+            history: currentState.history,
             phase: "outcome",
             pilot: currentState.pilot,
             result: currentState.result,
@@ -120,21 +135,65 @@ export function App() {
   }
 
   function closeYear() {
-    setGameState((currentState) =>
-      currentState.screen === "event" && currentState.phase === "outcome"
-        ? {
-            eventId: currentState.eventId,
-            phase: "closed",
-            pilot: currentState.pilot,
-            result: currentState.result,
-            screen: "event",
-          }
-        : currentState,
+    if (
+      hasClosedYearRef.current ||
+      gameState.screen !== "event" ||
+      gameState.phase !== "outcome"
+    ) {
+      return;
+    }
+
+    hasClosedYearRef.current = true;
+    const history = recordResolvedYear(
+      gameState.history,
+      gameState.eventId,
+      gameState.result,
     );
+    const pilot = advanceCareerYear(gameState.pilot);
+    const eligibleEventIds = getEligibleEventIds(
+      pilot.age,
+      history.completedEventIds,
+    );
+    const endReason = getCareerEndReason(
+      pilot,
+      eligibleEventIds,
+      gameState.result.outcome,
+    );
+
+    if (endReason) {
+      setGameState({
+        endReason,
+        history,
+        nicknameId: selectNickname(pilot.stats, randomRef.current),
+        pilot,
+        screen: "final",
+        titleId: selectTitle(pilot, history, endReason),
+      });
+      return;
+    }
+
+    hasClosedYearRef.current = false;
+    hasResolvedDecisionRef.current = false;
+    const event = selectEvent(eligibleEventIds, randomRef.current);
+
+    setGameState({
+      eventId: event.id,
+      history,
+      phase: "choosing",
+      pilot,
+      screen: "event",
+    });
+  }
+
+  function restartGame() {
+    hasClosedYearRef.current = false;
+    hasCreatedPilotRef.current = false;
+    hasResolvedDecisionRef.current = false;
+    setGameState({ screen: "welcome" });
   }
 
   const faction =
-    gameState.screen === "event"
+    gameState.screen === "event" || gameState.screen === "final"
       ? gameState.pilot.faction
       : gameState.screen === "pilot-creation"
         ? gameState.draft.faction
@@ -167,7 +226,7 @@ export function App() {
             onReducedMotionChange={setReducedMotion}
             reducedMotion={reducedMotion}
           />
-        ) : (
+        ) : gameState.screen === "event" ? (
           <DecisionScreen
             event={getEvent(gameState.eventId)}
             onCloseYear={closeYear}
@@ -175,6 +234,12 @@ export function App() {
             onReducedMotionChange={setReducedMotion}
             onRevealOutcome={revealOutcome}
             reducedMotion={reducedMotion}
+            state={gameState}
+          />
+        ) : (
+          <FinalScreen
+            colorMode={colorMode}
+            onRestart={restartGame}
             state={gameState}
           />
         )}

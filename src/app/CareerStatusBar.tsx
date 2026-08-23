@@ -8,9 +8,11 @@ import {
   militaryRankNameKeys,
   specialRankNameKeys,
 } from "../domain/pilot";
+import { getRankInsignia } from "../domain/ranks";
 import type { Pilot, Zoid } from "../domain/types";
 import { getZoid } from "../domain/zoids";
 import { translate } from "../i18n";
+import { RankInsignia } from "./RankInsignia";
 
 const factionLogoPaths = {
   guylos: "/images/factions/guylos.png",
@@ -77,7 +79,12 @@ function StatusDetails({
       <ZoidPanel zoid={zoid} zoidName={zoidName} />
       <div className="career-status__pilot">
         <span className="career-status__pilot-heading">
-          <small className="career-status__rank">{rankName}</small>
+          <small className="career-status__rank" title={rankName}>
+            <RankInsignia
+              insignia={getRankInsignia(pilot.career.militaryRank)}
+            />
+            <span>{rankName}</span>
+          </small>
           <small className="career-status__pilot-faction">{factionName}</small>
         </span>
         <strong>{pilot.name}</strong>
