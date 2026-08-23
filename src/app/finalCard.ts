@@ -73,11 +73,23 @@ function drawFinalCard(
   context.lineWidth = 3;
   context.strokeRect(44, 44, finalCardWidth - 88, finalCardHeight - 88);
 
-  drawTitle(context, summary, images.title, accent);
-  drawVisual(context, summary, images, panel, accent);
-  drawMetrics(context, summary, panel, accent);
-  drawAchievements(context, summary, images.achievementIcons, accent);
-  drawStats(context, summary, accent);
+  const titleBottom = drawTitle(context, summary, images.title, accent);
+  const visualBottom = drawVisual(context, summary, images, panel, accent);
+  const metricsBottom = drawMetrics(
+    context,
+    summary,
+    panel,
+    accent,
+    Math.max(titleBottom, visualBottom) + 50,
+  );
+  const achievementsBottom = drawAchievements(
+    context,
+    summary,
+    images.achievementIcons,
+    accent,
+    metricsBottom + 55,
+  );
+  drawStats(context, summary, accent, achievementsBottom + 60);
 }
 
 function drawTitle(
@@ -85,24 +97,50 @@ function drawTitle(
   summary: FinalSummary,
   icon: HTMLImageElement | null,
   accent: string,
-): void {
+): number {
   drawTitleSpotlights(context, accent);
 
   if (icon) {
-    drawContainedImage(context, icon, 290, 35, 160, 110);
+    drawContainedImage(context, icon, 280, 65, 180, 125);
   }
 
   context.fillStyle = accent;
   context.font = "900 62px system-ui, sans-serif";
   context.textAlign = "center";
-  drawWrappedText(context, summary.titleName, 370, 160, 560, 66, 2);
+  const titleBottom = drawWrappedText(
+    context,
+    summary.titleName,
+    370,
+    250,
+    560,
+    64,
+    2,
+  );
   context.fillStyle = "#c9d2e7";
   context.font = "600 24px system-ui, sans-serif";
-  drawWrappedText(context, summary.titleDescription, 370, 270, 560, 34, 4);
+  const descriptionBottom = drawWrappedText(
+    context,
+    summary.titleDescription,
+    370,
+    titleBottom + 48,
+    560,
+    34,
+    4,
+  );
   context.fillStyle = accent;
   context.font = "700 18px system-ui, sans-serif";
-  drawWrappedText(context, summary.ageLabel, 370, 410, 560, 26, 2);
+  const ageBottom = drawWrappedText(
+    context,
+    summary.ageLabel,
+    370,
+    descriptionBottom + 38,
+    560,
+    26,
+    2,
+  );
   context.textAlign = "left";
+
+  return ageBottom;
 }
 
 function drawTitleSpotlights(
@@ -110,16 +148,16 @@ function drawTitleSpotlights(
   accent: string,
 ): void {
   [
-    { angle: -Math.PI / 6, opacity: 0.16, x: 340 },
+    { angle: -Math.PI / 6, opacity: 0.16, x: 332 },
     { angle: 0, opacity: 0.22, x: 370 },
-    { angle: Math.PI / 6, opacity: 0.16, x: 400 },
+    { angle: Math.PI / 6, opacity: 0.16, x: 408 },
   ].forEach(({ angle, opacity, x }) => {
     context.save();
     context.fillStyle = accent;
     context.globalAlpha = opacity;
-    context.translate(x, 148);
+    context.translate(x, 195);
     context.rotate(angle);
-    context.fillRect(-12, -105, 24, 105);
+    context.fillRect(-14, -125, 28, 125);
     context.restore();
   });
 }
@@ -130,28 +168,30 @@ function drawVisual(
   images: CardImages,
   panel: string,
   accent: string,
-): void {
+): number {
   context.fillStyle = panel;
-  context.fillRect(700, 100, 418, 340);
+  context.fillRect(700, 80, 418, 430);
 
   if (images.faction) {
     context.save();
     context.globalAlpha = 0.14;
-    drawContainedImage(context, images.faction, 730, 145, 360, 220);
+    drawContainedImage(context, images.faction, 730, 135, 360, 260);
     context.restore();
   }
 
   if (images.zoid) {
-    drawContainedImage(context, images.zoid, 755, 175, 310, 170);
+    drawContainedImage(context, images.zoid, 755, 180, 310, 190);
   }
 
   drawRank(context, summary, images.rank, accent);
   context.textAlign = "left";
   context.font = "800 20px system-ui, sans-serif";
-  context.fillText(summary.labels.zoid.toUpperCase(), 730, 380);
+  context.fillText(summary.labels.zoid.toUpperCase(), 730, 430);
   context.fillStyle = "#ffffff";
   context.font = "800 30px system-ui, sans-serif";
-  drawWrappedText(context, summary.zoidName, 730, 417, 340, 34, 2);
+  drawWrappedText(context, summary.zoidName, 730, 470, 340, 34, 2);
+
+  return 510;
 }
 
 function drawRank(
@@ -175,7 +215,8 @@ function drawMetrics(
   summary: FinalSummary,
   panel: string,
   accent: string,
-): void {
+  y: number,
+): number {
   const metrics = [
     [summary.labels.potential, summary.potential],
     [summary.labels.fame, summary.fame],
@@ -190,15 +231,17 @@ function drawMetrics(
     const column = index % 2;
     const row = Math.floor(index / 2);
     const x = 82 + column * 528;
-    const y = 490 + row * 110;
+    const metricY = y + row * 120;
     context.fillStyle = panel;
-    context.fillRect(x, y, 504, 96);
+    context.fillRect(x, metricY, 504, 104);
     context.fillStyle = accent;
     context.font = "800 16px system-ui, sans-serif";
-    context.fillText(label.toUpperCase(), x + 18, y + 29);
+    context.fillText(label.toUpperCase(), x + 18, metricY + 30);
     context.font = `900 ${index === 3 ? 20 : 42}px system-ui, sans-serif`;
-    drawWrappedText(context, String(value), x + 18, y + 75, 468, 24, 2);
+    drawWrappedText(context, String(value), x + 18, metricY + 76, 468, 22, 2);
   });
+
+  return y + 224;
 }
 
 function drawAchievements(
@@ -206,72 +249,80 @@ function drawAchievements(
   summary: FinalSummary,
   icons: readonly (HTMLImageElement | null)[],
   accent: string,
-): void {
+  y: number,
+): number {
   context.fillStyle = accent;
   context.font = "800 20px system-ui, sans-serif";
-  context.fillText(summary.labels.achievements.toUpperCase(), 82, 735);
+  context.fillText(summary.labels.achievements.toUpperCase(), 82, y);
 
   if (summary.achievements.length === 0) {
     context.fillStyle = "#ffffff";
     context.font = "700 21px system-ui, sans-serif";
-    context.fillText("—", 82, 773);
-    return;
+    context.fillText("—", 82, y + 38);
+    return y + 45;
   }
+
+  const achievementY = y + 30;
 
   summary.achievements.forEach((achievement, index) => {
     const column = index % 3;
     const row = Math.floor(index / 3);
     const x = 82 + column * 357;
-    const y = 759 + row * 104;
+    const itemY = achievementY + row * 112;
 
     const icon = icons[index];
 
     if (icon) {
-      drawContainedImage(context, icon, x, y, 28, 28);
+      drawContainedImage(context, icon, x, itemY, 28, 28);
     }
 
     context.fillStyle = "#ffffff";
     context.font = "700 18px system-ui, sans-serif";
-    context.fillText(achievement.name, x + 44, y + 18);
+    context.fillText(achievement.name, x + 44, itemY + 18);
     context.fillStyle = "#c9d2e7";
     context.font = "400 16px system-ui, sans-serif";
     drawWrappedText(
       context,
       achievement.description,
       x + 44,
-      y + 46,
+      itemY + 46,
       280,
       22,
       3,
     );
   });
+
+  return achievementY + Math.ceil(summary.achievements.length / 3) * 112;
 }
 
 function drawStats(
   context: CanvasRenderingContext2D,
   summary: FinalSummary,
   accent: string,
+  y: number,
 ): void {
   context.fillStyle = accent;
   context.font = "800 20px system-ui, sans-serif";
-  context.fillText(summary.labels.stats.toUpperCase(), 82, 900);
+  context.fillText(summary.labels.stats.toUpperCase(), 82, y);
+
+  const statsY = y + 32;
 
   summary.stats.forEach((stat, index) => {
     const column = index % 3;
     const row = Math.floor(index / 3);
     const x = 82 + column * 357;
-    const y = 925 + row * 68;
+    const statY = statsY + row * 88;
 
     context.fillStyle = "#ffffff";
     context.font = "700 17px system-ui, sans-serif";
-    context.fillText(stat.label, x + 16, y + 24);
+    context.fillText(stat.label, x + 16, statY + 24);
     context.textAlign = "right";
-    context.fillText(String(stat.value), x + 308, y + 24);
+    context.fillText(String(stat.value), x + 308, statY + 24);
     context.textAlign = "left";
     context.fillStyle = "#556070";
-    context.fillRect(x + 16, y + 38, 292, 5);
+    context.fillRect(x + 16, statY + 46, 292, 5);
     context.fillStyle = accent;
-    context.fillRect(x + 16, y + 38, (292 * stat.value) / 100, 5);
+    context.fillRect(x + 16, statY + 46, (292 * stat.value) / 100, 5);
   });
 }
 
@@ -304,31 +355,47 @@ function drawWrappedText(
   maximumWidth: number,
   lineHeight: number,
   maximumLines: number,
-): void {
+): number {
+  const lines = wrapText(context, text, maximumWidth, maximumLines);
+
+  lines.forEach((line, index) => {
+    context.fillText(line, x, y + index * lineHeight);
+  });
+
+  return y + Math.max(lines.length - 1, 0) * lineHeight;
+}
+
+function wrapText(
+  context: CanvasRenderingContext2D,
+  text: string,
+  maximumWidth: number,
+  maximumLines: number,
+): readonly string[] {
   const words = text.split(/\s+/u);
-  let line = "";
-  let lineIndex = 0;
+  const lines: string[] = [];
+  let line = words.shift() ?? "";
 
   for (const word of words) {
-    const candidate = line ? `${line} ${word}` : word;
+    const candidate = `${line} ${word}`;
 
     if (context.measureText(candidate).width <= maximumWidth) {
       line = candidate;
       continue;
     }
 
-    context.fillText(line, x, y + lineIndex * lineHeight);
+    lines.push(line);
     line = word;
-    lineIndex += 1;
 
-    if (lineIndex === maximumLines - 1) {
-      break;
+    if (lines.length === maximumLines) {
+      return lines;
     }
   }
 
-  if (lineIndex < maximumLines) {
-    context.fillText(line, x, y + lineIndex * lineHeight);
+  if (lines.length < maximumLines && line) {
+    lines.push(line);
   }
+
+  return lines;
 }
 
 function exportCanvas(canvas: HTMLCanvasElement): Promise<Blob> {

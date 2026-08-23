@@ -107,12 +107,12 @@ describe("final card renderer", () => {
     expect(finalCardWidth).toBe(1200);
     expect(finalCardHeight).toBe(1500);
     expect(dimensions).toEqual([[1200, 1500]]);
-    expect(fillText).toHaveBeenCalledWith("False promise", 370, 160);
+    expect(fillText).toHaveBeenCalledWith("False promise", 370, 250);
     expect(context.rotate).toHaveBeenCalledTimes(3);
-    expect(context.translate).toHaveBeenCalledWith(340, 148);
-    expect(context.translate).toHaveBeenCalledWith(370, 148);
-    expect(context.translate).toHaveBeenCalledWith(400, 148);
-    expect(fillText).toHaveBeenCalledWith(summary.titleDescription, 370, 270);
+    expect(context.translate).toHaveBeenCalledWith(332, 195);
+    expect(context.translate).toHaveBeenCalledWith(370, 195);
+    expect(context.translate).toHaveBeenCalledWith(408, 195);
+    expect(fillText).toHaveBeenCalledWith(summary.titleDescription, 370, 298);
     expect(context.drawImage).toHaveBeenCalledWith(
       expect.anything(),
       1019.5,
@@ -121,13 +121,21 @@ describe("final card renderer", () => {
       51,
     );
     expect(fillText).toHaveBeenCalledWith("CADET", 1085, 174);
-    expect(fillText).toHaveBeenCalledWith("7 Wins · 3 Losses", 628, 675);
-    expect(fillText).toHaveBeenCalledWith("Born in the workshop", 126, 777);
+    expect(fillText).toHaveBeenCalledWith("7 Wins · 3 Losses", 628, 756);
+    expect(fillText).toHaveBeenCalledWith("Born in the workshop", 126, 887);
     expect(fillText).toHaveBeenCalledWith(
       "You learned every machine.",
       126,
-      805,
+      915,
     );
+
+    await createFinalCardBlob({
+      ...summary,
+      titleName:
+        "False promise that became an exceptionally long final career title for the nation",
+    });
+
+    expect(fillText).toHaveBeenCalledWith(summary.titleDescription, 370, 362);
   });
 
   test("keeps a special rank name next to its insignia", async () => {
