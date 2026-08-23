@@ -2,7 +2,7 @@ import type { FinalSummary } from "../domain/finalSummary";
 import type { Faction } from "../domain/types";
 import type { ColorMode } from "./AppControls";
 
-export const finalCardHeight = 1500;
+export const finalCardHeight = 1300;
 export const finalCardWidth = 1200;
 
 interface CardImages {
@@ -218,29 +218,29 @@ function drawVisual(
   palette: CardPalette,
 ): number {
   context.fillStyle = palette.panel;
-  context.fillRect(700, 80, 418, 430);
+  context.fillRect(700, 80, 418, 280);
 
   if (images.faction) {
     context.save();
     context.globalAlpha = 0.14;
-    drawContainedImage(context, images.faction, 730, 135, 360, 260);
+    drawContainedImage(context, images.faction, 730, 100, 360, 190);
     context.restore();
   }
 
   if (images.zoid) {
-    drawContainedImage(context, images.zoid, 755, 180, 310, 190);
+    drawContainedImage(context, images.zoid, 755, 130, 310, 135);
   }
 
   drawRank(context, summary, images.rank, palette.accent);
   context.fillStyle = palette.accent;
   context.textAlign = "left";
-  context.font = "800 20px system-ui, sans-serif";
-  context.fillText(summary.labels.zoid.toUpperCase(), 730, 430);
+  context.font = "800 17px system-ui, sans-serif";
+  context.fillText(summary.labels.zoid.toUpperCase(), 730, 292);
   context.fillStyle = palette.text;
-  context.font = "800 30px system-ui, sans-serif";
-  drawWrappedText(context, summary.zoidName, 730, 470, 340, 34, 2);
+  context.font = "800 24px system-ui, sans-serif";
+  drawWrappedText(context, summary.zoidName, 730, 320, 340, 24, 2);
 
-  return 510;
+  return 360;
 }
 
 function drawRank(
@@ -250,13 +250,13 @@ function drawRank(
   accent: string,
 ): void {
   if (image) {
-    drawContainedImage(context, image, 1000, 104, 90, 51);
+    drawContainedImage(context, image, 1020, 94, 64, 38);
   }
 
   context.fillStyle = accent;
   context.font = "900 18px system-ui, sans-serif";
   context.textAlign = "right";
-  context.fillText(summary.rank.toUpperCase(), 1085, 174);
+  context.fillText(summary.rank.toUpperCase(), 1085, 150);
 }
 
 function drawMetrics(

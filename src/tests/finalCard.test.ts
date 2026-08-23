@@ -62,7 +62,7 @@ afterEach(() => {
 });
 
 describe("final card renderer", () => {
-  test("renders the final summary to a 1200 by 1500 PNG", async () => {
+  test("renders the final summary to a compact 1200 by 1300 PNG", async () => {
     const dimensions: number[][] = [];
     const fillStyles: string[] = [];
     const fillText = vi.fn();
@@ -109,8 +109,8 @@ describe("final card renderer", () => {
     expect(blob.type).toBe("image/png");
     expect(canvas).toBeNull();
     expect(finalCardWidth).toBe(1200);
-    expect(finalCardHeight).toBe(1500);
-    expect(dimensions).toEqual([[1200, 1500]]);
+    expect(finalCardHeight).toBe(1300);
+    expect(dimensions).toEqual([[1200, 1300]]);
     expect(fillText).toHaveBeenCalledWith("False promise", 370, 250);
     expect(context.rotate).toHaveBeenCalledTimes(3);
     expect(context.translate).toHaveBeenCalledWith(332, 195);
@@ -119,18 +119,18 @@ describe("final card renderer", () => {
     expect(fillText).toHaveBeenCalledWith(summary.titleDescription, 370, 298);
     expect(context.drawImage).toHaveBeenCalledWith(
       expect.anything(),
-      1019.5,
-      104,
-      51,
-      51,
+      1033,
+      94,
+      38,
+      38,
     );
-    expect(fillText).toHaveBeenCalledWith("CADET", 1085, 174);
-    expect(fillText).toHaveBeenCalledWith("7 Wins · 3 Losses", 628, 756);
-    expect(fillText).toHaveBeenCalledWith("Born in the workshop", 126, 887);
+    expect(fillText).toHaveBeenCalledWith("CADET", 1085, 150);
+    expect(fillText).toHaveBeenCalledWith("7 Wins · 3 Losses", 628, 606);
+    expect(fillText).toHaveBeenCalledWith("Born in the workshop", 126, 737);
     expect(fillText).toHaveBeenCalledWith(
       "You learned every machine.",
       126,
-      915,
+      765,
     );
 
     await createFinalCardBlob(
@@ -192,6 +192,6 @@ describe("final card renderer", () => {
       "dark",
     );
 
-    expect(fillText).toHaveBeenCalledWith("LEO MASTER", 1085, 174);
+    expect(fillText).toHaveBeenCalledWith("LEO MASTER", 1085, 150);
   });
 });
