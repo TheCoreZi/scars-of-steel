@@ -1,10 +1,6 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 
-import {
-  createFinalCardBlob,
-  finalCardHeight,
-  finalCardWidth,
-} from "../app/finalCard";
+import { createFinalCardBlob, finalCardWidth } from "../app/finalCard";
 import type { FinalSummary } from "../domain/finalSummary";
 
 const summary = {
@@ -62,7 +58,7 @@ afterEach(() => {
 });
 
 describe("final card renderer", () => {
-  test("renders the final summary to a compact 1200 by 1300 PNG", async () => {
+  test("calculates a compact PNG height from its content", async () => {
     const dimensions: number[][] = [];
     const fillStyles: string[] = [];
     const fillText = vi.fn();
@@ -109,8 +105,7 @@ describe("final card renderer", () => {
     expect(blob.type).toBe("image/png");
     expect(canvas).toBeNull();
     expect(finalCardWidth).toBe(1200);
-    expect(finalCardHeight).toBe(1300);
-    expect(dimensions).toEqual([[1200, 1300]]);
+    expect(dimensions).toEqual([[1200, 1147]]);
     expect(fillText).toHaveBeenCalledWith("False promise", 370, 250);
     expect(context.rotate).toHaveBeenCalledTimes(3);
     expect(context.translate).toHaveBeenCalledWith(332, 195);
@@ -143,6 +138,19 @@ describe("final card renderer", () => {
     );
 
     expect(fillText).toHaveBeenCalledWith(summary.titleDescription, 370, 362);
+
+    await createFinalCardBlob(
+      {
+        ...summary,
+        ageLabel:
+          "You fought through a very long career that needs another complete line here.",
+        titleDescription:
+          "This deliberately long title description needs several lines to explain everything that happened during a complicated military career before the final result could be decided.",
+      },
+      "dark",
+    );
+
+    expect(dimensions[2][1]).toBeGreaterThan(dimensions[0][1]);
 
     await createFinalCardBlob(summary, "light");
 
