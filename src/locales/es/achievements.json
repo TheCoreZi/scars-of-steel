@@ -1,11 +1,14 @@
 {
   "bornInWorkshop": {
+    "description": "Entraste al programa mecánico y aprendiste a comprender cada máquina desde dentro.",
     "name": "Nacido en el taller"
   },
   "notOnMyWatch": {
+    "description": "Denunciaste la conducta de un veterano en vez de mirar hacia otro lado.",
     "name": "No en mi guardia"
   },
   "trueSoldier": {
+    "description": "Dejaste a un lado tu entrenamiento para ayudar a una comunidad que lo necesitaba.",
     "name": "Un soldado de verdad"
   }
 }

@@ -78,6 +78,33 @@
     "guylos": "Guylos Empire",
     "helic": "Helic Republic"
   },
+  "finalScreen": {
+    "achievements": "Achievements",
+    "age": "Age {{age}}",
+    "badge": "Final career record",
+    "battleRecord": "Battle record",
+    "careerDuration_one": "You fought for {{count}} year. Your career ended at age {{age}}.",
+    "careerDuration_other": "You fought for {{count}} years. Your career ended at age {{age}}.",
+    "download": "Download PNG",
+    "downloadError": "The image could not be generated. Try again.",
+    "factionTrust": "Faction trust",
+    "factions": {
+      "guylos": "the Empire",
+      "helic": "the Republic"
+    },
+    "fame": "Fame",
+    "losses": "Losses",
+    "newRun": "New run",
+    "noAchievements": "No achievements earned",
+    "noZoid": "Career ended without a Zoid",
+    "pilotName": "{{name}} “{{nickname}}” of {{faction}}",
+    "potential": "Potential",
+    "share": "Share",
+    "shareError": "The image could not be shared. The download remains available.",
+    "stats": "Final stats",
+    "wins": "Wins",
+    "zoid": "Signature Zoid"
+  },
   "pilotCreation": {
     "aspiration": "Requested specialization",
     "aspirations": {
@@ -115,7 +142,7 @@
     "battleReport": "Of {{available}} battles for {{faction}}, you participated in {{participated}} and won {{wins}}.",
     "battles": "Battles",
     "channel": "Career archive // secure transmission",
-    "close": "Close year",
+    "close": "Continue career",
     "closed": "Year closed. The record is ready to continue.",
     "potential": "Potential",
     "decisionRiskFailure": "Decision · With risk · Failure",

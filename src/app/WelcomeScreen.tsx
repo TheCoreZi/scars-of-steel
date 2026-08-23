@@ -51,7 +51,14 @@ export function WelcomeScreen({
         </div>
         <Badge>{t("welcome.badge")}</Badge>
         <div className="welcome__heading">
-          <h1 id={titleId}>{t("welcome.title")}</h1>
+          <div className="welcome__brand">
+            <img
+              alt=""
+              className="welcome__logo"
+              src="/images/brand/scars-of-steel-mark.png"
+            />
+            <h1 id={titleId}>{t("welcome.title")}</h1>
+          </div>
           <p className="welcome__description">{t("welcome.description")}</p>
           <p className="welcome__journey">{t("welcome.journey")}</p>
           <p className="welcome__call-to-action">{t("welcome.callToAction")}</p>

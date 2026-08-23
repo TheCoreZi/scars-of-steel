@@ -31,7 +31,6 @@ const statNames = [
 const zoidFallbackIcon = "◇";
 
 interface DecisionOutcomeScreenProps {
-  closed: boolean;
   event: DecisionEvent;
   onCloseYear: () => void;
   result: ResolvedYear;
@@ -39,7 +38,6 @@ interface DecisionOutcomeScreenProps {
 }
 
 export function DecisionOutcomeScreen({
-  closed,
   event,
   onCloseYear,
   result,
@@ -183,19 +181,13 @@ export function DecisionOutcomeScreen({
         </section>
       </div>
 
-      {closed ? (
-        <p className="outcome-screen__closed" role="status">
-          {t("outcomeScreen.closed")}
-        </p>
-      ) : (
-        <button
-          className="button button--primary"
-          onClick={onCloseYear}
-          type="button"
-        >
-          {t("outcomeScreen.close")}
-        </button>
-      )}
+      <button
+        className="button button--primary"
+        onClick={onCloseYear}
+        type="button"
+      >
+        {t("outcomeScreen.close")}
+      </button>
     </section>
   );
 }

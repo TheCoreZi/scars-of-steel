@@ -1,3 +1,54 @@
 {
-  "rookiePilot": "Piloto novato"
+  "champion": {
+    "description": "Fuiste una pieza fundamental para traer la paz al continente. Aunque el reconocimiento no siempre llevó tu nombre, {{pilotName}} cumplió con su deber hasta el final.",
+    "name": "Campeón"
+  },
+  "falsePromise": {
+    "description": "{{pilotName}} llegó con potencial, pero esta vida quizá no era para ti.",
+    "name": "Promesa falsa"
+  },
+  "livingLegend": {
+    "description": "No hubo enemigo que no te temiera. {{pilotName}} dominó cada rincón del campo de batalla.",
+    "name": "Leyenda viviente"
+  },
+  "martyr": {
+    "description": "Tu muerte fue llorada por toda la nación. {{pilotName}} se convirtió en una razón más para terminar la guerra.",
+    "name": "Mártir de la nación"
+  },
+  "nationAce": {
+    "description": "Nadie duda de tus decisiones. Los cadetes se alistan para luchar al lado de {{pilotName}}.",
+    "name": "As de la nación"
+  },
+  "nationIdol": {
+    "description": "No hay persona que no conozca tu nombre. Durante generaciones se contarán historias sobre {{pilotName}}.",
+    "name": "Ídolo de la nación"
+  },
+  "puppeteer": {
+    "description": "Tu única lealtad fue hacia ti mismo. {{pilotName}} movió los hilos que decidieron el curso de la guerra.",
+    "name": "Titiritero"
+  },
+  "solidPilot": {
+    "description": "Luchaste hasta el final y sobreviviste para ver la derrota. Incluso en la caída, {{pilotName}} aprendió lo que la guerra exige de un soldado.",
+    "name": "Piloto sólido"
+  },
+  "spearOfZi": {
+    "description": "Tus victorias cambiaron el rumbo de la guerra. {{pilotName}} olvidó el significado de la derrota.",
+    "name": "Lanza de Zi"
+  },
+  "veteran": {
+    "description": "Serviste a tu nación durante décadas y te retiraste a tu manera. {{pilotName}} supo que un buen soldado también sabe cuándo parar.",
+    "name": "Veterano de guerra"
+  },
+  "villageHero": {
+    "description": "Serviste, sobreviviste y te ganaste una reputación entre los tuyos. {{pilotName}} quizá no será recordado por la historia, pero vivió a su manera.",
+    "name": "Héroe de la aldea"
+  },
+  "voiceOfCommand": {
+    "description": "Alcanzaste la cima de la cadena de mando y demostraste tu valor. {{pilotName}} ganó el respeto de toda una nación.",
+    "name": "Voz de mando"
+  },
+  "warHero": {
+    "description": "Pocos pilotos pueden enfrentarte. Cuando el enemigo escucha el nombre de {{pilotName}}, empieza a retroceder. Tú decides el rumbo del combate.",
+    "name": "Héroe de guerra"
+  }
 }

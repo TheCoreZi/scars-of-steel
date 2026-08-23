@@ -1,3 +1,54 @@
 {
-  "rookiePilot": "Rookie pilot"
+  "champion": {
+    "description": "You played a vital role in bringing peace to the continent. Recognition did not always carry your name, but {{pilotName}} fulfilled the mission to the end.",
+    "name": "Champion"
+  },
+  "falsePromise": {
+    "description": "{{pilotName}} arrived with potential, but perhaps this life was not for you.",
+    "name": "False promise"
+  },
+  "livingLegend": {
+    "description": "Every enemy feared you. {{pilotName}} dominated every part of the battlefield.",
+    "name": "Living legend"
+  },
+  "martyr": {
+    "description": "The nation mourned your death. {{pilotName}} became another reason to end the war.",
+    "name": "Martyr of the nation"
+  },
+  "nationAce": {
+    "description": "No one doubts your decisions. Cadets enlist to fight beside {{pilotName}}.",
+    "name": "Ace of the nation"
+  },
+  "nationIdol": {
+    "description": "Everyone knows your name. People will tell stories about {{pilotName}} for generations.",
+    "name": "Idol of the nation"
+  },
+  "puppeteer": {
+    "description": "Your only loyalty was to yourself. {{pilotName}} pulled the strings that decided the course of the war.",
+    "name": "Puppeteer"
+  },
+  "solidPilot": {
+    "description": "You fought to the end and survived to see defeat. Even in the fall, {{pilotName}} learned what war demands from a soldier.",
+    "name": "Solid pilot"
+  },
+  "spearOfZi": {
+    "description": "Your victories changed the course of the war. {{pilotName}} forgot the meaning of defeat.",
+    "name": "Spear of Zi"
+  },
+  "veteran": {
+    "description": "You served your nation for decades and retired on your terms. {{pilotName}} knew that a good soldier also knows when to stop.",
+    "name": "War veteran"
+  },
+  "villageHero": {
+    "description": "You served, survived, and earned a reputation among your people. History might not remember {{pilotName}}, but you lived on your terms.",
+    "name": "Village hero"
+  },
+  "voiceOfCommand": {
+    "description": "You reached the top of the chain of command and proved your worth. {{pilotName}} earned the respect of an entire nation.",
+    "name": "Voice of command"
+  },
+  "warHero": {
+    "description": "Few pilots can face you. The enemy retreats when it hears the name {{pilotName}}. You decide the course of battle.",
+    "name": "War hero"
+  }
 }

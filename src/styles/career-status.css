@@ -1,0 +1,417 @@
+.career-status {
+  width: 100%;
+  color: var(--color-text);
+}
+
+.career-status__desktop {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-panel) 94%, var(--color-accent));
+}
+
+.career-status__details {
+  display: grid;
+  min-height: 6.5rem;
+  grid-template-columns:
+    minmax(6.5rem, 0.4fr) minmax(11rem, 1fr) minmax(17rem, 1.25fr)
+    minmax(7rem, 0.5fr);
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0.9rem var(--space-5);
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+.career-status__zoid-panel {
+  display: grid;
+  min-width: 0;
+  align-self: stretch;
+  align-content: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: color-mix(in srgb, var(--color-background) 70%, transparent);
+  text-align: center;
+}
+
+.career-status__zoid-content {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: var(--space-2);
+}
+
+.career-status__zoid-visual {
+  display: grid;
+  width: 4.5rem;
+  height: 3.5rem;
+  place-items: center;
+  border: 1px solid var(--color-border-strong);
+  border-radius: calc(var(--radius-medium) * 0.7);
+  background: var(--color-panel-raised);
+}
+
+.career-status__pilot,
+.career-status__potential {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-1);
+}
+
+.career-status__zoid-panel small,
+.career-status__rank,
+.career-status__potential small {
+  color: var(--color-text-muted);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.career-status__zoid-panel strong,
+.career-status__pilot > strong {
+  overflow: hidden;
+  color: var(--color-heading);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.career-status__rank {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--color-accent);
+}
+
+.career-status__rank .rank-insignia {
+  width: 1.2rem;
+  height: 0.75rem;
+}
+
+.rank-insignia {
+  display: block;
+  width: 2rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.career-status__pilot-heading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.career-status__pilot-faction {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.career-status__pilot-faction::before {
+  margin-right: var(--space-1);
+  color: var(--color-border-strong);
+  content: "•";
+}
+
+.career-status__pilot > strong {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.career-status__metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+}
+
+.career-status__metadata span:not(:last-child)::after {
+  margin-left: var(--space-3);
+  color: var(--color-border-strong);
+  content: "•";
+}
+
+.career-status__zoid {
+  width: 4.1rem;
+  height: 3.1rem;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.career-status__zoid-fallback {
+  display: grid;
+  width: 3rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: 50%;
+  color: var(--color-accent);
+  font-size: 1.6rem;
+}
+
+.career-status__potential {
+  position: relative;
+  width: 5rem;
+  aspect-ratio: 1;
+  place-content: center;
+  justify-self: center;
+  overflow: hidden;
+  padding: var(--space-2);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-medium);
+  background: color-mix(in srgb, var(--color-background) 70%, transparent);
+  text-align: center;
+}
+
+.career-status__potential::before {
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--potential-percent);
+  background: linear-gradient(
+    0deg,
+    color-mix(in srgb, var(--color-faction-secondary) 55%, transparent),
+    color-mix(in srgb, var(--color-accent) 55%, transparent)
+  );
+  content: "";
+  transition: height var(--motion-standard) ease;
+}
+
+.career-status__potential small,
+.career-status__potential strong {
+  z-index: 1;
+}
+
+.career-status__potential strong {
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 850;
+}
+
+.career-status__fans {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2.7rem;
+  overflow: hidden;
+  border-bottom: 0.25rem solid var(--color-accent);
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--color-accent) 9%, var(--color-panel))
+  );
+  pointer-events: none;
+}
+
+.career-status__fans-label {
+  position: absolute;
+  z-index: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: inline-flex;
+  width: max-content;
+  min-width: 3.5rem;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid var(--color-border-strong);
+  border-bottom: 0;
+  border-radius: var(--radius-small) var(--radius-small) 0 0;
+  opacity: 0.72;
+  background: color-mix(
+    in srgb,
+    var(--color-accent-soft) 65%,
+    var(--color-panel-raised)
+  );
+  box-shadow: inset 0 0 0.6rem rgb(0 0 0 / 18%);
+  margin-inline: auto;
+}
+
+.career-status__fans-label small {
+  color: var(--color-text-muted);
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.career-status__crowd {
+  position: absolute;
+  z-index: 1;
+  inset: auto var(--space-3) 0 4.5rem;
+  display: flex;
+  height: 2.35rem;
+  align-items: end;
+  justify-content: space-around;
+  gap: 0.1rem;
+}
+
+.career-status__fan {
+  position: relative;
+  display: block;
+  width: 0.62rem;
+  height: 1.4rem;
+  flex: 0 1 0.62rem;
+  color: var(--color-text-muted);
+}
+
+.career-status__fan:nth-child(3n + 2) {
+  color: var(--color-faction-secondary);
+}
+
+.career-status__fan:nth-child(3n) {
+  color: var(--color-accent);
+}
+
+.career-status__fan-sprite {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 1.4rem;
+  height: 1.4rem;
+  opacity: 0.62;
+  background: currentcolor;
+  mask-image: url("/images/ui/fan-walk-sprite.png");
+  mask-position: left center;
+  mask-repeat: no-repeat;
+  mask-size: 200% 100%;
+  -webkit-mask-image: url("/images/ui/fan-walk-sprite.png");
+  -webkit-mask-position: left center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 200% 100%;
+  transform: translateX(-50%);
+}
+
+.career-status__fan-message {
+  position: absolute;
+  z-index: 1;
+  bottom: 1.3rem;
+  left: 50%;
+  max-width: 5rem;
+  padding: 0.08rem 0.2rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.25rem;
+  opacity: 0;
+  color: var(--color-heading);
+  background: var(--color-panel-raised);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.42rem;
+  font-weight: 850;
+  line-height: 1;
+  text-overflow: ellipsis;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.career-status__fan[data-speaking="true"] .career-status__fan-message {
+  opacity: 0.9;
+  animation: fan-chant 2.4s var(--fan-message-delay) infinite ease-in-out;
+}
+
+.career-status__fans[data-mood="indifferent"]
+  .career-status__fan:not([data-speaking="true"]):nth-child(3n + 1)
+  .career-status__fan-message {
+  animation: fan-question 5s var(--fan-message-delay) infinite ease-in-out;
+}
+
+.career-status__fan[data-entering="true"][data-side="left"] {
+  animation: fan-enter-left 0.65s var(--fan-delay) both steps(6, end);
+}
+
+.career-status__fan[data-entering="true"][data-side="right"] {
+  animation: fan-enter-right 0.65s var(--fan-delay) both steps(6, end);
+}
+
+.career-status__fan[data-entering="true"] .career-status__fan-sprite {
+  animation: fan-walk-frames 0.22s var(--fan-delay) 3 steps(1, end);
+}
+
+.career-status__war {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.career-status__war-heading {
+  color: var(--color-text-muted);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.career-status__war-scale {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(7rem, 1fr) 2.5rem;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.career-status__war-scale img {
+  width: 2.5rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.career-status__war-track {
+  position: relative;
+  display: grid;
+  height: 0.7rem;
+  overflow: hidden;
+  place-items: center;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  background: #a92f42;
+}
+
+.career-status__war-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  height: 100%;
+  background: #527bd2;
+  transition: width var(--motion-standard) ease;
+}
+
+.career-status__war-values {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 0.68rem;
+}
+
+.career-status__war-values > span {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.career-status__war-values > span:last-child {
+  text-align: right;
+}
+
+.career-status__compact-label {
+  display: none;
+}
+
+.career-status__war-values strong {
+  color: var(--color-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

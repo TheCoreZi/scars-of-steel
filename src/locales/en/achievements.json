@@ -1,11 +1,14 @@
 {
   "bornInWorkshop": {
+    "description": "You entered the mechanics program and learned to understand every machine from the inside.",
     "name": "Born in the workshop"
   },
   "notOnMyWatch": {
+    "description": "You exposed a veteran's misconduct instead of looking the other way.",
     "name": "Not on my watch"
   },
   "trueSoldier": {
+    "description": "You set your training aside to support a community in need.",
     "name": "A true soldier"
   }
 }

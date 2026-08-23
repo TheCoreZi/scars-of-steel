@@ -9,6 +9,7 @@ import {
 import { afterEach, describe, expect, test, vi } from "vitest";
 
 import { DecisionScreen } from "../app/DecisionScreen";
+import { createCareerHistory } from "../domain/career";
 import { eventCatalog } from "../domain/events";
 import { createInitialPilot } from "../domain/pilot";
 import type { RandomGenerator } from "../domain/random";
@@ -29,8 +30,10 @@ const pilot = createInitialPilot({
   id: "pilot:decision-screen",
   name: "Lena",
 });
+const history = createCareerHistory();
 const choosingState = {
   eventId: event.id,
+  history,
   phase: "choosing",
   pilot,
   screen: "event",
@@ -247,6 +250,7 @@ describe("decision resolution", () => {
     );
     const state = {
       eventId: event.id,
+      history,
       phase: "outcome",
       pilot: result.pilotAfter,
       result,
@@ -313,7 +317,7 @@ describe("decision resolution", () => {
       screen.getByText("You improved significantly as a pilot this year."),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Close year" }),
+      screen.getByRole("button", { name: "Continue career" }),
     ).toBeInTheDocument();
     expect(document.querySelectorAll(".decision-screen__prompt")).toHaveLength(
       8,
@@ -336,7 +340,7 @@ describe("decision resolution", () => {
     },
   );
 
-  test("shows an earned achievement and closes the year in place", () => {
+  test("shows an earned achievement and closes the year", () => {
     const mechanicsEvent = eventCatalog.mechanicsProgram;
     const result = resolveYear(
       mechanicsEvent.decisions[0],
@@ -347,34 +351,18 @@ describe("decision resolution", () => {
     const onCloseYear = vi.fn();
     const state = {
       eventId: mechanicsEvent.id,
+      history,
       phase: "outcome",
       pilot: result.pilotAfter,
       result,
       screen: "event",
     } as const satisfies EventGameState;
-    const view = renderScreen(state, { event: mechanicsEvent, onCloseYear });
+    renderScreen(state, { event: mechanicsEvent, onCloseYear });
 
     expect(screen.getByText("Achievement earned")).toBeInTheDocument();
     expect(screen.getByText("Born in the workshop")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Close year" }));
+    fireEvent.click(screen.getByRole("button", { name: "Continue career" }));
     expect(onCloseYear).toHaveBeenCalledOnce();
-    const closedState = { ...state, phase: "closed" } as const;
-
-    view.rerender(
-      <DecisionScreen
-        event={mechanicsEvent}
-        onCloseYear={onCloseYear}
-        onDecision={() => undefined}
-        onReducedMotionChange={() => undefined}
-        onRevealOutcome={() => undefined}
-        reducedMotion={false}
-        state={closedState}
-      />,
-    );
-    expect(
-      screen.getByText("Year closed. The record is ready to continue."),
-    ).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Close year" })).toBeNull();
   });
 
   test("shows effective stat changes as compact outcome tags", () => {
@@ -387,6 +375,7 @@ describe("decision resolution", () => {
     );
     const state = {
       eventId: mechanicsEvent.id,
+      history,
       phase: "outcome",
       pilot: result.pilotAfter,
       result,
@@ -418,6 +407,7 @@ describe("decision resolution", () => {
     );
     const state = {
       eventId: event.id,
+      history,
       phase: "outcome",
       pilot: result.pilotAfter,
       result: {
@@ -469,6 +459,7 @@ describe("decision resolution", () => {
       );
       const state = {
         eventId: event.id,
+        history,
         phase: "outcome",
         pilot: result.pilotAfter,
         result: {
@@ -520,6 +511,7 @@ describe("decision resolution", () => {
       );
       const state = {
         eventId: growthEvent.id,
+        history,
         phase: "outcome",
         pilot: result.pilotAfter,
         result,
@@ -540,6 +532,7 @@ describe("decision resolution", () => {
     );
     const state = {
       eventId: event.id,
+      history,
       phase: "outcome",
       pilot: result.pilotAfter,
       result: {
@@ -611,6 +604,7 @@ function createAnimatingState(probability: number): AnimatingEventGameState {
 
   return {
     eventId: event.id,
+    history,
     phase: "animating",
     pilot: result.pilotAfter,
     result: { ...result, resolution: result.resolution },

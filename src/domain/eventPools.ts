@@ -14,6 +14,15 @@ export function selectInitialEvent(random: RandomGenerator): DecisionEvent {
   return selectEvent(initialEventPool, random);
 }
 
+export function getEligibleEventIds(
+  age: number,
+  completedEventIds: readonly EventId[],
+): readonly EventId[] {
+  const pool = age === 12 ? initialEventPool : [];
+
+  return pool.filter((id) => !completedEventIds.includes(id));
+}
+
 export function selectEvent(
   pool: readonly EventId[],
   random: RandomGenerator,
