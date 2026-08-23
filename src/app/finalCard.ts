@@ -1,4 +1,6 @@
 import type { FinalSummary } from "../domain/finalSummary";
+import type { Faction } from "../domain/types";
+import type { ColorMode } from "./AppControls";
 
 export const finalCardHeight = 1500;
 export const finalCardWidth = 1200;
@@ -11,8 +13,57 @@ interface CardImages {
   zoid: HTMLImageElement | null;
 }
 
+interface CardPalette {
+  accent: string;
+  background: string;
+  muted: string;
+  panel: string;
+  text: string;
+  track: string;
+}
+
+const cardPalettes = {
+  dark: {
+    guylos: {
+      accent: "#ff5d6c",
+      background: "#0c0d0f",
+      muted: "#c6c4c5",
+      panel: "#303135",
+      text: "#ffffff",
+      track: "#53565c",
+    },
+    helic: {
+      accent: "#f4b942",
+      background: "#071126",
+      muted: "#bdc9e8",
+      panel: "#172b58",
+      text: "#ffffff",
+      track: "#485981",
+    },
+  },
+  light: {
+    guylos: {
+      accent: "#b2243a",
+      background: "#e5e5e2",
+      muted: "#5e5b5c",
+      panel: "#d8d7d3",
+      text: "#242527",
+      track: "#9d9d98",
+    },
+    helic: {
+      accent: "#965b00",
+      background: "#e7ecf8",
+      muted: "#485677",
+      panel: "#dce5fa",
+      text: "#242527",
+      track: "#9ba8c8",
+    },
+  },
+} as const satisfies Record<ColorMode, Record<Faction, CardPalette>>;
+
 export async function createFinalCardBlob(
   summary: FinalSummary,
+  colorMode: ColorMode,
 ): Promise<Blob> {
   await document.fonts?.ready;
 
@@ -26,7 +77,7 @@ export async function createFinalCardBlob(
   }
 
   const images = await loadCardImages(summary);
-  drawFinalCard(context, summary, images);
+  drawFinalCard(context, summary, images, colorMode);
 
   return exportCanvas(canvas);
 }
@@ -60,51 +111,49 @@ function drawFinalCard(
   context: CanvasRenderingContext2D,
   summary: FinalSummary,
   images: CardImages,
+  colorMode: ColorMode,
 ): void {
-  const accent = summary.faction === "helic" ? "#f4b942" : "#ff5d6c";
-  const background = summary.faction === "helic" ? "#071126" : "#0c0d0f";
-  const panel = summary.faction === "helic" ? "#172b58" : "#303135";
+  const palette = cardPalettes[colorMode][summary.faction];
 
-  context.fillStyle = background;
+  context.fillStyle = palette.background;
   context.fillRect(0, 0, finalCardWidth, finalCardHeight);
-  context.fillStyle = accent;
+  context.fillStyle = palette.accent;
   context.fillRect(0, 0, finalCardWidth, 18);
-  context.strokeStyle = accent;
+  context.strokeStyle = palette.accent;
   context.lineWidth = 3;
   context.strokeRect(44, 44, finalCardWidth - 88, finalCardHeight - 88);
 
-  const titleBottom = drawTitle(context, summary, images.title, accent);
-  const visualBottom = drawVisual(context, summary, images, panel, accent);
+  const titleBottom = drawTitle(context, summary, images.title, palette);
+  const visualBottom = drawVisual(context, summary, images, palette);
   const metricsBottom = drawMetrics(
     context,
     summary,
-    panel,
-    accent,
+    palette,
     Math.max(titleBottom, visualBottom) + 50,
   );
   const achievementsBottom = drawAchievements(
     context,
     summary,
     images.achievementIcons,
-    accent,
+    palette,
     metricsBottom + 55,
   );
-  drawStats(context, summary, accent, achievementsBottom + 60);
+  drawStats(context, summary, palette, achievementsBottom + 60);
 }
 
 function drawTitle(
   context: CanvasRenderingContext2D,
   summary: FinalSummary,
   icon: HTMLImageElement | null,
-  accent: string,
+  palette: CardPalette,
 ): number {
-  drawTitleSpotlights(context, accent);
+  drawTitleSpotlights(context, palette.accent);
 
   if (icon) {
     drawContainedImage(context, icon, 280, 65, 180, 125);
   }
 
-  context.fillStyle = accent;
+  context.fillStyle = palette.accent;
   context.font = "900 62px system-ui, sans-serif";
   context.textAlign = "center";
   const titleBottom = drawWrappedText(
@@ -116,7 +165,7 @@ function drawTitle(
     64,
     2,
   );
-  context.fillStyle = "#c9d2e7";
+  context.fillStyle = palette.muted;
   context.font = "600 24px system-ui, sans-serif";
   const descriptionBottom = drawWrappedText(
     context,
@@ -127,7 +176,7 @@ function drawTitle(
     34,
     4,
   );
-  context.fillStyle = accent;
+  context.fillStyle = palette.accent;
   context.font = "700 18px system-ui, sans-serif";
   const ageBottom = drawWrappedText(
     context,
@@ -166,10 +215,9 @@ function drawVisual(
   context: CanvasRenderingContext2D,
   summary: FinalSummary,
   images: CardImages,
-  panel: string,
-  accent: string,
+  palette: CardPalette,
 ): number {
-  context.fillStyle = panel;
+  context.fillStyle = palette.panel;
   context.fillRect(700, 80, 418, 430);
 
   if (images.faction) {
@@ -183,11 +231,12 @@ function drawVisual(
     drawContainedImage(context, images.zoid, 755, 180, 310, 190);
   }
 
-  drawRank(context, summary, images.rank, accent);
+  drawRank(context, summary, images.rank, palette.accent);
+  context.fillStyle = palette.accent;
   context.textAlign = "left";
   context.font = "800 20px system-ui, sans-serif";
   context.fillText(summary.labels.zoid.toUpperCase(), 730, 430);
-  context.fillStyle = "#ffffff";
+  context.fillStyle = palette.text;
   context.font = "800 30px system-ui, sans-serif";
   drawWrappedText(context, summary.zoidName, 730, 470, 340, 34, 2);
 
@@ -213,8 +262,7 @@ function drawRank(
 function drawMetrics(
   context: CanvasRenderingContext2D,
   summary: FinalSummary,
-  panel: string,
-  accent: string,
+  palette: CardPalette,
   y: number,
 ): number {
   const metrics = [
@@ -232,9 +280,9 @@ function drawMetrics(
     const row = Math.floor(index / 2);
     const x = 82 + column * 528;
     const metricY = y + row * 120;
-    context.fillStyle = panel;
+    context.fillStyle = palette.panel;
     context.fillRect(x, metricY, 504, 104);
-    context.fillStyle = accent;
+    context.fillStyle = palette.accent;
     context.font = "800 16px system-ui, sans-serif";
     context.fillText(label.toUpperCase(), x + 18, metricY + 30);
     context.font = `900 ${index === 3 ? 20 : 42}px system-ui, sans-serif`;
@@ -248,15 +296,15 @@ function drawAchievements(
   context: CanvasRenderingContext2D,
   summary: FinalSummary,
   icons: readonly (HTMLImageElement | null)[],
-  accent: string,
+  palette: CardPalette,
   y: number,
 ): number {
-  context.fillStyle = accent;
+  context.fillStyle = palette.accent;
   context.font = "800 20px system-ui, sans-serif";
   context.fillText(summary.labels.achievements.toUpperCase(), 82, y);
 
   if (summary.achievements.length === 0) {
-    context.fillStyle = "#ffffff";
+    context.fillStyle = palette.text;
     context.font = "700 21px system-ui, sans-serif";
     context.fillText("—", 82, y + 38);
     return y + 45;
@@ -276,10 +324,10 @@ function drawAchievements(
       drawContainedImage(context, icon, x, itemY, 28, 28);
     }
 
-    context.fillStyle = "#ffffff";
+    context.fillStyle = palette.text;
     context.font = "700 18px system-ui, sans-serif";
     context.fillText(achievement.name, x + 44, itemY + 18);
-    context.fillStyle = "#c9d2e7";
+    context.fillStyle = palette.muted;
     context.font = "400 16px system-ui, sans-serif";
     drawWrappedText(
       context,
@@ -298,10 +346,10 @@ function drawAchievements(
 function drawStats(
   context: CanvasRenderingContext2D,
   summary: FinalSummary,
-  accent: string,
+  palette: CardPalette,
   y: number,
 ): void {
-  context.fillStyle = accent;
+  context.fillStyle = palette.accent;
   context.font = "800 20px system-ui, sans-serif";
   context.fillText(summary.labels.stats.toUpperCase(), 82, y);
 
@@ -313,15 +361,15 @@ function drawStats(
     const x = 82 + column * 357;
     const statY = statsY + row * 88;
 
-    context.fillStyle = "#ffffff";
+    context.fillStyle = palette.text;
     context.font = "700 17px system-ui, sans-serif";
     context.fillText(stat.label, x + 16, statY + 24);
     context.textAlign = "right";
     context.fillText(String(stat.value), x + 308, statY + 24);
     context.textAlign = "left";
-    context.fillStyle = "#556070";
+    context.fillStyle = palette.track;
     context.fillRect(x + 16, statY + 46, 292, 5);
-    context.fillStyle = accent;
+    context.fillStyle = palette.accent;
     context.fillRect(x + 16, statY + 46, (292 * stat.value) / 100, 5);
   });
 }

@@ -6,6 +6,7 @@ import {
   type FinalAchievementSummary,
 } from "../domain/finalSummary";
 import type { FinalGameState } from "../domain/types";
+import type { ColorMode } from "./AppControls";
 import { Panel } from "./UiPrimitives";
 import { createFinalCardBlob } from "./finalCard";
 import {
@@ -16,14 +17,20 @@ import {
 import { RankInsignia } from "./RankInsignia";
 
 interface FinalScreenProps {
+  colorMode: ColorMode;
   onRestart: () => void;
   state: FinalGameState;
 }
 
-export function FinalScreen({ onRestart, state }: FinalScreenProps) {
+interface FinalCardCache {
+  colorMode: ColorMode;
+  promise: Promise<Blob>;
+}
+
+export function FinalScreen({ colorMode, onRestart, state }: FinalScreenProps) {
   const headingId = useId();
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const imageBlobRef = useRef<Promise<Blob> | null>(null);
+  const imageBlobRef = useRef<FinalCardCache | null>(null);
   const [busyAction, setBusyAction] = useState<"download" | "share" | null>(
     null,
   );
@@ -75,8 +82,14 @@ export function FinalScreen({ onRestart, state }: FinalScreenProps) {
   }
 
   function getCardBlob(): Promise<Blob> {
-    imageBlobRef.current ??= createFinalCardBlob(summary);
-    return imageBlobRef.current;
+    if (imageBlobRef.current?.colorMode !== colorMode) {
+      imageBlobRef.current = {
+        colorMode,
+        promise: createFinalCardBlob(summary, colorMode),
+      };
+    }
+
+    return imageBlobRef.current.promise;
   }
 
   return (

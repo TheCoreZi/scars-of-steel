@@ -237,7 +237,11 @@ export function App() {
             state={gameState}
           />
         ) : (
-          <FinalScreen onRestart={restartGame} state={gameState} />
+          <FinalScreen
+            colorMode={colorMode}
+            onRestart={restartGame}
+            state={gameState}
+          />
         )}
       </ScreenTransition>
     </div>

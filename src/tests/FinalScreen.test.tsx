@@ -27,6 +27,7 @@ vi.mock("../app/finalCard", () => ({
   ),
 }));
 
+const darkColorMode = "dark";
 const event = eventCatalog.mechanicsProgram;
 const initialPilot = createInitialPilot({
   aspiration: "commander",
@@ -40,6 +41,7 @@ const result = resolveYear(
   initialPilot,
   createSeededRandomGenerator(4),
 );
+const lightColorMode = "light";
 
 if (!result.pilotAfter.zoids) {
   throw new TypeError("The final screen fixture requires a signature Zoid.");
@@ -64,7 +66,13 @@ afterEach(() => {
 describe("final screen", () => {
   test("shows the complete localized final summary", async () => {
     await i18n.changeLanguage("es");
-    render(<FinalScreen onRestart={() => undefined} state={state} />);
+    render(
+      <FinalScreen
+        colorMode={darkColorMode}
+        onRestart={() => undefined}
+        state={state}
+      />,
+    );
 
     expect(
       screen.getByRole("heading", { name: "Promesa falsa" }),
@@ -116,7 +124,11 @@ describe("final screen", () => {
     } satisfies FinalGameState;
 
     render(
-      <FinalScreen onRestart={() => undefined} state={stateWithoutZoid} />,
+      <FinalScreen
+        colorMode={darkColorMode}
+        onRestart={() => undefined}
+        state={stateWithoutZoid}
+      />,
     );
 
     expect(screen.getByText("Career ended without a Zoid")).toBeInTheDocument();
@@ -138,6 +150,7 @@ describe("final screen", () => {
 
     render(
       <FinalScreen
+        colorMode={darkColorMode}
         onRestart={() => undefined}
         state={stateWithEveryAchievement}
       />,
@@ -163,7 +176,13 @@ describe("final screen", () => {
     const createObjectURL = vi.fn(() => "blob:final-card");
     const revokeObjectURL = vi.fn();
     vi.stubGlobal("URL", { createObjectURL, revokeObjectURL });
-    render(<FinalScreen onRestart={() => undefined} state={state} />);
+    const { rerender } = render(
+      <FinalScreen
+        colorMode={darkColorMode}
+        onRestart={() => undefined}
+        state={state}
+      />,
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Download PNG" }));
 
@@ -178,9 +197,25 @@ describe("final screen", () => {
           "Lena Steel “The Guardian” of the Republic arrived with potential, but perhaps this life was not for you.",
         titleName: "False promise",
       }),
+      "dark",
     );
     expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
     expect(revokeObjectURL).toHaveBeenCalledWith("blob:final-card");
+
+    rerender(
+      <FinalScreen
+        colorMode={lightColorMode}
+        onRestart={() => undefined}
+        state={state}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Download PNG" }));
+
+    await waitFor(() => expect(createFinalCardBlob).toHaveBeenCalledTimes(2));
+    expect(createFinalCardBlob).toHaveBeenLastCalledWith(
+      expect.any(Object),
+      "light",
+    );
   });
 
   test("shares the PNG when file sharing is supported", async () => {
@@ -192,7 +227,13 @@ describe("final screen", () => {
       canShare: vi.fn(() => true),
       share,
     });
-    render(<FinalScreen onRestart={() => undefined} state={state} />);
+    render(
+      <FinalScreen
+        colorMode={darkColorMode}
+        onRestart={() => undefined}
+        state={state}
+      />,
+    );
 
     const shareButton = screen.getByRole("button", { name: "Share" });
     expect(shareButton).toHaveClass("final-screen__export");
@@ -206,7 +247,13 @@ describe("final screen", () => {
   });
 
   test("keeps download and hides share when Web Share is unavailable", () => {
-    render(<FinalScreen onRestart={() => undefined} state={state} />);
+    render(
+      <FinalScreen
+        colorMode={darkColorMode}
+        onRestart={() => undefined}
+        state={state}
+      />,
+    );
 
     expect(screen.getByRole("button", { name: "Download PNG" })).toHaveClass(
       "final-screen__export",
@@ -230,7 +277,13 @@ describe("final screen", () => {
       canShare: vi.fn(() => true),
       share,
     });
-    render(<FinalScreen onRestart={() => undefined} state={state} />);
+    render(
+      <FinalScreen
+        colorMode={darkColorMode}
+        onRestart={() => undefined}
+        state={state}
+      />,
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Share" }));
     await waitFor(() => expect(share).toHaveBeenCalledTimes(1));
@@ -246,7 +299,13 @@ describe("final screen", () => {
 
   test("starts a new run from the final screen", () => {
     const onRestart = vi.fn();
-    render(<FinalScreen onRestart={onRestart} state={state} />);
+    render(
+      <FinalScreen
+        colorMode={darkColorMode}
+        onRestart={onRestart}
+        state={state}
+      />,
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "New run" }));
 

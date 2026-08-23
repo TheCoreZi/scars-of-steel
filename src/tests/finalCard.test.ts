@@ -64,6 +64,7 @@ afterEach(() => {
 describe("final card renderer", () => {
   test("renders the final summary to a 1200 by 1500 PNG", async () => {
     const dimensions: number[][] = [];
+    const fillStyles: string[] = [];
     const fillText = vi.fn();
     const context = {
       drawImage: vi.fn(),
@@ -76,6 +77,9 @@ describe("final card renderer", () => {
       strokeRect: vi.fn(),
       translate: vi.fn(),
     };
+    Object.defineProperty(context, "fillStyle", {
+      set: (value: string) => fillStyles.push(value),
+    });
     vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(
       context as unknown as CanvasRenderingContext2D,
     );
@@ -99,7 +103,7 @@ describe("final card renderer", () => {
       },
     );
 
-    const blob = await createFinalCardBlob(summary);
+    const blob = await createFinalCardBlob(summary, "dark");
     const canvas = document.querySelector("canvas");
 
     expect(blob.type).toBe("image/png");
@@ -129,13 +133,22 @@ describe("final card renderer", () => {
       915,
     );
 
-    await createFinalCardBlob({
-      ...summary,
-      titleName:
-        "False promise that became an exceptionally long final career title for the nation",
-    });
+    await createFinalCardBlob(
+      {
+        ...summary,
+        titleName:
+          "False promise that became an exceptionally long final career title for the nation",
+      },
+      "dark",
+    );
 
     expect(fillText).toHaveBeenCalledWith(summary.titleDescription, 370, 362);
+
+    await createFinalCardBlob(summary, "light");
+
+    expect(fillStyles).toEqual(
+      expect.arrayContaining(["#965b00", "#e7ecf8", "#dce5fa", "#242527"]),
+    );
   });
 
   test("keeps a special rank name next to its insignia", async () => {
@@ -171,10 +184,13 @@ describe("final card renderer", () => {
       },
     );
 
-    await createFinalCardBlob({
-      ...summary,
-      rank: "Leo Master",
-    });
+    await createFinalCardBlob(
+      {
+        ...summary,
+        rank: "Leo Master",
+      },
+      "dark",
+    );
 
     expect(fillText).toHaveBeenCalledWith("LEO MASTER", 1085, 174);
   });
