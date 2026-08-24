@@ -1,6 +1,7 @@
 import { useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { getAssetPath } from "../assets";
 import { militaryRankNameKeys, specialRankNameKeys } from "../domain/pilot";
 import { getRankInsignia } from "../domain/ranks";
 import { getTitleDefinition } from "../domain/titles";
@@ -71,7 +72,7 @@ export function WelcomeScreen({
             <img
               alt=""
               className="welcome__logo"
-              src="/images/brand/scars-of-steel-mark.png"
+              src={getAssetPath("images/brand/scars-of-steel-mark.png")}
             />
             <h1 id={titleId}>{t("welcome.title")}</h1>
           </div>

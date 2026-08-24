@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { getAssetPath } from "../assets";
 import {
   aspirationNameKeys,
   factionNameKeys,
@@ -26,8 +27,8 @@ const aspirationIconPaths = {
 } as const satisfies Record<Aspiration, string>;
 const factions = Object.keys(factionNameKeys) as Faction[];
 const factionLogoPaths = {
-  guylos: "/images/factions/guylos.png",
-  helic: "/images/factions/helic.png",
+  guylos: getAssetPath("images/factions/guylos.png"),
+  helic: getAssetPath("images/factions/helic.png"),
 } as const satisfies Record<Faction, string>;
 const pendingIcon = "⌁";
 const statNames: StatName[] = [

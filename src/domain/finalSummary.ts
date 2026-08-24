@@ -1,3 +1,5 @@
+import { getAssetPath } from "../assets";
+import { translate } from "../i18n";
 import {
   achievementDescriptionKeys,
   achievementNameKeys,
@@ -14,7 +16,6 @@ import { getRankInsignia, type RankInsigniaDefinition } from "./ranks";
 import { getTitleDefinition } from "./titles";
 import type { Faction, FinalGameState, StatName } from "./types";
 import { getZoid } from "./zoids";
-import { translate } from "../i18n";
 
 const finalFactionNameKeys = {
   guylos: "interface:finalScreen.factions.guylos",
@@ -102,7 +103,9 @@ export function createFinalSummary(state: FinalGameState): FinalSummary {
     battleLosses: state.history.battles.losses,
     battleWins: state.history.battles.wins,
     faction: state.pilot.faction,
-    factionImagePath: `/images/factions/${state.pilot.faction}.png`,
+    factionImagePath: getAssetPath(
+      `images/factions/${state.pilot.faction}.png`,
+    ),
     factionName: translate(factionNameKeys[state.pilot.faction]),
     factionTrust: state.pilot.career.factionTrust,
     fame: state.pilot.career.fame,

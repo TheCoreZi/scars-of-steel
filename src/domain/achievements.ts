@@ -1,3 +1,4 @@
+import { getAssetPath } from "../assets";
 import type { AchievementId, TranslationKey } from "./types";
 
 export type AchievementIconId = "gavel" | "heart" | "wrench";
@@ -21,5 +22,7 @@ export const achievementNameKeys = {
 } as const satisfies Record<AchievementId, TranslationKey<"achievements">>;
 
 export function getAchievementIconPath(id: AchievementId): string {
-  return `/images/icons/achievements/${achievementIconIds[id]}.svg`;
+  return getAssetPath(
+    `images/icons/achievements/${achievementIconIds[id]}.svg`,
+  );
 }
