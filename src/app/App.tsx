@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 
 import { getEligibleEventIds, selectEvent } from "../domain/eventPools";
 import { getEvent } from "../domain/events";
@@ -11,11 +11,7 @@ import {
 import { selectNickname } from "../domain/nicknames";
 import { createInitialPilot } from "../domain/pilot";
 import { createSecureRandomGenerator } from "../domain/random";
-import type {
-  Decision,
-  GameState,
-  PilotCreationGameState,
-} from "../domain/types";
+import type { Decision, PilotCreationGameState } from "../domain/types";
 import { selectTitle } from "../domain/titles";
 import { resolveYear } from "../domain/year";
 import { AppControls } from "./AppControls";
@@ -25,12 +21,8 @@ import {
 } from "./colorModeStorage";
 import { DecisionScreen } from "./DecisionScreen";
 import { FinalScreen } from "./FinalScreen";
-import {
-  type CompletedGame,
-  createCompletedGame,
-  loadGameData,
-  saveGameData,
-} from "./gameStorage";
+import { type CompletedGame, loadGameData, saveGameData } from "./gameStorage";
+import { type AppState, GameActionType, gameReducer } from "./gameReducer";
 import {
   PilotCreationScreen,
   type PilotConfiguration,
@@ -39,22 +31,13 @@ import { ScreenTransition } from "./ScreenTransition";
 import { WelcomeScreen } from "./WelcomeScreen";
 
 export function App() {
-  const [appState, setAppState] = useState<{
-    completedGames: readonly CompletedGame[];
-    gameState: GameState;
-  }>(() => {
-    const storedData = loadGameData();
-
-    return {
-      completedGames: storedData.completedGames,
-      gameState: storedData.activeGame ?? ({ screen: "welcome" } as const),
-    };
-  });
+  const [appState, dispatch] = useReducer(
+    gameReducer,
+    undefined,
+    createInitialAppState,
+  );
   const [colorMode, setColorMode] = useState(loadColorModePreference);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const hasResolvedDecisionRef = useRef(false);
-  const hasClosedYearRef = useRef(false);
-  const hasCreatedPilotRef = useRef(false);
   const randomRef = useRef(createSecureRandomGenerator());
   const { gameState } = appState;
 
@@ -74,48 +57,23 @@ export function App() {
     saveColorModePreference(colorMode);
   }, [colorMode]);
 
-  function updateGameState(
-    update: GameState | ((currentState: GameState) => GameState),
-  ) {
-    setAppState((currentState) => ({
-      ...currentState,
-      gameState:
-        typeof update === "function" ? update(currentState.gameState) : update,
-    }));
-  }
-
   function openCompletedGame(game: CompletedGame) {
-    updateGameState(game.state);
+    dispatch({ game, type: GameActionType.OpenCompletedGame });
   }
 
   function startGame() {
-    hasClosedYearRef.current = false;
-    hasResolvedDecisionRef.current = false;
-    hasCreatedPilotRef.current = false;
-    updateGameState((currentState) =>
-      currentState.screen === "welcome"
-        ? {
-            draft: { aspiration: null, faction: null, name: "" },
-            screen: "pilot-creation",
-          }
-        : currentState,
-    );
+    dispatch({ type: GameActionType.StartGame });
   }
 
   function changePilotDraft(draft: PilotCreationGameState["draft"]) {
-    updateGameState((currentState) =>
-      currentState.screen === "pilot-creation"
-        ? { ...currentState, draft }
-        : currentState,
-    );
+    dispatch({ draft, type: GameActionType.ChangePilotDraft });
   }
 
   function confirmPilot(configuration: PilotConfiguration) {
-    if (hasCreatedPilotRef.current) {
+    if (gameState.screen !== "pilot-creation") {
       return;
     }
 
-    hasCreatedPilotRef.current = true;
     const pilot = createInitialPilot({
       ...configuration,
       id: `pilot:${crypto.randomUUID()}`,
@@ -126,21 +84,16 @@ export function App() {
       randomRef.current,
     );
 
-    updateGameState({
+    dispatch({
       eventId: event.id,
       history,
-      phase: "choosing",
       pilot,
-      screen: "event",
+      type: GameActionType.ConfirmPilot,
     });
   }
 
   function chooseDecision(decision: Decision) {
-    if (
-      hasResolvedDecisionRef.current ||
-      gameState.screen !== "event" ||
-      gameState.phase !== "choosing"
-    ) {
+    if (gameState.screen !== "event" || gameState.phase !== "choosing") {
       return;
     }
 
@@ -152,47 +105,18 @@ export function App() {
       randomRef.current,
     );
 
-    hasResolvedDecisionRef.current = true;
-    hasClosedYearRef.current = false;
-    updateGameState({
-      eventId: gameState.eventId,
-      history: gameState.history,
-      ...(result.resolution.kind === "chance"
-        ? {
-            phase: "animating" as const,
-            result: { ...result, resolution: result.resolution },
-          }
-        : { phase: "outcome" as const, result }),
-      screen: "event",
-      pilot: result.pilotAfter,
-    });
+    dispatch({ result, type: GameActionType.ChooseDecision });
   }
 
   function revealOutcome() {
-    updateGameState((currentState) =>
-      currentState.screen === "event" && currentState.phase === "animating"
-        ? {
-            eventId: currentState.eventId,
-            history: currentState.history,
-            phase: "outcome",
-            pilot: currentState.pilot,
-            result: currentState.result,
-            screen: "event",
-          }
-        : currentState,
-    );
+    dispatch({ type: GameActionType.RevealOutcome });
   }
 
   function closeYear() {
-    if (
-      hasClosedYearRef.current ||
-      gameState.screen !== "event" ||
-      gameState.phase !== "outcome"
-    ) {
+    if (gameState.screen !== "event" || gameState.phase !== "outcome") {
       return;
     }
 
-    hasClosedYearRef.current = true;
     const history = recordResolvedYear(
       gameState.history,
       gameState.eventId,
@@ -219,36 +143,22 @@ export function App() {
         titleId: selectTitle(pilot, history, endReason),
       } as const;
 
-      setAppState((currentState) => ({
-        completedGames: [
-          createCompletedGame(finalState),
-          ...currentState.completedGames.filter(
-            ({ state }) => state.pilot.id !== pilot.id,
-          ),
-        ],
-        gameState: finalState,
-      }));
+      dispatch({ state: finalState, type: GameActionType.CompleteCareer });
       return;
     }
 
-    hasClosedYearRef.current = false;
-    hasResolvedDecisionRef.current = false;
     const event = selectEvent(eligibleEventIds, randomRef.current);
 
-    updateGameState({
+    dispatch({
       eventId: event.id,
       history,
-      phase: "choosing",
       pilot,
-      screen: "event",
+      type: GameActionType.AdvanceYear,
     });
   }
 
   function restartGame() {
-    hasClosedYearRef.current = false;
-    hasCreatedPilotRef.current = false;
-    hasResolvedDecisionRef.current = false;
-    updateGameState({ screen: "welcome" });
+    dispatch({ type: GameActionType.RestartGame });
   }
 
   const faction =
@@ -308,6 +218,15 @@ export function App() {
       </ScreenTransition>
     </div>
   );
+}
+
+function createInitialAppState(): AppState {
+  const storedData = loadGameData();
+
+  return {
+    completedGames: storedData.completedGames,
+    gameState: storedData.activeGame ?? { screen: "welcome" },
+  };
 }
 
 function BackgroundDamage() {
