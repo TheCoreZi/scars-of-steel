@@ -219,6 +219,7 @@ describe("decision resolution", () => {
     view.rerender(
       <DecisionScreen
         event={event}
+        onAbandon={() => undefined}
         onCloseYear={() => undefined}
         onDecision={() => undefined}
         onReducedMotionChange={() => undefined}
@@ -363,6 +364,39 @@ describe("decision resolution", () => {
     expect(screen.getByText("Born in the workshop")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Continue career" }));
     expect(onCloseYear).toHaveBeenCalledOnce();
+  });
+
+  test("confirms before abandoning the run", () => {
+    const onAbandon = vi.fn();
+    renderScreen(
+      { ...createAnimatingState(0.2), phase: "outcome" },
+      {
+        onAbandon,
+      },
+    );
+
+    const abandonButton = screen.getByRole("button", { name: "Abandon run" });
+    expect(abandonButton).toHaveClass("button--secondary");
+    fireEvent.click(abandonButton);
+
+    const dialog = screen.getByRole("alertdialog", {
+      name: "Abandon this run?",
+    });
+    const cancel = within(dialog).getByRole("button", {
+      name: "Keep playing",
+    });
+    expect(cancel).toHaveFocus();
+    fireEvent.click(cancel);
+    expect(screen.queryByRole("alertdialog")).toBeNull();
+    expect(onAbandon).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: "Abandon run" }));
+    fireEvent.click(
+      within(screen.getByRole("alertdialog")).getByRole("button", {
+        name: "Abandon run",
+      }),
+    );
+    expect(onAbandon).toHaveBeenCalledOnce();
   });
 
   test("shows effective stat changes as compact outcome tags", () => {
@@ -550,6 +584,7 @@ describe("decision resolution", () => {
     view.rerender(
       <DecisionScreen
         event={event}
+        onAbandon={() => undefined}
         onCloseYear={() => undefined}
         onDecision={() => undefined}
         onReducedMotionChange={() => undefined}
@@ -567,6 +602,7 @@ describe("decision resolution", () => {
 
 interface RenderOverrides {
   event?: DecisionEvent;
+  onAbandon?: () => void;
   onCloseYear?: () => void;
   onDecision?: (decision: Decision) => void;
   onReducedMotionChange?: (reducedMotion: boolean) => void;
@@ -578,6 +614,7 @@ function renderScreen(state: EventGameState, overrides: RenderOverrides = {}) {
   return render(
     <DecisionScreen
       event={overrides.event ?? event}
+      onAbandon={overrides.onAbandon ?? (() => undefined)}
       onCloseYear={overrides.onCloseYear ?? (() => undefined)}
       onDecision={overrides.onDecision ?? (() => undefined)}
       onReducedMotionChange={

@@ -11,6 +11,7 @@ import { Panel } from "./UiPrimitives";
 
 interface DecisionScreenProps {
   event: DecisionEvent;
+  onAbandon: () => void;
   onCloseYear: () => void;
   onDecision: (decision: Decision) => void;
   onReducedMotionChange: (reducedMotion: boolean) => void;
@@ -21,6 +22,7 @@ interface DecisionScreenProps {
 
 export function DecisionScreen({
   event,
+  onAbandon,
   onCloseYear,
   onDecision,
   onReducedMotionChange,
@@ -65,6 +67,7 @@ export function DecisionScreen({
             ) : (
               <DecisionOutcomeScreen
                 event={event}
+                onAbandon={onAbandon}
                 onCloseYear={onCloseYear}
                 result={state.result}
                 titleId={phaseTitleId}

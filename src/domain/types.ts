@@ -371,6 +371,8 @@ export interface FinalGameState {
 export type GameState =
   EventGameState | FinalGameState | PilotCreationGameState | WelcomeGameState;
 
+export type ActiveGameState = EventGameState | PilotCreationGameState;
+
 export function createBoundedValue(value: number): BoundedValue {
   if (!Number.isFinite(value) || value < 0 || value > 100) {
     throw new RangeError("The value must be a finite number from 0 to 100.");

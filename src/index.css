@@ -757,8 +757,47 @@
   background: var(--color-accent-soft);
 }
 
-.outcome-screen > .button {
-  justify-self: end;
+.outcome-screen__actions {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
+  justify-self: stretch;
+}
+
+.abandon-dialog__backdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgb(0 0 0 / 72%);
+}
+
+.abandon-dialog {
+  width: min(100%, 30rem);
+  padding: var(--space-6);
+  border: 1px solid var(--color-accent);
+  background: var(--color-panel-raised);
+  box-shadow: 0 1.5rem 5rem rgb(0 0 0 / 65%);
+}
+
+.abandon-dialog h2 {
+  margin-bottom: var(--space-3);
+  color: var(--color-heading);
+}
+
+.abandon-dialog p {
+  color: var(--color-text-muted);
+}
+
+.abandon-dialog > div {
+  display: flex;
+  justify-content: end;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
 }
 
 @keyframes target-impact {
@@ -1486,6 +1525,15 @@
     padding: clamp(var(--space-5), 5vw, var(--space-7));
   }
 
+  .welcome__panel--records {
+    grid-template-areas:
+      "badge"
+      "heading"
+      "facts"
+      "button"
+      "records";
+  }
+
   .app-shell .welcome__panel::after {
     top: 0;
     right: -10%;
@@ -1544,6 +1592,13 @@
   .welcome .button {
     width: 100%;
     min-width: 0;
+  }
+}
+
+@media (max-width: 64rem) {
+  .service-records {
+    width: 100%;
+    justify-self: stretch;
   }
 }
 
@@ -1966,7 +2021,7 @@
     font-size: 0.8rem;
   }
 
-  .outcome-screen > .button {
+  .outcome-screen__actions {
     width: 100%;
     justify-self: stretch;
   }
@@ -1986,6 +2041,49 @@
 }
 
 @media (max-width: 40rem) {
+  .service-records {
+    padding: var(--space-2);
+  }
+
+  .service-records__row {
+    width: 100%;
+    grid-template-columns: 1.75rem minmax(3.5rem, 1fr) 2.5rem 2.5rem 2rem 2rem;
+    gap: 0.2rem;
+    padding: var(--space-1);
+  }
+
+  .service-records__name,
+  .service-records__metric {
+    font-size: 0.62rem;
+  }
+
+  .service-records__zoid {
+    width: 2.5rem;
+  }
+
+  .service-records__rank {
+    width: 2.5rem;
+  }
+
+  .service-records__title {
+    width: 1.75rem;
+  }
+
+  .service-records__rank img,
+  .service-records__title img {
+    max-width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .service-records__rank small,
+  .service-records__zoid small {
+    font-size: 0.42rem;
+  }
+
+  .service-records__metric {
+    min-width: 2rem;
+  }
+
   .app-shell {
     background-position:
       35% 0,
@@ -2046,7 +2144,7 @@
     gap: var(--space-3);
   }
 
-  .outcome-screen > .button {
+  .outcome-screen__actions .button {
     min-height: 2.5rem;
     padding: var(--space-2) var(--space-4);
     font-size: 0.72rem;
@@ -2466,9 +2564,20 @@
     text-align: center;
   }
 
+  .welcome__brand {
+    width: 100%;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-inline: var(--space-3);
+  }
+
   .welcome__heading h1 {
     max-width: 100%;
     font-size: clamp(2.75rem, 13.5vw, 4rem);
+  }
+
+  .welcome__logo {
+    width: clamp(4.5rem, 20vw, 6rem);
   }
 
   .welcome__heading p {
