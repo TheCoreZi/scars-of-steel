@@ -1,0 +1,55 @@
+name: Publish release
+
+on:
+  release:
+    types:
+      - released
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          cache: npm
+          node-version: 22
+      - name: Install dependencies
+        run: npm ci --registry=https://registry.npmjs.org/
+      - name: Check formatting
+        run: npm run format:check
+      - name: Lint
+        run: npm run lint
+      - name: Check types
+        run: npm run typecheck
+      - name: Run tests
+        run: npm run test:run
+      - name: Set build metadata
+        env:
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
+        run: |
+          echo "COMMIT_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> "$GITHUB_ENV"
+      - name: Build
+        run: npm run build
+      - name: Upload release build
+        uses: actions/upload-artifact@v4
+        with:
+          name: scars-of-steel-${{ github.event.release.tag_name }}
+          path: dist
+          retention-days: 30
+      - name: Request website deployment
+        env:
+          GH_TOKEN: ${{ secrets.THECOREZI_WEB_DISPATCH_TOKEN }}
+          RELEASE_VERSION: ${{ github.event.release.tag_name }}
+        run: |
+          jq --null-input --arg tag "$RELEASE_VERSION" '{event_type: "scars-of-steel-release", client_payload: {tag: $tag}}' |
+            gh api --method POST repos/TheCoreZi/thecorezi-web/dispatches --input -

@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 
+import { getAssetPath } from "../assets";
 import {
   getLifeStage,
   factionShortNameKeys,
@@ -15,8 +16,8 @@ import { translate } from "../i18n";
 import { RankInsignia } from "./RankInsignia";
 
 const factionLogoPaths = {
-  guylos: "/images/factions/guylos.png",
-  helic: "/images/factions/helic.png",
+  guylos: getAssetPath("images/factions/guylos.png"),
+  helic: getAssetPath("images/factions/helic.png"),
 } as const;
 const zoidFallbackIcon = "◇";
 

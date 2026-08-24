@@ -1,3 +1,4 @@
+import { getAssetPath } from "../assets";
 import type {
   CareerEndReason,
   CareerHistory,
@@ -33,7 +34,9 @@ function titleDefinition(
     canBeGranted,
     descriptionKey: `titles:${key}.description`,
     id,
-    iconPath: `/images/icons/titles/${id.slice("title:".length)}.png`,
+    iconPath: getAssetPath(
+      `images/icons/titles/${id.slice("title:".length)}.png`,
+    ),
     nameKey: `titles:${key}.name`,
   };
 }

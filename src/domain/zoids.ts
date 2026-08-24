@@ -1,3 +1,4 @@
+import { getAssetPath } from "../assets";
 import {
   createBoundedValue,
   type Faction,
@@ -420,7 +421,7 @@ function createZoid({
     basePower: createBoundedValue(basePower),
     faction,
     id: `zoid:${id}`,
-    ...(image ? { imagePath: `/images/zoids/${image}.png` } : {}),
+    ...(image ? { imagePath: getAssetPath(`images/zoids/${image}.png`) } : {}),
     nameKey: `zoids:${name}.name` as TranslationKey<"zoids">,
   };
 }

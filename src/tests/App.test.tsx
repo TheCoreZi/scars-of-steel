@@ -205,7 +205,7 @@ describe("welcome screen", () => {
 
     const heading = await startPilotCreation();
     expect(heading).toBeInTheDocument();
-    expect(heading).toHaveFocus();
+    await waitFor(() => expect(heading).toHaveFocus());
     expect(document.querySelector(".welcome__damage")).toBeInTheDocument();
     expect(screen.getByRole("group", { name: "Language" })).toBeInTheDocument();
     expect(
@@ -452,7 +452,9 @@ describe("pilot creation", () => {
     expect(document.querySelectorAll(".decision-screen__prompt")).toHaveLength(
       8,
     );
-    expect(document.querySelector(".outcome-screen h1")).toHaveFocus();
+    await waitFor(() =>
+      expect(document.querySelector(".outcome-screen h1")).toHaveFocus(),
+    );
     expect(screen.getByLabelText("Career status")).toBeInTheDocument();
 
     const outcome = screen.getByRole("heading", { level: 1 }).textContent;
