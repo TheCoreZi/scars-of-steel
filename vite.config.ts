@@ -3,7 +3,7 @@ import type { Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  base: "/scars-of-steel/",
+  base: "/",
   plugins: [react(), buildInfo()],
   test: {
     environment: "jsdom",

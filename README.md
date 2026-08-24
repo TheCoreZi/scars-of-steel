@@ -50,14 +50,11 @@ ci` to validate `package-lock.json` and create a clean dependency installation.
 ## Releases
 
 Stable GitHub releases deploy to
-<https://thecorezi.com/scars-of-steel/>. Drafts and prereleases do not deploy.
-The release tag is the public version.
-
-The release workflow builds the tag and saves `dist` as a GitHub Actions
-artifact. It then requests a deployment from `TheCoreZi/thecorezi-web`. That
-site includes the latest stable game release at `/scars-of-steel/` and checks
-<https://thecorezi.com/scars-of-steel/build-info.json> after deployment. The
-metadata file has this format:
+<https://scars-of-steel.thecorezi.com/>. Drafts and prereleases do not deploy.
+The release tag is the public version. The release workflow builds the tag,
+deploys `dist` with GitHub Pages, and checks the public page after deployment.
+The metadata is available at
+<https://scars-of-steel.thecorezi.com/build-info.json> in this format:
 
 ```json
 {
@@ -66,12 +63,12 @@ metadata file has this format:
 }
 ```
 
-Add a fine-grained token named `THECOREZI_WEB_DISPATCH_TOKEN` to the GitHub
-Actions secrets for this repository. Give the token access only to
-`TheCoreZi/thecorezi-web` and grant it write access to repository contents. The
-token sends the `repository_dispatch` event. It is not included in the source
-or build artifact.
+In the repository Pages settings, select **GitHub Actions** as the source. Set
+the custom domain to `scars-of-steel.thecorezi.com`. Before you add the DNS
+record, add the custom domain to the repository settings. Then add a DNS CNAME
+record from `scars-of-steel` to `thecorezi.github.io`. Enable **Enforce HTTPS**
+after GitHub validates the DNS record.
 
-Disable GitHub Pages for this repository. `TheCoreZi/thecorezi-web` owns the
-Pages deployment and the `thecorezi.com` custom domain. Do not add a `CNAME`
-file here.
+The deployment uses `GITHUB_TOKEN` with native Pages permissions. It does not
+require repository secrets. Do not add a `CNAME` file because GitHub stores the
+custom domain in the Pages settings.
