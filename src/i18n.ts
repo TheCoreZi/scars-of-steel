@@ -20,6 +20,7 @@ import titles from "./locales/es/titles.json";
 import zoids from "./locales/es/zoids.json";
 
 export const defaultNamespace = "interface";
+export const languageStorageKey = "scars-of-steel:language";
 export const resources = {
   en: {
     achievements: achievementsEn,
@@ -42,6 +43,41 @@ export const resources = {
     zoids,
   },
 } as const;
+export const supportedLanguages = ["en", "es"] as const;
+export type Language = (typeof supportedLanguages)[number];
+
+export function loadLanguagePreference(): Language {
+  let storedLanguage: string | null = null;
+
+  try {
+    storedLanguage = window.localStorage.getItem(languageStorageKey);
+  } catch {
+    // Use the browser language when storage is unavailable.
+  }
+
+  const browserLanguages =
+    typeof navigator === "undefined"
+      ? []
+      : [...navigator.languages, navigator.language];
+
+  for (const candidate of [storedLanguage, ...browserLanguages]) {
+    const language = candidate?.toLowerCase().split("-")[0];
+
+    if (supportedLanguages.includes(language as Language)) {
+      return language as Language;
+    }
+  }
+
+  return "en";
+}
+
+export function saveLanguagePreference(language: Language) {
+  try {
+    window.localStorage.setItem(languageStorageKey, language);
+  } catch {
+    // Keep the selected language in memory when storage is unavailable.
+  }
+}
 
 export const i18n = createInstance();
 
@@ -52,7 +88,7 @@ void i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
-  lng: "en",
+  lng: loadLanguagePreference(),
   missingKeyHandler: import.meta.env.DEV
     ? (_languages, namespace, key) => {
         throw new Error(`Missing translation key "${namespace}:${key}".`);
@@ -60,7 +96,7 @@ void i18n.use(initReactI18next).init({
     : undefined,
   resources,
   saveMissing: import.meta.env.DEV,
-  supportedLngs: ["en", "es"],
+  supportedLngs: supportedLanguages,
 });
 
 export function translate(

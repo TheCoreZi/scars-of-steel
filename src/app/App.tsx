@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getEligibleEventIds, selectEvent } from "../domain/eventPools";
 import { getEvent } from "../domain/events";
@@ -18,9 +18,19 @@ import type {
 } from "../domain/types";
 import { selectTitle } from "../domain/titles";
 import { resolveYear } from "../domain/year";
-import { AppControls, type ColorMode } from "./AppControls";
+import { AppControls } from "./AppControls";
+import {
+  loadColorModePreference,
+  saveColorModePreference,
+} from "./colorModeStorage";
 import { DecisionScreen } from "./DecisionScreen";
 import { FinalScreen } from "./FinalScreen";
+import {
+  type CompletedGame,
+  createCompletedGame,
+  loadGameData,
+  saveGameData,
+} from "./gameStorage";
 import {
   PilotCreationScreen,
   type PilotConfiguration,
@@ -29,21 +39,60 @@ import { ScreenTransition } from "./ScreenTransition";
 import { WelcomeScreen } from "./WelcomeScreen";
 
 export function App() {
-  const [colorMode, setColorMode] = useState<ColorMode>("dark");
-  const [gameState, setGameState] = useState<GameState>({
-    screen: "welcome",
+  const [appState, setAppState] = useState<{
+    completedGames: readonly CompletedGame[];
+    gameState: GameState;
+  }>(() => {
+    const storedData = loadGameData();
+
+    return {
+      completedGames: storedData.completedGames,
+      gameState: storedData.activeGame ?? ({ screen: "welcome" } as const),
+    };
   });
+  const [colorMode, setColorMode] = useState(loadColorModePreference);
   const [reducedMotion, setReducedMotion] = useState(false);
   const hasResolvedDecisionRef = useRef(false);
   const hasClosedYearRef = useRef(false);
   const hasCreatedPilotRef = useRef(false);
   const randomRef = useRef(createSecureRandomGenerator());
+  const { gameState } = appState;
+
+  useEffect(() => {
+    saveGameData({
+      activeGame:
+        appState.gameState.screen === "event" ||
+        appState.gameState.screen === "pilot-creation"
+          ? appState.gameState
+          : null,
+      completedGames: appState.completedGames,
+      version: 2,
+    });
+  }, [appState]);
+
+  useEffect(() => {
+    saveColorModePreference(colorMode);
+  }, [colorMode]);
+
+  function updateGameState(
+    update: GameState | ((currentState: GameState) => GameState),
+  ) {
+    setAppState((currentState) => ({
+      ...currentState,
+      gameState:
+        typeof update === "function" ? update(currentState.gameState) : update,
+    }));
+  }
+
+  function openCompletedGame(game: CompletedGame) {
+    updateGameState(game.state);
+  }
 
   function startGame() {
     hasClosedYearRef.current = false;
     hasResolvedDecisionRef.current = false;
     hasCreatedPilotRef.current = false;
-    setGameState((currentState) =>
+    updateGameState((currentState) =>
       currentState.screen === "welcome"
         ? {
             draft: { aspiration: null, faction: null, name: "" },
@@ -54,7 +103,7 @@ export function App() {
   }
 
   function changePilotDraft(draft: PilotCreationGameState["draft"]) {
-    setGameState((currentState) =>
+    updateGameState((currentState) =>
       currentState.screen === "pilot-creation"
         ? { ...currentState, draft }
         : currentState,
@@ -77,7 +126,7 @@ export function App() {
       randomRef.current,
     );
 
-    setGameState({
+    updateGameState({
       eventId: event.id,
       history,
       phase: "choosing",
@@ -105,7 +154,7 @@ export function App() {
 
     hasResolvedDecisionRef.current = true;
     hasClosedYearRef.current = false;
-    setGameState({
+    updateGameState({
       eventId: gameState.eventId,
       history: gameState.history,
       ...(result.resolution.kind === "chance"
@@ -120,7 +169,7 @@ export function App() {
   }
 
   function revealOutcome() {
-    setGameState((currentState) =>
+    updateGameState((currentState) =>
       currentState.screen === "event" && currentState.phase === "animating"
         ? {
             eventId: currentState.eventId,
@@ -161,14 +210,24 @@ export function App() {
     );
 
     if (endReason) {
-      setGameState({
+      const finalState = {
         endReason,
         history,
         nicknameId: selectNickname(pilot.stats, randomRef.current),
         pilot,
         screen: "final",
         titleId: selectTitle(pilot, history, endReason),
-      });
+      } as const;
+
+      setAppState((currentState) => ({
+        completedGames: [
+          createCompletedGame(finalState),
+          ...currentState.completedGames.filter(
+            ({ state }) => state.pilot.id !== pilot.id,
+          ),
+        ],
+        gameState: finalState,
+      }));
       return;
     }
 
@@ -176,7 +235,7 @@ export function App() {
     hasResolvedDecisionRef.current = false;
     const event = selectEvent(eligibleEventIds, randomRef.current);
 
-    setGameState({
+    updateGameState({
       eventId: event.id,
       history,
       phase: "choosing",
@@ -189,7 +248,7 @@ export function App() {
     hasClosedYearRef.current = false;
     hasCreatedPilotRef.current = false;
     hasResolvedDecisionRef.current = false;
-    setGameState({ screen: "welcome" });
+    updateGameState({ screen: "welcome" });
   }
 
   const faction =
@@ -214,7 +273,9 @@ export function App() {
       >
         {gameState.screen === "welcome" ? (
           <WelcomeScreen
+            completedGames={appState.completedGames}
             onReducedMotionChange={setReducedMotion}
+            onSelectGame={openCompletedGame}
             onStart={startGame}
             reducedMotion={reducedMotion}
           />
@@ -229,6 +290,7 @@ export function App() {
         ) : gameState.screen === "event" ? (
           <DecisionScreen
             event={getEvent(gameState.eventId)}
+            onAbandon={restartGame}
             onCloseYear={closeYear}
             onDecision={chooseDecision}
             onReducedMotionChange={setReducedMotion}

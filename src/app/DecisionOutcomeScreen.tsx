@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 
 import { achievementNameKeys } from "../domain/achievements";
@@ -32,6 +32,7 @@ const zoidFallbackIcon = "◇";
 
 interface DecisionOutcomeScreenProps {
   event: DecisionEvent;
+  onAbandon: () => void;
   onCloseYear: () => void;
   result: ResolvedYear;
   titleId: string;
@@ -39,10 +40,13 @@ interface DecisionOutcomeScreenProps {
 
 export function DecisionOutcomeScreen({
   event,
+  onAbandon,
   onCloseYear,
   result,
   titleId,
 }: DecisionOutcomeScreenProps) {
+  const [showAbandonDialog, setShowAbandonDialog] = useState(false);
+  const abandonButtonRef = useRef<HTMLButtonElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const { t } = useTranslation("interface");
   const decision = event.decisions.find(
@@ -63,6 +67,11 @@ export function DecisionOutcomeScreen({
   useEffect(() => {
     headingRef.current?.focus();
   }, []);
+
+  function cancelAbandon() {
+    setShowAbandonDialog(false);
+    abandonButtonRef.current?.focus();
+  }
 
   return (
     <section
@@ -181,14 +190,82 @@ export function DecisionOutcomeScreen({
         </section>
       </div>
 
-      <button
-        className="button button--primary"
-        onClick={onCloseYear}
-        type="button"
-      >
-        {t("outcomeScreen.close")}
-      </button>
+      <div className="outcome-screen__actions">
+        <button
+          className="button button--secondary"
+          onClick={() => setShowAbandonDialog(true)}
+          ref={abandonButtonRef}
+          type="button"
+        >
+          {t("outcomeScreen.abandon")}
+        </button>
+        <button
+          className="button button--primary"
+          onClick={onCloseYear}
+          type="button"
+        >
+          {t("outcomeScreen.close")}
+        </button>
+      </div>
+      {showAbandonDialog ? (
+        <AbandonDialog onCancel={cancelAbandon} onConfirm={onAbandon} />
+      ) : null}
     </section>
+  );
+}
+
+interface AbandonDialogProps {
+  onCancel: () => void;
+  onConfirm: () => void;
+}
+
+function AbandonDialog({ onCancel, onConfirm }: AbandonDialogProps) {
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
+  const descriptionId = useId();
+  const titleId = useId();
+  const { t } = useTranslation("interface");
+
+  useEffect(() => {
+    cancelButtonRef.current?.focus();
+  }, []);
+
+  return (
+    <div
+      className="abandon-dialog__backdrop"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          onCancel();
+        }
+      }}
+    >
+      <section
+        aria-describedby={descriptionId}
+        aria-labelledby={titleId}
+        aria-modal="true"
+        className="abandon-dialog"
+        role="alertdialog"
+      >
+        <h2 id={titleId}>{t("outcomeScreen.abandonDialog.title")}</h2>
+        <p id={descriptionId}>{t("outcomeScreen.abandonDialog.description")}</p>
+        <div>
+          <button
+            className="button"
+            onClick={onCancel}
+            ref={cancelButtonRef}
+            type="button"
+          >
+            {t("outcomeScreen.abandonDialog.cancel")}
+          </button>
+          <button
+            className="button button--primary"
+            onClick={onConfirm}
+            type="button"
+          >
+            {t("outcomeScreen.abandonDialog.confirm")}
+          </button>
+        </div>
+      </section>
+    </div>
   );
 }
 

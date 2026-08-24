@@ -1,9 +1,56 @@
-import { expect, test } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
 
 import { achievementDescriptionKeys } from "../domain/achievements";
-import { nicknameIds, getNicknameKey } from "../domain/nicknames";
+import { getNicknameKey, nicknameIds } from "../domain/nicknames";
 import { titleCatalog } from "../domain/titles";
-import { i18n } from "../i18n";
+import {
+  i18n,
+  languageStorageKey,
+  loadLanguagePreference,
+  saveLanguagePreference,
+} from "../i18n";
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  window.localStorage.clear();
+});
+
+describe("language preference", () => {
+  test("uses the saved language before the browser language", () => {
+    vi.spyOn(window.navigator, "languages", "get").mockReturnValue(["en-US"]);
+    window.localStorage.setItem(languageStorageKey, "es");
+
+    expect(loadLanguagePreference()).toBe("es");
+  });
+
+  test("uses a supported regional browser language", () => {
+    vi.spyOn(window.navigator, "languages", "get").mockReturnValue([
+      "es-MX",
+      "en-US",
+    ]);
+
+    expect(loadLanguagePreference()).toBe("es");
+  });
+
+  test("saves the selected language", () => {
+    saveLanguagePreference("es");
+
+    expect(window.localStorage.getItem(languageStorageKey)).toBe("es");
+  });
+
+  test("continues when browser storage fails", () => {
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new DOMException("Storage is unavailable.");
+    });
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new DOMException("Storage is full.");
+    });
+    vi.spyOn(window.navigator, "languages", "get").mockReturnValue(["es-MX"]);
+
+    expect(loadLanguagePreference()).toBe("es");
+    expect(() => saveLanguagePreference("es")).not.toThrow();
+  });
+});
 
 test("interpolates pilot values", () => {
   expect(

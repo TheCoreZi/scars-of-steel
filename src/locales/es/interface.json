@@ -135,6 +135,13 @@
     "title": "Solicitud de alistamiento"
   },
   "outcomeScreen": {
+    "abandon": "Abandonar partida",
+    "abandonDialog": {
+      "cancel": "Seguir jugando",
+      "confirm": "Abandonar partida",
+      "description": "Se borrará el progreso de la carrera actual. Esta acción no se puede deshacer.",
+      "title": "¿Abandonar esta partida?"
+    },
     "achievementEarned": "Logro obtenido",
     "badge": "Informe anual",
     "battleInjured": "Terminaste con heridas y te retiraste de las batallas restantes.",
@@ -202,6 +209,10 @@
       "en": "Inglés",
       "es": "Español",
       "label": "Idioma"
+    },
+    "serviceRecords": {
+      "open": "Abrir tarjeta final de {{name}}",
+      "title": "Expedientes de servicio"
     },
     "start": "Inicia tu carrera",
     "title": "Cicatrices de Acero"

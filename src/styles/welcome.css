@@ -26,6 +26,15 @@
     inset 0 0 0 1px var(--color-border);
 }
 
+.welcome__panel--records {
+  grid-template-areas:
+    "badge facts"
+    "heading facts"
+    "button button"
+    "records records";
+  grid-template-rows: auto 1fr auto auto;
+}
+
 .app-shell[data-color-mode="light"] .welcome__panel {
   background:
     linear-gradient(112deg, rgb(248 250 255 / 96%) 0 64%, transparent 64%),
@@ -290,11 +299,13 @@
 
 .welcome__brand {
   display: flex;
+  min-width: 0;
   align-items: center;
   gap: clamp(var(--space-3), 2.5vw, var(--space-5));
 }
 
 .welcome__heading h1 {
+  min-width: 0;
   max-width: 10ch;
   color: var(--title-metal-light);
   background:
@@ -416,4 +427,237 @@
   grid-area: button;
   min-width: 15rem;
   justify-self: start;
+}
+
+.service-records {
+  z-index: 1;
+  width: min(100%, 33rem);
+  min-width: 0;
+  grid-area: records;
+  justify-self: start;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-top: 0.2rem solid var(--color-border-strong);
+  background: color-mix(in srgb, var(--color-panel) 90%, transparent);
+}
+
+.service-records h2 {
+  margin-bottom: var(--space-3);
+  color: var(--color-accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.service-records ul {
+  display: grid;
+  max-height: 12rem;
+  margin: 0;
+  overflow-y: auto;
+  gap: var(--space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.service-records__row {
+  --record-accent: var(--color-accent);
+
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 3.25rem;
+  grid-template-columns: 2.25rem minmax(6rem, 1fr) 4.5rem 5rem 2.5rem 2.5rem;
+  align-items: center;
+  justify-content: start;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid
+    color-mix(in srgb, var(--record-accent) 34%, var(--color-border));
+  border-left: 0.25rem solid var(--record-accent);
+  color: inherit;
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--record-accent) 12%, var(--color-panel-raised)),
+    var(--color-panel-raised) 72%
+  );
+  box-shadow: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.service-records__row[data-faction="guylos"] {
+  --record-accent: #ff5d6c;
+}
+
+.service-records__row[data-faction="helic"] {
+  --record-accent: #5f8ee8;
+}
+
+.app-shell[data-color-mode="light"]
+  .service-records__row[data-faction="guylos"] {
+  --record-accent: #b2243a;
+}
+
+.app-shell[data-color-mode="light"]
+  .service-records__row[data-faction="helic"] {
+  --record-accent: #315aa8;
+}
+
+.service-records__row:hover,
+.service-records__row:focus-visible {
+  border-color: var(--record-accent);
+  box-shadow: 0 0 0 0.2rem
+    color-mix(in srgb, var(--record-accent) 22%, transparent);
+  outline: none;
+}
+
+.service-records__name {
+  overflow: hidden;
+  color: var(--color-heading);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.service-records__rank {
+  display: grid;
+  width: 4.5rem;
+  min-width: 0;
+  grid-template-rows: 2rem auto;
+  place-items: center;
+}
+
+.service-records__rank img {
+  width: auto;
+  max-width: 100%;
+  height: 1.75rem;
+}
+
+.service-records__zoid {
+  display: grid;
+  width: 5rem;
+  min-width: 0;
+  grid-template-rows: 2rem auto;
+  place-items: center;
+  overflow: hidden;
+  color: var(--record-accent);
+  font-size: 1.3rem;
+}
+
+.service-records__zoid img {
+  width: 3rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.service-records__rank small,
+.service-records__zoid small {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 0.58rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.service-records__title {
+  display: grid;
+  width: 2.25rem;
+  height: 2.5rem;
+  place-items: center;
+}
+
+.service-records__title img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.service-records__metric {
+  display: inline-flex;
+  min-width: 3rem;
+  align-items: center;
+  justify-content: end;
+  gap: 0.2rem;
+  color: var(--record-accent);
+}
+
+.service-records__metric strong {
+  color: var(--color-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 64.01rem) {
+  :lang(es) .welcome__brand {
+    gap: var(--space-4);
+  }
+
+  :lang(es) .welcome__logo {
+    width: clamp(5rem, 9vw, 8rem);
+  }
+
+  :lang(es) .welcome__panel {
+    grid-template-columns: minmax(0, 1.6fr) minmax(17rem, 0.4fr);
+  }
+}
+
+@media (min-width: 64.01rem) and (max-width: 72rem) {
+  .welcome__heading {
+    container-type: inline-size;
+  }
+
+  .welcome__heading h1 {
+    font-size: clamp(3rem, 14cqi, 4.5rem);
+  }
+}
+
+@media (min-width: 64.01rem) {
+  .welcome__panel--records {
+    grid-template-areas:
+      "badge facts"
+      "heading facts"
+      "button records";
+    grid-template-columns: minmax(0, 1fr) minmax(28rem, 0.7fr);
+    grid-template-rows: auto 1fr auto;
+  }
+
+  :lang(es) .welcome__panel--records {
+    grid-template-columns: minmax(0, 1fr) minmax(24rem, 0.55fr);
+  }
+
+  .welcome__panel--records .welcome__facts {
+    width: calc(100% - var(--space-7));
+    justify-self: end;
+  }
+
+  .welcome__panel--records .service-records {
+    width: calc(120% + var(--space-5));
+    align-self: end;
+    justify-self: end;
+  }
+
+  .welcome__panel--records > .button {
+    align-self: start;
+  }
+
+  .welcome__panel--records .service-records__row {
+    grid-template-columns: 2rem minmax(5rem, 1fr) 4rem 4.5rem 2.25rem 2.25rem;
+    gap: 0.35rem;
+  }
+
+  .welcome__panel--records .service-records__rank {
+    width: 4rem;
+  }
+
+  .welcome__panel--records .service-records__title {
+    width: 2rem;
+  }
+
+  .welcome__panel--records .service-records__zoid {
+    width: 4.5rem;
+  }
+
+  .welcome__panel--records .service-records__metric {
+    min-width: 2.25rem;
+  }
 }

@@ -135,6 +135,13 @@
     "title": "Cadet enlistment form"
   },
   "outcomeScreen": {
+    "abandon": "Abandon run",
+    "abandonDialog": {
+      "cancel": "Keep playing",
+      "confirm": "Abandon run",
+      "description": "Your current career progress will be deleted. This action cannot be undone.",
+      "title": "Abandon this run?"
+    },
     "achievementEarned": "Achievement earned",
     "badge": "Annual report",
     "battleInjured": "You were injured and withdrew from the remaining battles.",
@@ -202,6 +209,10 @@
       "en": "English",
       "es": "Spanish",
       "label": "Language"
+    },
+    "serviceRecords": {
+      "open": "Open final card for {{name}}",
+      "title": "Service records"
     },
     "start": "Begin your career",
     "title": "Scars of Steel"

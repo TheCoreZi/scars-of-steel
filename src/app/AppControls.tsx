@@ -1,10 +1,14 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-export type ColorMode = "dark" | "light";
-type Language = "en" | "es";
+import {
+  saveLanguagePreference,
+  supportedLanguages,
+  type Language,
+} from "../i18n";
+import type { ColorMode } from "./colorModeStorage";
 
-const languages: Language[] = ["en", "es"];
+export type { ColorMode } from "./colorModeStorage";
 
 interface AppControlsProps {
   colorMode: ColorMode;
@@ -22,6 +26,7 @@ export function AppControls({
   }, [i18n.resolvedLanguage]);
 
   function changeLanguage(language: Language) {
+    saveLanguagePreference(language);
     void i18n.changeLanguage(language);
   }
 
@@ -36,7 +41,7 @@ export function AppControls({
         className="language-selector"
         role="group"
       >
-        {languages.map((language) => (
+        {supportedLanguages.map((language) => (
           <button
             aria-label={t(`welcome.language.${language}`)}
             aria-pressed={i18n.resolvedLanguage === language}

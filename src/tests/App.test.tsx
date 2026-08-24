@@ -4,19 +4,55 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
 import { App } from "../app/App";
+import { colorModeStorageKey } from "../app/colorModeStorage";
 import { PilotCreationScreen } from "../app/PilotCreationScreen";
 import { WelcomeScreen } from "../app/WelcomeScreen";
+import type { CompletedGame } from "../app/gameStorage";
+import { createCareerHistory } from "../domain/career";
+import { createInitialPilot } from "../domain/pilot";
+import { createBoundedValue, type PilotDraft } from "../domain/types";
 import { i18n } from "../i18n";
-import type { PilotDraft } from "../domain/types";
+
+const completedPilot = createInitialPilot({
+  aspiration: "commander",
+  faction: "helic",
+  id: "pilot:lena",
+  name: "Lena Steel",
+});
+const completedGame = {
+  state: {
+    endReason: "no-eligible-events",
+    history: createCareerHistory(),
+    nicknameId: "nickname:guardian",
+    pilot: {
+      ...completedPilot,
+      career: {
+        ...completedPilot.career,
+        fame: createBoundedValue(62),
+        militaryRank: "captain",
+      },
+      potential: createBoundedValue(74),
+      zoids: {
+        damagedIds: [],
+        reserveIds: [],
+        signatureId: "zoid:command-wolf",
+      },
+    },
+    screen: "final",
+    titleId: "title:false-promise",
+  },
+} as const satisfies CompletedGame;
 
 afterEach(() => {
   cleanup();
   document.documentElement.lang = "en";
+  window.localStorage.clear();
   void i18n.changeLanguage("en");
 });
 
@@ -62,7 +98,9 @@ describe("welcome screen", () => {
 
     render(
       <WelcomeScreen
+        completedGames={[]}
         onReducedMotionChange={() => undefined}
+        onSelectGame={() => undefined}
         onStart={() => undefined}
         reducedMotion={false}
       />,
@@ -90,12 +128,62 @@ describe("welcome screen", () => {
     ).toBeInTheDocument();
   });
 
+  test("shows compact service records without visible Zoid names", () => {
+    const onSelectGame = vi.fn();
+    render(
+      <WelcomeScreen
+        completedGames={[completedGame]}
+        onReducedMotionChange={() => undefined}
+        onSelectGame={onSelectGame}
+        onStart={() => undefined}
+        reducedMotion={false}
+      />,
+    );
+
+    const record = screen.getByText("Lena Steel").closest("li");
+    expect(record).not.toBeNull();
+    expect(within(record!).getByText("Captain")).toBeInTheDocument();
+    expect(
+      within(record!).getByLabelText("Captain").querySelector("img"),
+    ).toHaveAttribute("src", "/images/ranks/captain.png");
+    expect(within(record!).getByText("Command Wolf")).toBeInTheDocument();
+    const zoid = within(record!).getByLabelText("Zoid: Command Wolf");
+    expect(zoid).toHaveClass("service-records__zoid");
+    expect(zoid.querySelector("img")).toHaveAttribute(
+      "src",
+      "/images/zoids/command_wolf.png",
+    );
+    expect(
+      within(record!).getByLabelText("False promise").querySelector("img"),
+    ).toHaveAttribute("src", "/images/icons/titles/false-promise.png");
+    expect(
+      within(record!).getByLabelText("Potential: 74 of 100"),
+    ).toHaveTextContent("⚡74");
+    expect(within(record!).getByLabelText("Fame: 62 of 100")).toHaveTextContent(
+      "★62",
+    );
+    const row = within(record!).getByRole("button", {
+      name: "Open final card for Lena Steel",
+    });
+    expect(row).toHaveAttribute("data-faction", "helic");
+    fireEvent.click(row);
+    expect(onSelectGame).toHaveBeenCalledWith(completedGame);
+    expect(
+      screen
+        .getByRole("button", { name: "Begin your career" })
+        .compareDocumentPosition(screen.getByText("Service records")) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
   test("starts the flow only once", () => {
     const onStart = vi.fn();
 
     render(
       <WelcomeScreen
+        completedGames={[]}
         onReducedMotionChange={() => undefined}
+        onSelectGame={() => undefined}
         onStart={onStart}
         reducedMotion={false}
       />,
@@ -340,7 +428,7 @@ describe("pilot creation", () => {
   });
 
   test("resolves a safe initial decision once and opens its outcome", async () => {
-    render(<App />);
+    const firstRender = render(<App />);
     await startPilotCreation();
     fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
       target: { value: "Lena" },
@@ -366,17 +454,104 @@ describe("pilot creation", () => {
     );
     expect(document.querySelector(".outcome-screen h1")).toHaveFocus();
     expect(screen.getByLabelText("Career status")).toBeInTheDocument();
+
+    const outcome = screen.getByRole("heading", { level: 1 }).textContent;
+    firstRender.unmount();
+    render(<App />);
+
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      outcome!,
+    );
+    expect(
+      screen.getByRole("button", { name: "Continue career" }),
+    ).toBeInTheDocument();
   });
 
-  test("starts again at the welcome screen after remounting", async () => {
+  test("restores the exact resolved chance roll", async () => {
+    const firstRender = render(<App />);
+    await startPilotCreation();
+    fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
+      target: { value: "Lena" },
+    });
+    fireEvent.click(screen.getByRole("radio", { name: "Helic Republic" }));
+    fireEvent.click(screen.getByRole("radio", { name: "War hero" }));
+    fireEvent.click(screen.getByRole("button", { name: "Submit enlistment" }));
+
+    await screen.findByText("Choose your response");
+    const chanceDecision = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".decision-option"),
+    ).find((option) => option.ariaLabel?.includes(". With risk."));
+    fireEvent.click(chanceDecision!);
+
+    const firstStatus = await screen.findByRole("status");
+    const firstTarget = await screen.findByRole("img", {
+      name: /Resolution target/u,
+    });
+    const result = firstStatus.dataset.result;
+    const style = firstTarget.getAttribute("style");
+    firstRender.unmount();
+    render(<App />);
+
+    expect(await screen.findByRole("status")).toHaveAttribute(
+      "data-result",
+      result,
+    );
+    expect(
+      await screen.findByRole("img", { name: /Resolution target/u }),
+    ).toHaveAttribute("style", style);
+  });
+
+  test("restores pilot creation after remounting", async () => {
     const firstRender = render(<App />);
     expect(await startPilotCreation()).toBeInTheDocument();
+    fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
+      target: { value: "Lena" },
+    });
 
     firstRender.unmount();
     render(<App />);
 
     expect(
-      screen.getByRole("heading", { name: "Scars of Steel" }),
+      screen.getByRole("heading", { name: "Cadet enlistment form" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Recruit name" })).toHaveValue(
+      "Lena",
+    );
+  });
+
+  test("abandons an active run after confirmation", async () => {
+    const firstRender = render(<App />);
+    await startPilotCreation();
+    fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
+      target: { value: "Lena" },
+    });
+    fireEvent.click(screen.getByRole("radio", { name: "Helic Republic" }));
+    fireEvent.click(screen.getByRole("radio", { name: "War hero" }));
+    fireEvent.click(screen.getByRole("button", { name: "Submit enlistment" }));
+
+    await screen.findByText("Choose your response");
+    const safeDecision = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".decision-option"),
+    ).find((option) => option.ariaLabel?.includes(". Safe."));
+    fireEvent.click(safeDecision!);
+    fireEvent.click(await screen.findByRole("button", { name: "Abandon run" }));
+    fireEvent.click(
+      within(screen.getByRole("alertdialog")).getByRole("button", {
+        name: "Abandon run",
+      }),
+    );
+
+    expect(
+      await screen.findByRole("button", { name: "Begin your career" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Service records" }),
+    ).toBeNull();
+
+    firstRender.unmount();
+    render(<App />);
+    expect(
+      screen.getByRole("button", { name: "Begin your career" }),
     ).toBeInTheDocument();
   });
 
@@ -411,10 +586,29 @@ describe("pilot creation", () => {
       screen.getByRole("button", { name: "Download PNG" }),
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "New run" }));
+    expect(screen.getByRole("button", { name: "New run" })).toBeInTheDocument();
+    cleanup();
+    render(<App />);
+
     expect(
       await screen.findByRole("button", { name: "Begin your career" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Service records" }),
+    ).toBeInTheDocument();
+    const record = screen.getByText("Lena").closest("li");
+    expect(record).not.toBeNull();
+    expect(within(record!).getByLabelText("Cadet")).toBeInTheDocument();
+    expect(within(record!).getByLabelText(/Potential:/u)).toBeInTheDocument();
+    expect(within(record!).getByLabelText(/Fame:/u)).toBeInTheDocument();
+    fireEvent.click(within(record!).getByRole("button"));
+    expect(
+      await screen.findByRole("heading", { name: "False promise" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("main").closest(".app-shell")).toHaveAttribute(
+      "data-faction",
+      "helic",
+    );
   });
 });
 
@@ -436,6 +630,20 @@ test("changes between dark and light modes", () => {
     .closest(".app-shell");
   expect(colorModeSwitch).toBeChecked();
   expect(app).toHaveAttribute("data-color-mode", "light");
+  expect(window.localStorage.getItem(colorModeStorageKey)).toBe("light");
+});
+
+test("loads the saved color mode", () => {
+  window.localStorage.setItem(colorModeStorageKey, "light");
+
+  render(<App />);
+
+  expect(screen.getByRole("switch", { name: "Light mode" })).toBeChecked();
+  expect(
+    screen
+      .getByRole("heading", { name: "Scars of Steel" })
+      .closest(".app-shell"),
+  ).toHaveAttribute("data-color-mode", "light");
 });
 
 test("turns animations on and off", () => {
