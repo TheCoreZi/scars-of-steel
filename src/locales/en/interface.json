@@ -211,6 +211,8 @@
       "label": "Language"
     },
     "serviceRecords": {
+      "collapse": "Collapse service records",
+      "expand": "Expand service records",
       "open": "Open final card for {{name}}",
       "title": "Service records"
     },

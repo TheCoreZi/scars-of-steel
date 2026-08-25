@@ -140,8 +140,29 @@ describe("welcome screen", () => {
       />,
     );
 
+    const recordsPanel = screen
+      .getByText("Service records")
+      .closest(".service-records");
+    const recordsToggle = screen.getByRole("button", {
+      name: "Expand service records",
+    });
+    expect(recordsPanel).not.toBeNull();
+    expect(recordsPanel?.closest(".welcome__panel")).toBeNull();
+    expect(recordsToggle).toHaveAttribute("aria-expanded", "false");
+    expect(
+      screen.queryByRole("button", {
+        name: "Open final card for Lena Steel",
+      }),
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(recordsToggle);
+
     const record = screen.getByText("Lena Steel").closest("li");
     expect(record).not.toBeNull();
+    expect(recordsToggle).toHaveAttribute("aria-expanded", "true");
+    expect(
+      screen.getByRole("button", { name: "Collapse service records" }),
+    ).toBeInTheDocument();
     expect(within(record!).getByText("Captain")).toBeInTheDocument();
     expect(
       within(record!).getByLabelText("Captain").querySelector("img"),
@@ -598,6 +619,9 @@ describe("pilot creation", () => {
     expect(
       screen.getByRole("heading", { name: "Service records" }),
     ).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole("button", { name: "Expand service records" }),
+    );
     const record = screen.getByText("Lena").closest("li");
     expect(record).not.toBeNull();
     expect(within(record!).getByLabelText("Cadet")).toBeInTheDocument();
@@ -659,7 +683,8 @@ test("turns animations on and off", () => {
     .closest(".app-shell");
 
   expect(animationSwitch).toBeChecked();
-  expect(animationSwitch.parentElement).toHaveClass("welcome__panel");
+  expect(animationSwitch.parentElement).toHaveClass("welcome__topbar");
+  expect(animationSwitch.closest(".welcome__panel")).toBeInTheDocument();
   expect(
     animationSwitch.querySelector(".animation-toggle__icon"),
   ).toBeInTheDocument();

@@ -211,6 +211,8 @@
       "label": "Idioma"
     },
     "serviceRecords": {
+      "collapse": "Contraer expedientes de servicio",
+      "expand": "Expandir expedientes de servicio",
       "open": "Abrir tarjeta final de {{name}}",
       "title": "Expedientes de servicio"
     },

@@ -10,8 +10,8 @@ interface BadgeProps extends PropsWithChildren {
 
 interface MeterProps {
   label: string;
-  max?: number;
   value: number;
+  max?: number;
 }
 
 interface PanelProps extends PropsWithChildren {
@@ -36,24 +36,29 @@ export function Button({
   );
 }
 
-export function Meter({ label, max = 100, value }: MeterProps) {
+export function Meter({ label, value, max = 100 }: MeterProps) {
+  const normalizedMax = Math.max(0, max);
+  const normalizedValue = Math.min(Math.max(0, value), normalizedMax);
+
   return (
     <div className="meter">
       <span className="meter__heading">
         <span className="meter__label">{label}</span>
-        <span className="meter__number">{value}</span>
+        <span className="meter__number">{normalizedValue}</span>
       </span>
       <div
         aria-label={label}
-        aria-valuemax={max}
+        aria-valuemax={normalizedMax}
         aria-valuemin={0}
-        aria-valuenow={value}
+        aria-valuenow={normalizedValue}
         className="meter__track"
         role="progressbar"
       >
         <span
           className="meter__value"
-          style={{ width: `${(value / max) * 100}%` }}
+          style={{
+            width: `${normalizedMax === 0 ? 0 : (normalizedValue / normalizedMax) * 100}%`,
+          }}
         />
       </div>
     </div>
