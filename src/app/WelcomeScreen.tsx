@@ -54,19 +54,16 @@ export function WelcomeScreen({
   return (
     <main className="screen welcome">
       <Panel
-        className={`welcome__panel${completedGames.length > 0 ? " welcome__panel--records" : ""}`}
+        className={`welcome__panel${completedGames.length > 0 ? " welcome__panel--has-records" : ""}`}
         labelledBy={titleId}
       >
-        <AnimationToggle
-          onReducedMotionChange={onReducedMotionChange}
-          reducedMotion={reducedMotion}
-        />
-        <div className="welcome__signal" aria-hidden="true">
-          <span />
-          <span />
-          <span />
+        <div className="welcome__topbar">
+          <Badge>{t("welcome.badge")}</Badge>
+          <AnimationToggle
+            onReducedMotionChange={onReducedMotionChange}
+            reducedMotion={reducedMotion}
+          />
         </div>
-        <Badge>{t("welcome.badge")}</Badge>
         <div className="welcome__heading">
           <div className="welcome__brand">
             <img
@@ -101,11 +98,11 @@ export function WelcomeScreen({
         <Button disabled={started} onClick={handleStart}>
           {t("welcome.start")}
         </Button>
-        <ServiceRecords
-          completedGames={completedGames}
-          onSelectGame={onSelectGame}
-        />
       </Panel>
+      <ServiceRecords
+        completedGames={completedGames}
+        onSelectGame={onSelectGame}
+      />
     </main>
   );
 }
@@ -116,6 +113,8 @@ interface ServiceRecordsProps {
 }
 
 function ServiceRecords({ completedGames, onSelectGame }: ServiceRecordsProps) {
+  const contentId = useId();
+  const [expanded, setExpanded] = useState(false);
   const { t } = useTranslation("interface");
 
   if (completedGames.length === 0) {
@@ -123,17 +122,47 @@ function ServiceRecords({ completedGames, onSelectGame }: ServiceRecordsProps) {
   }
 
   return (
-    <section className="service-records">
-      <h2>{t("welcome.serviceRecords.title")}</h2>
-      <ul>
-        {completedGames.map((game) => (
-          <ServiceRecord
-            game={game}
-            key={game.state.pilot.id}
-            onSelect={onSelectGame}
-          />
-        ))}
-      </ul>
+    <section
+      className={`service-records${expanded ? " service-records--expanded" : ""}`}
+    >
+      <h2 aria-label={t("welcome.serviceRecords.title")}>
+        <button
+          aria-controls={contentId}
+          aria-expanded={expanded}
+          aria-label={t(
+            expanded
+              ? "welcome.serviceRecords.collapse"
+              : "welcome.serviceRecords.expand",
+          )}
+          onClick={() => setExpanded(!expanded)}
+          type="button"
+        >
+          <span>{t("welcome.serviceRecords.title")}</span>
+          <small>{completedGames.length}</small>
+          <span aria-hidden="true" className="service-records__toggle-icon">
+            <span />
+            <span />
+          </span>
+        </button>
+      </h2>
+      <div
+        aria-hidden={!expanded}
+        className="service-records__drawer"
+        id={contentId}
+        inert={!expanded}
+      >
+        <div className="service-records__drawer-content">
+          <ul>
+            {completedGames.map((game) => (
+              <ServiceRecord
+                game={game}
+                key={game.state.pilot.id}
+                onSelect={onSelectGame}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
     </section>
   );
 }

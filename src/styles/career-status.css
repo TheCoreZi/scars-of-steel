@@ -122,7 +122,7 @@
 }
 
 .career-status__pilot > strong {
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: 1.4rem;
   letter-spacing: 0.035em;
   text-transform: uppercase;
@@ -180,7 +180,7 @@
   height: var(--potential-percent);
   background: linear-gradient(
     0deg,
-    color-mix(in srgb, var(--color-faction-secondary) 55%, transparent),
+    color-mix(in srgb, var(--color-secondary) 55%, transparent),
     color-mix(in srgb, var(--color-accent) 55%, transparent)
   );
   content: "";
@@ -194,7 +194,7 @@
 
 .career-status__potential strong {
   color: var(--color-heading);
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 850;
 }
@@ -271,7 +271,7 @@
 }
 
 .career-status__fan:nth-child(3n + 2) {
-  color: var(--color-faction-secondary);
+  color: var(--color-secondary);
 }
 
 .career-status__fan:nth-child(3n) {
@@ -309,7 +309,7 @@
   opacity: 0;
   color: var(--color-heading);
   background: var(--color-panel-raised);
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-family: var(--font-console);
   font-size: 0.42rem;
   font-weight: 850;
   line-height: 1;
@@ -375,8 +375,8 @@
   overflow: hidden;
   place-items: center;
   border: 1px solid var(--color-border-strong);
-  border-radius: 999px;
-  background: #a92f42;
+  border-radius: var(--radius-pill);
+  background: var(--color-faction);
 }
 
 .career-status__war-fill {
@@ -384,7 +384,7 @@
   inset: 0 auto 0 0;
   display: block;
   height: 100%;
-  background: #527bd2;
+  background: var(--color-faction);
   transition: width var(--motion-standard) ease;
 }
 

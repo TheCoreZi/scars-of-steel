@@ -1,20 +1,22 @@
 :root {
   color-scheme: dark;
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-console: "IBM Plex Mono", ui-monospace, monospace;
+  --font-display: Quantico, "Arial Narrow", sans-serif;
+  --line-height-body: 1.65;
+  --color-scrollbar-thumb: #a67c2b;
+  --color-scrollbar-thumb-hover: #f4b942;
+  --color-scrollbar-track: #292720;
   --motion-fast: 140ms;
   --motion-standard: 240ms;
-  --radius-medium: 0.75rem;
   --radius-large: 1.5rem;
+  --radius-medium: 0.75rem;
+  --radius-pill: 999px;
+  --radius-small: 0.4rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -25,8 +27,63 @@
   --space-8: 4rem;
 }
 
+:root:has(.app-shell[data-color-mode="dark"][data-faction="guylos"]) {
+  --color-scrollbar-thumb: #bd4655;
+  --color-scrollbar-thumb-hover: #ff5d6c;
+  --color-scrollbar-track: #1e1f22;
+}
+
+:root:has(.app-shell[data-color-mode="dark"][data-faction="helic"]) {
+  --color-scrollbar-track: #0c1830;
+}
+
+:root:has(.app-shell[data-color-mode="light"]) {
+  --color-scrollbar-thumb: #8a5700;
+  --color-scrollbar-thumb-hover: #684200;
+  --color-scrollbar-track: #d8d4cc;
+}
+
+:root:has(.app-shell[data-color-mode="light"][data-faction="guylos"]) {
+  --color-scrollbar-thumb: #b2243a;
+  --color-scrollbar-thumb-hover: #8d1d2e;
+  --color-scrollbar-track: #d4d2cf;
+}
+
+:root:has(.app-shell[data-color-mode="light"][data-faction="helic"]) {
+  --color-scrollbar-thumb: #965b00;
+  --color-scrollbar-thumb-hover: #714500;
+  --color-scrollbar-track: #d5ddeb;
+}
+
 * {
   box-sizing: border-box;
+  scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 0.65rem;
+  height: 0.65rem;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 2px solid var(--color-scrollbar-track);
+  border-radius: var(--radius-pill);
+  background: var(--color-scrollbar-thumb);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scrollbar-thumb-hover);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--color-scrollbar-track);
 }
 
 body {
@@ -52,7 +109,7 @@ p {
 h1,
 h2 {
   color: var(--color-heading);
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   letter-spacing: 0.015em;
   line-height: 0.96;
   text-transform: uppercase;
@@ -60,7 +117,7 @@ h2 {
 
 p {
   color: var(--color-text-muted);
-  line-height: 1.65;
+  line-height: var(--line-height-body);
 }
 
 .app-shell {
@@ -70,7 +127,12 @@ p {
   --color-background: #141311;
   --color-border: #5c5953;
   --color-border-strong: #8d7a61;
-  --color-faction-secondary: #b88a52;
+  --color-console: #111317;
+  --color-console-line: rgb(255 255 255 / 5%);
+  --color-console-muted: #c6c4c5;
+  --color-console-raised: #25272c;
+  --color-console-text: #f5f5f4;
+  --color-secondary: #b88a52;
   --color-heading: #ffffff;
   --color-panel: rgb(30 30 29 / 95%);
   --color-panel-raised: #302d29;
@@ -82,8 +144,7 @@ p {
   --color-text-muted: #b9bcc3;
   --damage-dark: #050607;
   --damage-metal: #62666e;
-  --font-body: Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Arial Narrow", "Roboto Condensed", Inter, sans-serif;
+  --shadow-console: inset 0 0 2rem rgb(0 0 0 / 28%);
   --shadow-panel: 0 2rem 7rem rgb(0 0 0 / 58%);
   --title-metal-accent: #737780;
   --title-metal-dark: #484b51;
@@ -109,13 +170,13 @@ p {
     repeating-linear-gradient(
       112deg,
       transparent 0 4.2rem,
-      color-mix(in srgb, var(--color-faction-secondary) 14%, transparent)
-        4.25rem 4.34rem,
+      color-mix(in srgb, var(--color-secondary) 14%, transparent) 4.25rem
+        4.34rem,
       transparent 4.4rem 8.4rem
     ),
     radial-gradient(
       circle at 22% 78%,
-      color-mix(in srgb, var(--color-faction-secondary) 16%, transparent),
+      color-mix(in srgb, var(--color-secondary) 16%, transparent),
       transparent 32%
     ),
     radial-gradient(
@@ -138,7 +199,7 @@ p {
   --color-background: #0c0d0f;
   --color-border: #53565c;
   --color-border-strong: #9f4350;
-  --color-faction-secondary: #8aad72;
+  --color-secondary: #8aad72;
   --color-panel: rgb(25 26 29 / 96%);
   --color-panel-raised: #303135;
   --color-text-muted: #c6c4c5;
@@ -153,7 +214,7 @@ p {
   --color-background: #071126;
   --color-border: #485981;
   --color-border-strong: #7b8fc8;
-  --color-faction-secondary: #4b73c7;
+  --color-secondary: #4b73c7;
   --color-panel: rgb(13 25 53 / 94%);
   --color-panel-raised: #172b58;
   --color-text-muted: #bdc9e8;
@@ -167,6 +228,11 @@ p {
   --color-background: #ece9e3;
   --color-border: #aaa49a;
   --color-border-strong: #8d7556;
+  --color-console: #f3f2ef;
+  --color-console-line: rgb(36 37 39 / 6%);
+  --color-console-muted: #5c5e62;
+  --color-console-raised: #e3e1dd;
+  --color-console-text: #242527;
   --color-heading: #1d1e20;
   --color-panel: rgb(250 249 246 / 96%);
   --color-panel-raised: #dfd9cf;
@@ -178,6 +244,7 @@ p {
   --color-text-muted: #5c5e62;
   --damage-dark: #252b35;
   --damage-metal: #a9b1c0;
+  --shadow-console: inset 0 0 1.25rem rgb(36 37 39 / 8%);
   --shadow-panel: 0 2rem 5rem rgb(41 42 45 / 20%);
   --title-metal-accent: #754300;
   --title-metal-dark: #4d2900;
@@ -195,7 +262,8 @@ p {
   --color-background: #e5e5e2;
   --color-border: #9d9d98;
   --color-border-strong: #a54855;
-  --color-faction-secondary: #628653;
+  --color-console: #f1eeee;
+  --color-secondary: #628653;
   --color-panel: rgb(248 248 246 / 96%);
   --color-panel-raised: #d8d7d3;
   --color-text-muted: #5e5b5c;
@@ -210,11 +278,36 @@ p {
   --color-background: #e7ecf8;
   --color-border: #9ba8c8;
   --color-border-strong: #7388b8;
-  --color-faction-secondary: #4b73c7;
+  --color-console: #edf1fa;
+  --color-secondary: #4b73c7;
   --color-panel: rgb(248 250 255 / 96%);
   --color-panel-raised: #dce5fa;
   --color-text-muted: #485677;
   --shadow-panel: 0 2rem 5rem rgb(37 50 87 / 20%);
+}
+
+.app-shell [data-faction="guylos"] {
+  --color-faction: #ff5d6c;
+  --color-faction-surface: rgb(93 10 26 / 38%);
+  --color-on-faction: #210508;
+}
+
+.app-shell [data-faction="helic"] {
+  --color-faction: #5f8ee8;
+  --color-faction-surface: rgb(23 43 88 / 78%);
+  --color-on-faction: #071126;
+}
+
+.app-shell[data-color-mode="light"] [data-faction="guylos"] {
+  --color-faction: #b2243a;
+  --color-faction-surface: rgb(178 36 58 / 12%);
+  --color-on-faction: #ffffff;
+}
+
+.app-shell[data-color-mode="light"] [data-faction="helic"] {
+  --color-faction: #315aa8;
+  --color-faction-surface: rgb(49 90 168 / 12%);
+  --color-on-faction: #ffffff;
 }
 
 .screen {
@@ -238,7 +331,7 @@ p {
   border-radius: var(--radius-large);
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--color-panel) 92%, var(--color-faction-secondary)),
+    color-mix(in srgb, var(--color-panel) 92%, var(--color-secondary)),
     var(--color-panel) 58%
   );
   box-shadow: var(--shadow-panel);
@@ -250,7 +343,7 @@ p {
   align-items: center;
   padding: var(--space-1) var(--space-3);
   border: 1px solid var(--color-border-strong);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--color-accent);
   background: var(--color-accent-soft);
   font-size: 0.72rem;
@@ -267,13 +360,14 @@ p {
   justify-content: center;
   padding: var(--space-3) var(--space-6);
   border: 1px solid var(--color-accent);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--color-accent-contrast);
   background: var(--color-accent);
   box-shadow:
     0 0 0 0.4rem var(--color-accent-soft),
     0 1rem 3rem var(--color-accent-soft);
   cursor: pointer;
+  font-family: var(--font-display);
   font-weight: 850;
   letter-spacing: 0.055em;
   text-transform: uppercase;
@@ -290,26 +384,22 @@ p {
 }
 
 .button--secondary {
-  border-color: var(--color-faction-secondary);
+  border-color: var(--color-secondary);
   color: var(--color-heading);
   background: color-mix(
     in srgb,
     var(--color-panel-raised) 78%,
-    var(--color-faction-secondary)
+    var(--color-secondary)
   );
   box-shadow:
-    0 0 0 0.25rem
-      color-mix(in srgb, var(--color-faction-secondary) 18%, transparent),
-    0 0.75rem 2rem
-      color-mix(in srgb, var(--color-faction-secondary) 15%, transparent);
+    0 0 0 0.25rem color-mix(in srgb, var(--color-secondary) 18%, transparent),
+    0 0.75rem 2rem color-mix(in srgb, var(--color-secondary) 15%, transparent);
 }
 
 .button--secondary:hover:not(:disabled) {
   box-shadow:
-    0 0 0 0.35rem
-      color-mix(in srgb, var(--color-faction-secondary) 24%, transparent),
-    0 1rem 2.5rem
-      color-mix(in srgb, var(--color-faction-secondary) 20%, transparent);
+    0 0 0 0.35rem color-mix(in srgb, var(--color-secondary) 24%, transparent),
+    0 1rem 2.5rem color-mix(in srgb, var(--color-secondary) 20%, transparent);
 }
 
 .button:active:not(:disabled) {
@@ -317,8 +407,8 @@ p {
 }
 
 .button:disabled {
-  cursor: wait;
-  opacity: 0.7;
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .button:focus-visible,
@@ -357,7 +447,7 @@ p {
   display: flex;
   overflow: hidden;
   border: 1px solid var(--color-border-strong);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--color-panel) 84%, var(--color-accent));
   box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 22%);
 }
@@ -378,6 +468,15 @@ p {
 .language-selector button[aria-pressed="true"] {
   color: var(--color-accent-contrast);
   background: var(--color-accent);
+}
+
+.language-selector button:hover:not([aria-pressed="true"]) {
+  color: var(--color-heading);
+  background: var(--color-accent-soft);
+}
+
+.language-selector button:active {
+  filter: brightness(0.92);
 }
 
 .color-mode-toggle {
@@ -446,7 +545,7 @@ p {
   background: color-mix(in srgb, var(--color-panel-raised) 90%, black);
   box-shadow: 0 0.35rem 0.8rem rgb(0 0 0 / 25%);
   cursor: pointer;
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-family: var(--font-console);
   font-size: 0.6rem;
   font-weight: 850;
   letter-spacing: 0.07em;

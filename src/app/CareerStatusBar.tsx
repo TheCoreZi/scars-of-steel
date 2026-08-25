@@ -114,11 +114,13 @@ function StatusDetails({
               secondFaction: secondFactionName,
             })}
             className="career-status__war-track"
+            data-faction={secondSide.faction}
             role="img"
           >
             <span
               aria-hidden="true"
               className="career-status__war-fill"
+              data-faction={firstSide.faction}
               style={{ width: `${firstSide.control}%` }}
             />
           </div>
