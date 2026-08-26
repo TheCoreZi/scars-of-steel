@@ -20,6 +20,7 @@ import {
   saveColorModePreference,
 } from "./colorModeStorage";
 import { DecisionScreen } from "./DecisionScreen";
+import { FanProjectFooter } from "./FanProjectFooter";
 import { FinalScreen } from "./FinalScreen";
 import { type CompletedGame, loadGameData, saveGameData } from "./gameStorage";
 import { type AppState, GameActionType, gameReducer } from "./gameReducer";
@@ -216,6 +217,7 @@ export function App() {
           />
         )}
       </ScreenTransition>
+      <FanProjectFooter />
     </div>
   );
 }

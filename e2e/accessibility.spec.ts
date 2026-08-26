@@ -9,9 +9,15 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
   await expect(
     page.getByRole("navigation", { name: "Application controls" }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("contentinfo", { name: "Fan project notice" }),
+  ).toBeAttached();
 
   await page.getByRole("button", { name: "Begin your career" }).click();
   await auditCurrentScreen(page, "pilot creation");
+  await expect(
+    page.getByRole("contentinfo", { name: "Fan project notice" }),
+  ).toBeAttached();
   await completePilotCreation(page);
   await auditCurrentScreen(page, "decision selection");
 
