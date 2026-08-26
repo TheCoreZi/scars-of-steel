@@ -13,12 +13,15 @@
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "prepare": "husky",
     "preview": "vite preview",
     "test": "vitest",
     "test:e2e": "playwright test",
     "test:lighthouse": "npm run build && node scripts/run-lighthouse.mjs",
     "test:run": "vitest run",
-    "typecheck": "tsc -b --pretty false"
+    "typecheck": "tsc -b --pretty false",
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test:run",
+    "verify:browser": "npm run test:e2e && npm run test:lighthouse"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "5.3.0",
@@ -45,6 +48,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.4",
     "globals": "^17.11.0",
+    "husky": "^9.1.7",
     "jsdom": "^30.0.1",
     "lighthouse": "^13.4.1",
     "prettier": "^3.9.6",

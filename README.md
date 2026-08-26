@@ -27,23 +27,27 @@ npm run dev
 ## Verification
 
 ```sh
-npm run typecheck
-npm run lint
-npm run format:check
-npm run test:run
-npm run test:e2e
-npm run test:lighthouse
-npm run build
+npm run verify
+npm run verify:browser
 ```
 
 Run `npm test` to run tests in watch mode. Run `npm run lint:fix` or `npm run
-format` to fix files. Run `npm run preview` to serve the local build.
+format` to fix files. Run `npm run preview` to serve the local build. The
+`verify` command checks formatting, lint, types, and unit tests. The
+`verify:browser` command runs Playwright, builds the application, and runs the
+Lighthouse accessibility audit.
 
 Install Chromium once before you run the browser checks:
 
 ```sh
 npx playwright install chromium
 ```
+
+## Git hooks
+
+The installation configures Git hooks through Husky. The pre-commit hook runs
+`npm run verify` and `npm run verify:browser`. A failed check stops the commit.
+Use the CI workflow as the final verification for each pull request.
 
 ## Continuous integration
 
