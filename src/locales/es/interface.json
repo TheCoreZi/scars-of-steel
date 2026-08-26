@@ -81,6 +81,13 @@
     "guylos": "Imperio de Guylos",
     "helic": "República de Helic"
   },
+  "fanProjectFooter": {
+    "affiliation": "Este proyecto no está afiliado, patrocinado ni respaldado por TOMY Company, Ltd. ni por sus socios.",
+    "credits": "Créditos de imágenes: Kenney y CraftPix.",
+    "creator": "Cicatrices de Acero es un juego de fans no oficial y sin ánimo de lucro creado por The Core Zi.",
+    "label": "Aviso de proyecto fan",
+    "rights": "ZOIDS y sus nombres, personajes, imágenes y marcas pertenecen a TOMY Company, Ltd. y a sus respectivos propietarios."
+  },
   "finalScreen": {
     "achievements": "Logros",
     "age": "Edad {{age}}",

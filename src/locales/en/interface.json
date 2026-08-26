@@ -81,6 +81,13 @@
     "guylos": "Guylos Empire",
     "helic": "Helic Republic"
   },
+  "fanProjectFooter": {
+    "affiliation": "This project is not affiliated with, sponsored by, or endorsed by TOMY Company, Ltd. or its partners.",
+    "credits": "Image credits: Kenney and CraftPix.",
+    "creator": "Scars of Steel is an unofficial, non-profit fan game created by The Core Zi.",
+    "label": "Fan project notice",
+    "rights": "ZOIDS and its names, characters, images, and trademarks belong to TOMY Company, Ltd. and their respective owners."
+  },
   "finalScreen": {
     "achievements": "Achievements",
     "age": "Age {{age}}",

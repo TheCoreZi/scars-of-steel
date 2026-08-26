@@ -2,6 +2,32 @@
 
 Text adventure game about the career of a Zoids pilot.
 
+## Fan project notice
+
+Scars of Steel is an unofficial, non-profit fan game created by The Core Zi.
+This project is not affiliated with, sponsored by, or endorsed by TOMY Company,
+Ltd. or its partners. ZOIDS and its names, characters, images, and trademarks
+belong to TOMY Company, Ltd. and their respective owners.
+
+## Asset credits
+
+The following credits record the information that is currently available. An
+unknown license does not grant permission to reuse or redistribute an asset.
+
+| Assets                                                                                 | Source or creator                                                                                           | License status                                                                                                                                                          |
+| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Some title icons in `public/images/icons/titles/`                                      | [CraftPix](https://craftpix.net/)                                                                           | Covered by the applicable [CraftPix file license](https://craftpix.net/file-licenses/). The product tier is not documented. Do not redistribute these files separately. |
+| Most Zoid sprites in `public/images/zoids/`                                            | The official Zoids Saga series for Game Boy Advance, collected through the internal `zoids-sleeper` project | The exact installment, original files, extraction details, and license are not documented.                                                                              |
+| Rank images in `public/images/ranks/`                                                  | Kenney Vleugels                                                                                             | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/).                                                                                                          |
+| IBM Plex Mono, IBM Plex Sans, and Quantico fonts                                       | Fontsource packages                                                                                         | SIL Open Font License 1.1. See `public/fonts/OFL-1.1.txt`.                                                                                                              |
+| Faction emblems, brand images, achievement icons, remaining title icons, and UI images | The source is not documented.                                                                               | The license is not documented.                                                                                                                                          |
+
+## Code copyright
+
+The repository does not provide a general license to use, modify, or distribute
+its original code. Default copyright restrictions apply. Asset terms remain
+separate from the code copyright.
+
 ## Requirements
 
 - Node.js 20.19 or a later compatible version.

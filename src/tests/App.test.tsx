@@ -91,6 +91,14 @@ describe("welcome screen", () => {
     expect(screen.getByText("1").nextElementSibling).toHaveTextContent(
       "war to decide",
     );
+    expect(
+      screen.getByRole("contentinfo", { name: "Fan project notice" }),
+    ).toHaveTextContent(
+      "Scars of Steel is an unofficial, non-profit fan game created by The Core Zi.",
+    );
+    expect(
+      screen.getByRole("contentinfo", { name: "Fan project notice" }),
+    ).toHaveTextContent("Image credits: Kenney and CraftPix.");
   });
 
   test("shows Spanish content", async () => {
@@ -126,6 +134,39 @@ describe("welcome screen", () => {
     expect(
       screen.getByRole("button", { name: "Inicia tu carrera" }),
     ).toBeInTheDocument();
+  });
+
+  test("shows the localized fan project notice on every screen", async () => {
+    const { rerender } = render(<App />);
+
+    expect(
+      screen.getByRole("contentinfo", { name: "Fan project notice" }),
+    ).toHaveTextContent(
+      "This project is not affiliated with, sponsored by, or endorsed by TOMY Company, Ltd. or its partners.",
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Begin your career" }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: "Cadet enlistment form" }),
+      ).toBeInTheDocument();
+    });
+    expect(
+      screen.getByRole("contentinfo", { name: "Fan project notice" }),
+    ).toBeInTheDocument();
+
+    await i18n.changeLanguage("es");
+    rerender(<App />);
+
+    expect(
+      screen.getByRole("contentinfo", { name: "Aviso de proyecto fan" }),
+    ).toHaveTextContent(
+      "ZOIDS y sus nombres, personajes, imágenes y marcas pertenecen a TOMY Company, Ltd. y a sus respectivos propietarios.",
+    );
+    expect(
+      screen.getByRole("contentinfo", { name: "Aviso de proyecto fan" }),
+    ).toHaveTextContent("Créditos de imágenes: Kenney y CraftPix.");
   });
 
   test("shows compact service records without visible Zoid names", () => {
