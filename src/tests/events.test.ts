@@ -3,11 +3,12 @@ import { describe, expect, test, vi } from "vitest";
 import {
   calculateAdjustedSuccessChance,
   eventCatalog,
+  getEvent,
+  getOutcome,
   resolveDecision,
   validateEvents,
 } from "../domain/events";
 import { initialEventPool, selectInitialEvent } from "../domain/eventPools";
-import { getEvent } from "../domain/events";
 import { createInitialPilot } from "../domain/pilot";
 import type { RandomGenerator } from "../domain/random";
 import {
@@ -19,7 +20,7 @@ import {
   type StatChange,
   type Stats,
 } from "../domain/types";
-import { translate } from "../i18n";
+import { i18n, supportedLanguages } from "../i18n";
 
 const pilot = createInitialPilot({
   aspiration: "war-hero",
@@ -69,18 +70,16 @@ function createStats(piloting: number, synchrony: number): Stats {
   };
 }
 
-function createRandom(probability: number): RandomGenerator {
+function createRandom(probability: number, integer = 4): RandomGenerator {
   return {
     chance: vi.fn(),
-    integer: vi.fn(() => 4),
+    integer: vi.fn(() => integer),
     probability: vi.fn(() => probability),
     weighted: <T>(entries: readonly { value: T }[]) => entries[0].value,
   };
 }
 
-function createValidationEvent(
-  statChanges: readonly StatChange[],
-): DecisionEvent {
+function createValidationEvent(statChanges: readonly StatChange[]) {
   const createDecision = (index: number): SafeDecision => ({
     descriptionKey:
       "decisions:academy.firstExercises.acceptStandard.description",
@@ -101,29 +100,118 @@ function createValidationEvent(
     id: "event:validation",
     introductionKey: "narrative:academy.firstExercises.introduction",
     titleKey: "narrative:academy.firstExercises.title",
+  } as const satisfies DecisionEvent;
+}
+
+function createValidationChanceEvent(
+  changes: Partial<ChanceDecision> = {},
+): DecisionEvent {
+  const event = createValidationEvent([
+    { amount: 1, stat: "piloting", target: "stat" },
+  ]);
+  const decision = {
+    ...createChanceDecision(40),
+    failureOutcome: {
+      ...testOutcome,
+      id: "outcome:validation-chance-failure",
+    },
+    id: "decision:validation-chance",
+    successOutcome: {
+      ...testOutcome,
+      id: "outcome:validation-chance-success",
+    },
+    ...changes,
+  } as ChanceDecision;
+
+  return {
+    ...event,
+    decisions: [decision, event.decisions[1], event.decisions[2]],
   };
 }
 
 describe("Initial event content", () => {
-  test("defines five events, 15 decisions, and 21 outcomes", () => {
+  test("defines a valid catalog with connected references", () => {
     const events: readonly DecisionEvent[] = Object.values(eventCatalog);
-    const decisions = events.flatMap((event) => event.decisions);
-    const outcomes = decisions.flatMap((decision) =>
-      decision.kind === "safe"
-        ? [decision.outcome]
-        : [decision.successOutcome, decision.failureOutcome],
-    );
 
-    expect(initialEventPool).toHaveLength(5);
-    expect(decisions).toHaveLength(15);
-    expect(outcomes).toHaveLength(21);
-    expect(new Set(outcomes.map((outcome) => outcome.id)).size).toBe(21);
+    expect(() => validateEvents(events)).not.toThrow();
+    expect(new Set(initialEventPool).size).toBe(initialEventPool.length);
+
+    for (const event of events) {
+      expect(getEvent(event.id)).toBe(event);
+
+      for (const decision of event.decisions) {
+        const outcomes =
+          decision.kind === "safe"
+            ? [decision.outcome]
+            : [decision.successOutcome, decision.failureOutcome];
+
+        for (const outcome of outcomes) {
+          expect(getOutcome(event, outcome.id)).toBe(outcome);
+        }
+      }
+    }
+
+    for (const eventId of initialEventPool) {
+      expect(getEvent(eventId).id).toBe(eventId);
+    }
   });
 
   test("rejects duplicate event identifiers", () => {
     expect(() => validateEvents([initialEvents[0], initialEvents[0]])).toThrow(
       "Duplicate event identifier",
     );
+  });
+
+  test("requires three decisions with unique identifiers", () => {
+    const event = createValidationEvent([
+      { amount: 1, stat: "piloting", target: "stat" },
+    ]);
+
+    expect(() =>
+      validateEvents([
+        {
+          ...event,
+          decisions: event.decisions.slice(0, 2),
+        } as unknown as DecisionEvent,
+      ]),
+    ).toThrow("must have three decisions");
+    expect(() =>
+      validateEvents([
+        {
+          ...event,
+          decisions: [
+            event.decisions[0],
+            event.decisions[0],
+            event.decisions[2],
+          ],
+        },
+      ]),
+    ).toThrow("Duplicate decision identifier");
+  });
+
+  test("requires unique outcome identifiers", () => {
+    const event = createValidationEvent([
+      { amount: 1, stat: "piloting", target: "stat" },
+    ]);
+
+    expect(() =>
+      validateEvents([
+        {
+          ...event,
+          decisions: [
+            event.decisions[0],
+            {
+              ...event.decisions[1],
+              outcome: {
+                ...event.decisions[1].outcome,
+                id: event.decisions[0].outcome.id,
+              },
+            },
+            event.decisions[2],
+          ],
+        },
+      ]),
+    ).toThrow("Duplicate outcome identifier");
   });
 
   test("requires at least one change in every outcome", () => {
@@ -139,21 +227,113 @@ describe("Initial event content", () => {
     );
   });
 
-  test("selects an event through the injected random generator", () => {
-    const random = createRandom(0);
+  test.each([0, Number.NaN, Number.POSITIVE_INFINITY])(
+    "rejects the invalid outcome change %s",
+    (amount) => {
+      expect(() =>
+        validateEvents([
+          createValidationEvent([{ amount, stat: "piloting", target: "stat" }]),
+        ]),
+      ).toThrow("has an invalid change");
+    },
+  );
 
-    expect(selectInitialEvent(random)).toBe(initialEvents[4]);
-    expect(random.integer).toHaveBeenCalledWith(0, 4);
+  test("requires an available Zoid pool for each outcome reward", () => {
+    const event = createValidationEvent([
+      { amount: 1, stat: "piloting", target: "stat" },
+    ]);
+    const outcome = {
+      ...event.decisions[0].outcome,
+      zoidReward: "missing",
+    } as unknown as Outcome;
+
+    expect(() =>
+      validateEvents([
+        {
+          ...event,
+          decisions: [
+            { ...event.decisions[0], outcome },
+            event.decisions[1],
+            event.decisions[2],
+          ],
+        },
+      ]),
+    ).toThrow("uses an unavailable Zoid category");
   });
 
-  test("provides translations for every event, decision, and outcome", () => {
-    for (const event of initialEvents) {
-      expect(translate(event.introductionKey)).toBeTruthy();
-      expect(translate(event.titleKey)).toBeTruthy();
+  test("requires unique probability stats with positive finite weights", () => {
+    expect(() =>
+      validateEvents([
+        createValidationChanceEvent({
+          probabilityStats: [
+            { stat: "piloting", weight: 0.3 },
+            { stat: "piloting", weight: 0.15 },
+          ],
+        }),
+      ]),
+    ).toThrow("repeats a probability stat");
+
+    for (const weight of [0, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(() =>
+        validateEvents([
+          createValidationChanceEvent({
+            probabilityStats: [{ stat: "piloting", weight }],
+          }),
+        ]),
+      ).toThrow("has an invalid stat weight");
+    }
+  });
+
+  test.each([-1, 101, Number.NaN, Number.POSITIVE_INFINITY])(
+    "rejects the invalid base probability %s",
+    (baseSuccessChance) => {
+      expect(() =>
+        validateEvents([
+          createValidationChanceEvent({
+            baseSuccessChance: baseSuccessChance as never,
+          }),
+        ]),
+      ).toThrow("has an invalid probability");
+    },
+  );
+
+  test.each([-1, 101, Number.NaN, Number.POSITIVE_INFINITY])(
+    "rejects the invalid neutral stat %s",
+    (probabilityNeutralStat) => {
+      expect(() =>
+        validateEvents([
+          createValidationChanceEvent({
+            probabilityNeutralStat: probabilityNeutralStat as never,
+          }),
+        ]),
+      ).toThrow("has an invalid neutral stat");
+    },
+  );
+
+  test("selects an event through the injected random generator", () => {
+    const index = initialEventPool.length - 1;
+    const random = createRandom(0, index);
+
+    expect(selectInitialEvent(random)).toBe(initialEvents[index]);
+    expect(random.integer).toHaveBeenCalledWith(0, index);
+  });
+
+  test("provides every content translation in each language", () => {
+    for (const event of Object.values(eventCatalog)) {
+      for (const language of supportedLanguages) {
+        expect(i18n.exists(event.introductionKey, { lng: language })).toBe(
+          true,
+        );
+        expect(i18n.exists(event.titleKey, { lng: language })).toBe(true);
+      }
 
       for (const decision of event.decisions) {
-        expect(translate(decision.descriptionKey)).toBeTruthy();
-        expect(translate(decision.labelKey)).toBeTruthy();
+        for (const language of supportedLanguages) {
+          expect(i18n.exists(decision.descriptionKey, { lng: language })).toBe(
+            true,
+          );
+          expect(i18n.exists(decision.labelKey, { lng: language })).toBe(true);
+        }
 
         const outcomes =
           decision.kind === "safe"
@@ -161,7 +341,11 @@ describe("Initial event content", () => {
             : [decision.successOutcome, decision.failureOutcome];
 
         for (const result of outcomes) {
-          expect(translate(result.narrativeKey)).toBeTruthy();
+          for (const language of supportedLanguages) {
+            expect(i18n.exists(result.narrativeKey, { lng: language })).toBe(
+              true,
+            );
+          }
         }
       }
     }
