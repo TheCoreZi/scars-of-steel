@@ -31,18 +31,28 @@ npm run typecheck
 npm run lint
 npm run format:check
 npm run test:run
+npm run test:e2e
+npm run test:lighthouse
 npm run build
 ```
 
 Run `npm test` to run tests in watch mode. Run `npm run lint:fix` or `npm run
 format` to fix files. Run `npm run preview` to serve the local build.
 
+Install Chromium once before you run the browser checks:
+
+```sh
+npx playwright install chromium
+```
+
 ## Continuous integration
 
 Pull requests and pushes to `master` install dependencies from the public npm
 registry. They check formatting, lint, types, tests, and the production build.
-A failed check stops the workflow. Builds from `master` are available as GitHub
-Actions artifacts for seven days.
+The browser tests check accessibility, 48-pixel targets, horizontal overflow at
+320, 768, and 1280 pixels, and a 200% zoom profile. Lighthouse requires an
+Accessibility score of at least 95. A failed check stops the workflow. Builds
+from `master` are available as GitHub Actions artifacts for seven days.
 
 The npm cache stores downloaded packages only. Each workflow still uses `npm
 ci` to validate `package-lock.json` and create a clean dependency installation.

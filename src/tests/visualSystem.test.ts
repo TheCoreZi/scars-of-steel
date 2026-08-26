@@ -14,6 +14,10 @@ describe("visual system", () => {
     "--color-console",
     "--color-console-text",
     "--color-faction",
+    "--color-faction-option-accent",
+    "--color-faction-option-check",
+    "--color-faction-option-surface",
+    "--color-on-dark-surface",
     "--color-on-faction",
     "--color-scrollbar-thumb",
     "--color-scrollbar-thumb-hover",
@@ -74,6 +78,26 @@ describe("visual system", () => {
       getContrast(tokens["--color-on-faction"], tokens["--color-faction"]),
     ).toBeGreaterThanOrEqual(4.5);
   });
+
+  test.each([
+    ["Guylos", '.app-shell [data-faction="guylos"]'],
+    ["Helic", '.app-shell [data-faction="helic"]'],
+  ])(
+    "keeps %s faction option indicators at WCAG AA contrast",
+    (_, selector) => {
+      const tokens = {
+        ...getTokens(".app-shell"),
+        ...getTokens(selector),
+      };
+
+      expect(
+        getContrast(
+          tokens["--color-faction-option-check"],
+          tokens["--color-faction-option-accent"],
+        ),
+      ).toBeGreaterThanOrEqual(4.5);
+    },
+  );
 
   test.each([
     ["dark neutral", ":root"],

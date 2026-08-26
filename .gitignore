@@ -1,7 +1,9 @@
 .DS_Store
 node_modules/
+playwright-report/
 dist/
 coverage/
 docs/
+test-results/
 *.tsbuildinfo
 *.local

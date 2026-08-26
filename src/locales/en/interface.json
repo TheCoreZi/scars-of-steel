@@ -3,6 +3,9 @@
     "introduction": "Your career as a pilot is about to begin.",
     "title": "Scars of Steel"
   },
+  "appControls": {
+    "label": "Application controls"
+  },
   "aspirations": {
     "commander": "Commander",
     "shadow": "Shadow",

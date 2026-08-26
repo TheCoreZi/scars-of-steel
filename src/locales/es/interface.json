@@ -3,6 +3,9 @@
     "introduction": "Tu carrera como piloto está a punto de comenzar.",
     "title": "Cicatrices de Acero"
   },
+  "appControls": {
+    "label": "Controles de la aplicación"
+  },
   "aspirations": {
     "commander": "Comandante",
     "shadow": "Sombra",
