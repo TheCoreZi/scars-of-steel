@@ -35,7 +35,7 @@ export function AppControls({
   }
 
   return (
-    <div className="app-controls">
+    <nav aria-label={t("appControls.label")} className="app-controls">
       <div
         aria-label={t("welcome.language.label")}
         className="language-selector"
@@ -63,7 +63,7 @@ export function AppControls({
       >
         <span aria-hidden="true" className="color-mode-toggle__icon" />
       </button>
-    </div>
+    </nav>
   );
 }
 

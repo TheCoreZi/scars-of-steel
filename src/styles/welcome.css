@@ -16,7 +16,7 @@
   grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.42fr);
   grid-template-rows: auto 1fr auto;
   gap: clamp(var(--space-5), 3vw, 2.5rem);
-  padding: clamp(var(--space-5), 6vw, var(--space-8));
+  padding: clamp(var(--space-5), 6vw, var(--space-7));
   background:
     linear-gradient(112deg, rgb(12 25 54 / 96%) 0 64%, transparent 64%),
     linear-gradient(
@@ -277,8 +277,10 @@
 .welcome__topbar .animation-toggle {
   position: static;
   flex: none;
-  min-height: auto;
-  padding: 0;
+  min-width: 3rem;
+  min-height: 3rem;
+  justify-content: center;
+  padding: var(--space-2);
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -442,6 +444,7 @@
 .service-records h2 button {
   display: flex;
   min-width: 17rem;
+  min-height: 3rem;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
@@ -652,7 +655,7 @@
 
 .service-records__metric {
   display: inline-flex;
-  min-width: 3rem;
+  min-width: 0;
   align-items: center;
   justify-content: end;
   gap: 0.2rem;

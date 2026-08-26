@@ -1,12 +1,13 @@
 import react from "@vitejs/plugin-react";
 import type { Plugin } from "vite";
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   base: "/",
   plugins: [react(), buildInfo()],
   test: {
     environment: "jsdom",
+    exclude: [...configDefaults.exclude, "e2e/**"],
     setupFiles: "./src/tests/setup.ts",
   },
 });

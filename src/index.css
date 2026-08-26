@@ -1,10 +1,13 @@
 .decision-screen__heading h1,
 .pilot-creation__heading h1 {
-  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-size: clamp(2.5rem, 7vw, 4.3rem);
 }
 
 .decision-screen__heading h1:focus,
-.pilot-creation__heading h1:focus {
+.final-screen__title h1:focus,
+.outcome-screen h1:focus,
+.pilot-creation__heading h1:focus,
+.resolution-screen h1:focus {
   outline: none;
 }
 
@@ -767,20 +770,16 @@
   justify-self: stretch;
 }
 
-.abandon-dialog__backdrop {
-  position: fixed;
-  z-index: 20;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: var(--space-4);
+.abandon-dialog::backdrop {
   background: rgb(0 0 0 / 72%);
 }
 
 .abandon-dialog {
   width: min(100%, 30rem);
+  max-width: calc(100% - (var(--space-4) * 2));
   padding: var(--space-6);
   border: 1px solid var(--color-accent);
+  color: var(--color-text);
   background: var(--color-panel-raised);
   box-shadow: 0 1.5rem 5rem rgb(0 0 0 / 65%);
 }
@@ -1118,10 +1117,10 @@
 }
 
 .pilot-option--faction {
-  --option-accent: var(--color-faction);
-  --option-check: var(--color-on-faction);
-  --option-surface: var(--color-faction-surface);
-  --option-text: var(--color-heading);
+  --option-accent: var(--color-faction-option-accent);
+  --option-check: var(--color-faction-option-check);
+  --option-surface: var(--color-faction-option-surface);
+  --option-text: var(--color-on-dark-surface);
 }
 
 .pilot-option--faction .pilot-option__content {
@@ -1683,8 +1682,8 @@
 
   .animation-toggle {
     display: grid;
-    width: 1.75rem;
-    min-height: 1.75rem;
+    width: 3rem;
+    min-height: 3rem;
     place-items: center;
     padding: 0;
   }
@@ -2080,7 +2079,7 @@
   }
 
   .service-records__metric {
-    min-width: 2rem;
+    min-width: 0;
   }
 
   .app-shell {
@@ -2144,7 +2143,7 @@
   }
 
   .outcome-screen__actions .button {
-    min-height: 2.5rem;
+    min-height: 3rem;
     padding: var(--space-2) var(--space-4);
     font-size: 0.72rem;
   }
@@ -2301,8 +2300,8 @@
   }
 
   .color-mode-toggle {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 3rem;
+    height: 3rem;
   }
 
   .animation-toggle {
@@ -2310,8 +2309,8 @@
   }
 
   .language-selector button {
-    min-width: 2.5rem;
-    min-height: 2.5rem;
+    min-width: 3rem;
+    min-height: 3rem;
     padding-inline: var(--space-2);
   }
 

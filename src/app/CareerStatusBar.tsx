@@ -143,7 +143,6 @@ function StatusDetails({
       </div>
       <div
         aria-label={t("careerStatus.potentialLabel", { value: potential })}
-        aria-orientation="vertical"
         aria-valuemax={100}
         aria-valuemin={0}
         aria-valuenow={potential}

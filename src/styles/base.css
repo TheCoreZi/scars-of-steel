@@ -132,6 +132,7 @@ p {
   --color-console-muted: #c6c4c5;
   --color-console-raised: #25272c;
   --color-console-text: #f5f5f4;
+  --color-on-dark-surface: #ffffff;
   --color-secondary: #b88a52;
   --color-heading: #ffffff;
   --color-panel: rgb(30 30 29 / 95%);
@@ -193,7 +194,7 @@ p {
 }
 
 .app-shell[data-faction="guylos"] {
-  --color-accent: #ff5d6c;
+  --color-accent: #ff7180;
   --color-accent-contrast: #210508;
   --color-accent-soft: rgb(255 93 108 / 20%);
   --color-background: #0c0d0f;
@@ -288,12 +289,18 @@ p {
 
 .app-shell [data-faction="guylos"] {
   --color-faction: #ff5d6c;
+  --color-faction-option-accent: #ff5d6c;
+  --color-faction-option-check: #210508;
+  --color-faction-option-surface: rgb(93 10 26 / 38%);
   --color-faction-surface: rgb(93 10 26 / 38%);
   --color-on-faction: #210508;
 }
 
 .app-shell [data-faction="helic"] {
   --color-faction: #5f8ee8;
+  --color-faction-option-accent: #f4b942;
+  --color-faction-option-check: #18140a;
+  --color-faction-option-surface: #172b58;
   --color-faction-surface: rgb(23 43 88 / 78%);
   --color-on-faction: #071126;
 }
@@ -536,7 +543,7 @@ p {
   z-index: 20;
   top: 0;
   right: var(--space-4);
-  min-height: 1.8rem;
+  min-height: 3rem;
   padding: 0 var(--space-2);
   border: 1px solid var(--color-border-strong);
   border-top: 0;

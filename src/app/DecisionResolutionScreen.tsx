@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 
 import type {
@@ -29,6 +29,7 @@ export function DecisionResolutionScreen({
   result,
   titleId,
 }: DecisionResolutionScreenProps) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const { t } = useTranslation("interface");
   const reduceMotion = useReducedMotion(reducedMotion);
   const [showIndicator, setShowIndicator] = useState(false);
@@ -49,6 +50,8 @@ export function DecisionResolutionScreen({
   } as CSSProperties;
 
   useEffect(() => {
+    headingRef.current?.focus();
+
     const indicatorTimeout = reduceMotion
       ? undefined
       : window.setTimeout(() => setShowIndicator(true), impactDelay);
@@ -67,13 +70,15 @@ export function DecisionResolutionScreen({
   }, [onRevealOutcome, reduceMotion]);
 
   return (
-    <section
+    <div
       aria-labelledby={titleId}
       className="resolution-screen"
       data-reduced-motion={reduceMotion || undefined}
     >
       <Badge>{t("resolutionScreen.badge")}</Badge>
-      <h1 id={titleId}>{t("resolutionScreen.selected")}</h1>
+      <h1 id={titleId} ref={headingRef} tabIndex={-1}>
+        {t("resolutionScreen.selected")}
+      </h1>
       <strong className="resolution-screen__decision">
         {decision ? translate(decision.labelKey) : ""}
       </strong>
@@ -105,6 +110,6 @@ export function DecisionResolutionScreen({
             )
           : "\u00a0"}
       </p>
-    </section>
+    </div>
   );
 }

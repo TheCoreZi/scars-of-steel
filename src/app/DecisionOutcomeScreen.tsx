@@ -74,7 +74,7 @@ export function DecisionOutcomeScreen({
   }
 
   return (
-    <section
+    <div
       aria-labelledby={titleId}
       aria-live="polite"
       className="outcome-screen"
@@ -210,7 +210,7 @@ export function DecisionOutcomeScreen({
       {showAbandonDialog ? (
         <AbandonDialog onCancel={cancelAbandon} onConfirm={onAbandon} />
       ) : null}
-    </section>
+    </div>
   );
 }
 
@@ -222,50 +222,100 @@ interface AbandonDialogProps {
 function AbandonDialog({ onCancel, onConfirm }: AbandonDialogProps) {
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const descriptionId = useId();
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const { t } = useTranslation("interface");
 
   useEffect(() => {
+    const dialog = dialogRef.current;
+
+    if (!dialog) {
+      return;
+    }
+
+    if (typeof dialog.showModal === "function") {
+      dialog.showModal();
+    } else {
+      dialog.setAttribute("open", "");
+    }
+
     cancelButtonRef.current?.focus();
+
+    return () => {
+      if (dialog.open && typeof dialog.close === "function") {
+        dialog.close();
+      }
+    };
   }, []);
 
+  function cancelDialog() {
+    const dialog = dialogRef.current;
+
+    if (dialog?.open && typeof dialog.close === "function") {
+      dialog.close();
+    }
+
+    onCancel();
+  }
+
+  function keepFocusInside(event: React.KeyboardEvent<HTMLDialogElement>) {
+    if (event.key !== "Tab") {
+      return;
+    }
+
+    const dialog = dialogRef.current;
+    const controls = dialog?.querySelectorAll<HTMLElement>(
+      "button:not(:disabled)",
+    );
+    const firstControl = controls?.[0];
+    const lastControl = controls?.[controls.length - 1];
+
+    if (
+      !firstControl ||
+      !lastControl ||
+      (!event.shiftKey && document.activeElement !== lastControl) ||
+      (event.shiftKey && document.activeElement !== firstControl)
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    (event.shiftKey ? lastControl : firstControl).focus();
+  }
+
   return (
-    <div
-      className="abandon-dialog__backdrop"
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          onCancel();
-        }
+    <dialog
+      aria-describedby={descriptionId}
+      aria-labelledby={titleId}
+      className="abandon-dialog"
+      onCancel={(event) => {
+        event.preventDefault();
+        cancelDialog();
       }}
+      onKeyDown={keepFocusInside}
+      ref={dialogRef}
+      role="alertdialog"
     >
-      <section
-        aria-describedby={descriptionId}
-        aria-labelledby={titleId}
-        aria-modal="true"
-        className="abandon-dialog"
-        role="alertdialog"
-      >
-        <h2 id={titleId}>{t("outcomeScreen.abandonDialog.title")}</h2>
-        <p id={descriptionId}>{t("outcomeScreen.abandonDialog.description")}</p>
-        <div>
-          <button
-            className="button"
-            onClick={onCancel}
-            ref={cancelButtonRef}
-            type="button"
-          >
-            {t("outcomeScreen.abandonDialog.cancel")}
-          </button>
-          <button
-            className="button button--primary"
-            onClick={onConfirm}
-            type="button"
-          >
-            {t("outcomeScreen.abandonDialog.confirm")}
-          </button>
-        </div>
-      </section>
-    </div>
+      <h2 id={titleId}>{t("outcomeScreen.abandonDialog.title")}</h2>
+      <p id={descriptionId}>{t("outcomeScreen.abandonDialog.description")}</p>
+      <div>
+        <button
+          className="button"
+          onClick={cancelDialog}
+          ref={cancelButtonRef}
+          type="button"
+        >
+          {t("outcomeScreen.abandonDialog.cancel")}
+        </button>
+        <button
+          className="button button--primary"
+          onClick={onConfirm}
+          type="button"
+        >
+          {t("outcomeScreen.abandonDialog.confirm")}
+        </button>
+      </div>
+    </dialog>
   );
 }
 

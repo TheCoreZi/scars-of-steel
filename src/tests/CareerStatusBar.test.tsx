@@ -67,7 +67,7 @@ describe("career status bar", () => {
     const potential = within(desktop!).getByRole("progressbar", {
       name: "Potential: 0 of 100",
     });
-    expect(potential).toHaveAttribute("aria-orientation", "vertical");
+    expect(potential).not.toHaveAttribute("aria-orientation");
     expect(potential).toHaveStyle("--potential-percent: 0%");
     expect(
       screen.getByRole("progressbar", {

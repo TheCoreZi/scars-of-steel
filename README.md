@@ -27,22 +27,36 @@ npm run dev
 ## Verification
 
 ```sh
-npm run typecheck
-npm run lint
-npm run format:check
-npm run test:run
-npm run build
+npm run verify
+npm run verify:browser
 ```
 
 Run `npm test` to run tests in watch mode. Run `npm run lint:fix` or `npm run
-format` to fix files. Run `npm run preview` to serve the local build.
+format` to fix files. Run `npm run preview` to serve the local build. The
+`verify` command checks formatting, lint, types, and unit tests. The
+`verify:browser` command runs Playwright, builds the application, and runs the
+Lighthouse accessibility audit.
+
+Install Chromium once before you run the browser checks:
+
+```sh
+npx playwright install chromium
+```
+
+## Git hooks
+
+The installation configures Git hooks through Husky. The pre-commit hook runs
+`npm run verify` and `npm run verify:browser`. A failed check stops the commit.
+Use the CI workflow as the final verification for each pull request.
 
 ## Continuous integration
 
 Pull requests and pushes to `master` install dependencies from the public npm
 registry. They check formatting, lint, types, tests, and the production build.
-A failed check stops the workflow. Builds from `master` are available as GitHub
-Actions artifacts for seven days.
+The browser tests check accessibility, 48-pixel targets, horizontal overflow at
+320, 768, and 1280 pixels, and a 200% zoom profile. Lighthouse requires an
+Accessibility score of at least 95. A failed check stops the workflow. Builds
+from `master` are available as GitHub Actions artifacts for seven days.
 
 The npm cache stores downloaded packages only. Each workflow still uses `npm
 ci` to validate `package-lock.json` and create a clean dependency installation.
