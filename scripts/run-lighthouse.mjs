@@ -1,5 +1,6 @@
 import { chromium } from "@playwright/test";
 import { spawn } from "node:child_process";
+import { once } from "node:events";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -56,9 +57,13 @@ async function runAudit() {
       );
     }
   } finally {
-    browser.kill("SIGTERM");
-    server.kill("SIGTERM");
-    await rm(browserData, { force: true, recursive: true });
+    await Promise.all([stopProcess(browser), stopProcess(server)]);
+    await rm(browserData, {
+      force: true,
+      maxRetries: 5,
+      recursive: true,
+      retryDelay: 200,
+    });
   }
 }
 
@@ -80,4 +85,15 @@ async function waitForUrl(url) {
   }
 
   throw new Error(`Timed out while waiting for ${url}.`);
+}
+
+async function stopProcess(process) {
+  if (process.exitCode !== null || process.signalCode !== null) {
+    return;
+  }
+
+  const closed = once(process, "close");
+
+  process.kill("SIGTERM");
+  await closed;
 }
