@@ -1,14 +1,38 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 
-import { achievementDescriptionKeys } from "../domain/achievements";
+import {
+  achievementDescriptionKeys,
+  achievementNameKeys,
+} from "../domain/achievements";
 import { getNicknameKey, nicknameIds } from "../domain/nicknames";
 import { titleCatalog } from "../domain/titles";
 import {
   i18n,
   languageStorageKey,
   loadLanguagePreference,
+  resources,
   saveLanguagePreference,
+  supportedLanguages,
 } from "../i18n";
+
+function getLeafEntries(
+  value: unknown,
+  path = "",
+): readonly (readonly [string, string])[] {
+  if (typeof value === "string") {
+    return [[path, value]];
+  }
+
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new TypeError(`Translation ${path} must be an object or string.`);
+  }
+
+  return Object.entries(value)
+    .flatMap(([key, child]) =>
+      getLeafEntries(child, path ? `${path}.${key}` : key),
+    )
+    .sort(([first], [second]) => first.localeCompare(second));
+}
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -72,6 +96,28 @@ test("provides Spanish resources", () => {
   );
 });
 
+test("keeps every language complete and structurally aligned", () => {
+  expect(Object.keys(resources.es).sort()).toEqual(
+    Object.keys(resources.en).sort(),
+  );
+
+  for (const namespace of Object.keys(
+    resources.en,
+  ) as (keyof typeof resources.en)[]) {
+    const englishEntries = getLeafEntries(resources.en[namespace]);
+    const spanishEntries = getLeafEntries(resources.es[namespace]);
+
+    expect(englishEntries.length).toBeGreaterThan(0);
+    expect(spanishEntries.map(([key]) => key)).toEqual(
+      englishEntries.map(([key]) => key),
+    );
+
+    for (const [, text] of [...englishEntries, ...spanishEntries]) {
+      expect(text.trim()).not.toBe("");
+    }
+  }
+});
+
 test("formats the localized final pilot name", () => {
   expect(
     i18n.getFixedT("en", "interface")("finalScreen.pilotName", {
@@ -90,9 +136,13 @@ test("formats the localized final pilot name", () => {
 });
 
 test("provides every final distinction in both languages", () => {
-  for (const language of ["en", "es"]) {
+  for (const language of supportedLanguages) {
     for (const descriptionKey of Object.values(achievementDescriptionKeys)) {
       expect(i18n.exists(descriptionKey, { lng: language })).toBe(true);
+    }
+
+    for (const nameKey of Object.values(achievementNameKeys)) {
+      expect(i18n.exists(nameKey, { lng: language })).toBe(true);
     }
 
     for (const nicknameId of nicknameIds) {

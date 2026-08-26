@@ -2,7 +2,7 @@ import { describe, expect, test, vi } from "vitest";
 
 import { simulateBattleYear } from "../domain/battles";
 import { eventCatalog } from "../domain/events";
-import { applyOutcome } from "../domain/outcomes";
+import { applyOutcome, getAchievementIds } from "../domain/outcomes";
 import { createInitialPilot } from "../domain/pilot";
 import type { RandomGenerator } from "../domain/random";
 import {
@@ -122,6 +122,22 @@ describe("year resolution", () => {
     );
 
     expect(result.achievementIds).toContain(id);
+  });
+
+  test.each([
+    ["outcome-tag:humanitarian-aid", ["achievement:true-soldier"]],
+    ["outcome-tag:mechanics-program", ["achievement:born-in-workshop"]],
+    ["outcome-tag:reported-veteran", ["achievement:not-on-my-watch"]],
+    ["outcome-tag:unrelated", []],
+  ] as const)("maps %s to its exact achievements", (tag, achievementIds) => {
+    const outcome = {
+      id: "outcome:achievement-test",
+      narrativeKey: "outcomes:academy.firstExercisesAcceptStandard",
+      statChanges: [],
+      tags: [tag],
+    } as const satisfies Outcome;
+
+    expect(getAchievementIds(outcome)).toEqual(achievementIds);
   });
 
   test("applies an injury declared by the outcome", () => {

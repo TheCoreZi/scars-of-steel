@@ -98,7 +98,7 @@ export function hasInitialZoidPool(
   category: ZoidCategory,
   faction: Faction,
 ): boolean {
-  return initialZoidPools[faction][category].length > 0;
+  return (initialZoidPools[faction][category]?.length ?? 0) > 0;
 }
 
 export function selectInitialZoid(

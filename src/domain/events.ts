@@ -522,6 +522,14 @@ function validateDecision(
     }
 
     if (
+      result.statChanges.some(
+        ({ amount }) => !Number.isFinite(amount) || amount === 0,
+      )
+    ) {
+      throw new TypeError(`Outcome ${result.id} has an invalid change.`);
+    }
+
+    if (
       result.zoidReward &&
       (!hasInitialZoidPool(result.zoidReward, "guylos") ||
         !hasInitialZoidPool(result.zoidReward, "helic"))

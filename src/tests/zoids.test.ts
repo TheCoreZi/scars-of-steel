@@ -10,7 +10,7 @@ import {
   type ZoidPools,
 } from "../domain/zoidPools";
 import { createSeededRandomGenerator } from "../domain/random";
-import { translate } from "../i18n";
+import { i18n, supportedLanguages } from "../i18n";
 
 describe("initial Zoid catalog", () => {
   test("defines 56 unique Zoids", () => {
@@ -111,9 +111,11 @@ describe("initial Zoid catalog", () => {
     expect(() => validateZoidPools(pools)).toThrow("invalid pool weight");
   });
 
-  test("provides a localized name for every Zoid", () => {
+  test("provides every Zoid name in each language", () => {
     for (const zoid of zoids) {
-      expect(translate(zoid.nameKey)).toBeTruthy();
+      for (const language of supportedLanguages) {
+        expect(i18n.exists(zoid.nameKey, { lng: language })).toBe(true);
+      }
     }
   });
 });
