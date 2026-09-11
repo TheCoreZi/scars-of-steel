@@ -1,4 +1,12 @@
 {
+  "firstRomance": {
+    "name": "Primer romance",
+    "description": "Las prácticas no lo eran todo en la academia."
+  },
+  "snitch": {
+    "name": "Soplón",
+    "description": "Denunciaste a un cadete por hacer trampa."
+  },
   "bornInWorkshop": {
     "description": "Entraste al programa mecánico y aprendiste a comprender cada máquina desde dentro.",
     "name": "Nacido en el taller"

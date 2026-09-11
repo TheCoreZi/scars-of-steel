@@ -13,7 +13,7 @@ import {
   type Stats,
   type TranslationKey,
 } from "./types";
-import { getZoid } from "./zoids";
+import { getEffectiveZoidPower } from "./zoids";
 
 const zoidPotentialWeight = 0.25;
 const initialStats = {
@@ -130,6 +130,7 @@ export function createInitialPilot({
 
   return {
     age: 12,
+    bonusIds: [],
     aspiration,
     basePotential: zero,
     career: {
@@ -144,6 +145,7 @@ export function createInitialPilot({
     id,
     name: normalizePilotName(name),
     potential: zero,
+    zoidProgress: {},
     stats: getInitialStats(aspiration),
     zoids: null,
   };
@@ -151,7 +153,8 @@ export function createInitialPilot({
 
 export function calculatePotential(pilot: Pilot) {
   const zoidBonus = pilot.zoids
-    ? getZoid(pilot.zoids.signatureId).basePower * zoidPotentialWeight
+    ? getEffectiveZoidPower(pilot, pilot.zoids.signatureId) *
+      zoidPotentialWeight
     : 0;
 
   return createBoundedValue(

@@ -26,6 +26,7 @@ interface CardPalette {
 
 interface FinalCardLayout {
   achievementsY: number;
+  bonusesY: number;
   height: number;
   metricsY: number;
   statsY: number;
@@ -99,6 +100,7 @@ async function loadCardImages(summary: FinalSummary): Promise<CardImages> {
     loadImage(summary.titleIconPath),
     loadImage(summary.zoidImagePath),
     ...summary.achievements.map(({ iconPath }) => loadImage(iconPath)),
+    ...summary.bonuses.map(({ iconPath }) => loadImage(iconPath)),
   ]);
 
   return { achievementIcons, faction, rank, title, zoid };
@@ -123,17 +125,24 @@ function getFinalCardLayout(
 ): FinalCardLayout {
   const metricsY =
     Math.max(getTitleBottom(context, summary), finalCardVisualBottom) + 50;
-  const achievementsY = metricsY + 224 + 55;
+  const bonusesY = metricsY + 224 + 55;
+  const statsY = summary.bonuses.length
+    ? bonusesY + 16 + Math.ceil(summary.bonuses.length / 3) * 40 + 45
+    : bonusesY;
+  const statsBottom = getStatsBottom(summary.stats.length, statsY);
+  const achievementsY = statsBottom + 60;
   const achievementsBottom = getAchievementsBottom(
     summary.achievements.length,
     achievementsY,
   );
-  const statsY = achievementsBottom + 60;
-  const statsBottom = getStatsBottom(summary.stats.length, statsY);
 
   return {
     achievementsY,
-    height: Math.ceil(statsBottom + finalCardBottomPadding),
+    bonusesY,
+    height: Math.ceil(
+      (summary.achievements.length ? achievementsBottom : statsBottom) +
+        finalCardBottomPadding,
+    ),
     metricsY,
     statsY,
   };
@@ -222,6 +231,13 @@ function drawFinalCard(
     images.achievementIcons,
     palette,
     layout.achievementsY,
+  );
+  drawBonuses(
+    context,
+    summary,
+    images.achievementIcons.slice(summary.achievements.length),
+    palette,
+    layout.bonusesY,
   );
   drawStats(context, summary, palette, layout.statsY);
 }
@@ -378,16 +394,11 @@ function drawAchievements(
   palette: CardPalette,
   y: number,
 ): void {
+  if (!summary.achievements.length) return;
+
   context.fillStyle = palette.accent;
   context.font = "800 20px system-ui, sans-serif";
   context.fillText(summary.labels.achievements.toUpperCase(), 82, y);
-
-  if (summary.achievements.length === 0) {
-    context.fillStyle = palette.text;
-    context.font = "700 21px system-ui, sans-serif";
-    context.fillText("—", 82, y + 38);
-    return;
-  }
 
   const achievementY = y + 30;
 
@@ -417,6 +428,29 @@ function drawAchievements(
       22,
       3,
     );
+  });
+}
+
+function drawBonuses(
+  context: CanvasRenderingContext2D,
+  summary: FinalSummary,
+  icons: readonly (HTMLImageElement | null)[],
+  palette: CardPalette,
+  y: number,
+): void {
+  if (!summary.bonuses.length) return;
+
+  context.fillStyle = palette.accent;
+  context.font = "800 20px system-ui, sans-serif";
+  context.fillText(summary.labels.bonuses.toUpperCase(), 82, y);
+  summary.bonuses.forEach((bonus, index) => {
+    const x = 82 + (index % 3) * 357;
+    const itemY = y + 16 + Math.floor(index / 3) * 40;
+    const icon = icons[index];
+    if (icon) drawContainedImage(context, icon, x, itemY, 28, 28);
+    context.fillStyle = palette.text;
+    context.font = "700 18px system-ui, sans-serif";
+    context.fillText(bonus.name, x + 44, itemY + 18);
   });
 }
 

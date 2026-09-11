@@ -26,8 +26,7 @@
   min-width: 0;
   align-self: stretch;
   align-content: center;
-  gap: var(--space-1);
-  padding: var(--space-2);
+  padding: 0.3rem 0.45rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-medium);
   background: color-mix(in srgb, var(--color-background) 70%, transparent);
@@ -39,17 +38,91 @@
   min-width: 0;
   grid-template-columns: minmax(0, 1fr);
   justify-items: center;
-  gap: var(--space-2);
+  gap: 0.12rem;
 }
 
 .career-status__zoid-visual {
+  position: relative;
   display: grid;
   width: 4.5rem;
-  height: 3.5rem;
+  height: 3rem;
   place-items: center;
-  border: 1px solid var(--color-border-strong);
-  border-radius: calc(var(--radius-medium) * 0.7);
-  background: var(--color-panel-raised);
+}
+
+.career-status__zoid-name {
+  max-width: 100%;
+  line-height: 1.15;
+}
+
+.career-status__zoid-panel .career-status__zoid-power {
+  color: var(--color-text-muted);
+  font-size: 0.6rem;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.career-status__zoid-upgrades {
+  position: absolute;
+  top: 0.1rem;
+  right: 0.1rem;
+  display: grid;
+  justify-items: center;
+  padding: 0.05rem 0.1rem;
+  border-radius: 0.2rem;
+  background: #101419d9;
+  color: #ffe0a0;
+  font: 700 0.5rem var(--font-console);
+  filter: drop-shadow(0 0 0.15rem #e9bd6455);
+}
+
+.career-status__zoid-upgrades svg {
+  display: block;
+  width: 0.75rem;
+  max-height: 2rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.career-status__conditions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem;
+  max-width: 3rem;
+  flex-shrink: 0;
+}
+
+.career-status__condition {
+  display: block;
+  width: 0.9rem;
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  background: #e5484d;
+  clip-path: polygon(
+    34% 0,
+    66% 0,
+    66% 34%,
+    100% 34%,
+    100% 66%,
+    66% 66%,
+    66% 100%,
+    34% 100%,
+    34% 66%,
+    0 66%,
+    0 34%,
+    34% 34%
+  );
+  filter: drop-shadow(0 0 0.2rem rgb(229 72 77 / 65%));
+}
+
+.career-status__condition--zoid {
+  position: absolute;
+  top: 0.1rem;
+  left: 0.1rem;
+  max-width: 2rem;
 }
 
 .career-status__pilot,
@@ -70,7 +143,7 @@
 }
 
 .career-status__zoid-panel strong,
-.career-status__pilot > strong {
+.career-status__pilot-name > strong {
   overflow: hidden;
   color: var(--color-heading);
   text-overflow: ellipsis;
@@ -121,7 +194,15 @@
   content: "•";
 }
 
-.career-status__pilot > strong {
+.career-status__pilot-name {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.career-status__pilot-name > strong {
+  min-width: 0;
   font-family: var(--font-display);
   font-size: 1.4rem;
   letter-spacing: 0.035em;
@@ -145,6 +226,7 @@
 .career-status__zoid {
   width: 4.1rem;
   height: 3.1rem;
+  max-height: 100%;
   object-fit: contain;
   image-rendering: pixelated;
 }

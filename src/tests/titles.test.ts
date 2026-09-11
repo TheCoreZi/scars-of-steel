@@ -15,12 +15,16 @@ import {
   type Pilot,
 } from "../domain/types";
 
-const basePilot = createInitialPilot({
+const initialPilot = createInitialPilot({
   aspiration: "commander",
   faction: "helic",
   id: "pilot:title-test",
   name: "Lena",
 });
+const basePilot = {
+  ...initialPilot,
+  career: { ...initialPilot.career, militaryRank: "soldier" },
+} as const satisfies Pilot;
 
 function select(
   pilotChanges: Partial<Pilot> = {},
@@ -36,7 +40,7 @@ function select(
 
 function withCareer(
   changes: Partial<Pilot["career"]>,
-  militaryRank: MilitaryRank = "cadet",
+  militaryRank: MilitaryRank = "soldier",
 ): Pilot["career"] {
   return { ...basePilot.career, militaryRank, ...changes };
 }
@@ -65,7 +69,7 @@ describe("final title priority", () => {
       select(
         {
           age: 13,
-          career: withCareer({ fame: createBoundedValue(80) }),
+          career: withCareer({ fame: createBoundedValue(80) }, "cadet"),
           condition: "dead",
         },
         undefined,
@@ -75,14 +79,23 @@ describe("final title priority", () => {
   });
 
   test("prioritizes the war result over an unfinished academy", () => {
-    expect(select({ age: 13 }, undefined, "war-won")).toBe("title:champion");
-    expect(select({ age: 13 }, undefined, "war-lost")).toBe(
+    const unfinishedCadet = {
+      age: 13,
+      career: withCareer({}, "cadet"),
+    };
+    expect(select(unfinishedCadet, undefined, "war-won")).toBe(
+      "title:champion",
+    );
+    expect(select(unfinishedCadet, undefined, "war-lost")).toBe(
       "title:solid-pilot",
     );
   });
 
-  test("uses false promise when the run ends during academy", () => {
-    expect(select({ age: 13 })).toBe("title:false-promise");
+  test("uses false promise when the run ends with cadet rank", () => {
+    expect(select({ career: withCareer({}, "cadet") })).toBe(
+      "title:false-promise",
+    );
+    expect(select({ age: 13 })).toBe("title:village-hero");
   });
 
   test("uses the ordered future career rules", () => {

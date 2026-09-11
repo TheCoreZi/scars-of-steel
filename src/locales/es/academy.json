@@ -1,0 +1,1062 @@
+{
+  "decisions": {
+    "academy-synchrony-test": {
+      "1": {
+        "description": "Avanza a un ritmo que te permita sentir cada reacción del Zoid.",
+        "label": "Escuchar al Zoid"
+      },
+      "2": {
+        "description": "Ejecuta de memoria la secuencia reglamentaria y cuenta cada giro.",
+        "label": "Confiar en la memoria"
+      },
+      "3": {
+        "description": "Lleva el Zoid al límite y gana la tabla de tiempos.",
+        "label": "Romper el récord"
+      }
+    },
+    "academy-convoy-detail": {
+      "1": {
+        "description": "Adelántate a la columna y busca posibles emboscadas.",
+        "label": "Marchar en vanguardia"
+      },
+      "2": {
+        "description": "Mantén tu Zoid entre los transportes y cualquier atacante sin perseguir señuelos.",
+        "label": "Permanecer junto al transporte"
+      },
+      "3": {
+        "description": "Engancha el transporte a tu Zoid y sácalo del desfiladero antes de que el rival cierre el paso.",
+        "label": "Remolcar el transporte"
+      }
+    },
+    "academy-wild-migration": {
+      "1": {
+        "description": "Usa tu Zoid para apartarla de los hangares sin atacarla.",
+        "label": "Guiar la manada"
+      },
+      "2": {
+        "description": "Protege al personal y deja que la manada siga su curso.",
+        "label": "Evacuar los hangares"
+      },
+      "3": {
+        "description": "Bloquea las armas de tu Zoid y completa el circuito usando a la manada como obstáculos móviles.",
+        "label": "Entrenar entre la manada"
+      }
+    },
+    "academy-ruins-survey": {
+      "1": {
+        "description": "Protege el hallazgo y cumple la orden.",
+        "label": "Hacer caso"
+      },
+      "2": {
+        "description": "Echa un vistazo antes de que llegue el equipo de investigación.",
+        "label": "Explorar la entrada"
+      },
+      "3": {
+        "description": "Asegura el acceso para que nadie entre antes de que lleguen los especialistas.",
+        "label": "Cerrar la entrada"
+      }
+    },
+    "academy-red-rust-storm": {
+      "1": {
+        "description": "Ajusta el radar y mantén el rumbo que llevaban.",
+        "label": "Confiar en los sensores"
+      },
+      "2": {
+        "description": "Desconecta los sensores y navega con la brújula, tu memoria y los instintos de tu Zoid.",
+        "label": "Seguir el terreno"
+      },
+      "3": {
+        "description": "Detén la marcha y protege los Zoids hasta que pase la tormenta.",
+        "label": "Acampar y esperar"
+      }
+    },
+    "academy-rival-challenge": {
+      "1": {
+        "description": "Acepta el duelo y demuestra quién es el mejor piloto.",
+        "label": "Aceptar el duelo"
+      },
+      "2": {
+        "description": "Rétalo a decidir la rivalidad con la calificación del siguiente ejercicio. Quien pierda limpiará las botas del otro durante una semana.",
+        "label": "Competir en la próxima práctica"
+      },
+      "3": {
+        "description": "No arriesgues dos Zoids por orgullo.",
+        "label": "Rechazar el espectáculo"
+      }
+    },
+    "academy-night-infiltration": {
+      "1": {
+        "description": "Reduce emisiones térmicas y usa el terreno para ocultarte.",
+        "label": "Avanzar en silencio"
+      },
+      "2": {
+        "description": "Crea varios ecos falsos y entra mientras el fuerte busca objetivos inexistentes.",
+        "label": "Saturar los sensores"
+      },
+      "3": {
+        "description": "Hazte detectar lejos del objetivo para que el resto entre.",
+        "label": "Crear una distracción"
+      }
+    },
+    "academy-salvo-malfunction": {
+      "1": {
+        "description": "Cruza el campo con tu Zoid y abre una ruta entre las salvas.",
+        "label": "Cubrir a los cadetes"
+      },
+      "2": {
+        "description": "Entra al sistema de práctica y corta la secuencia de disparo.",
+        "label": "Apagar la torreta"
+      },
+      "3": {
+        "description": "Avisa a los instructores.",
+        "label": "Seguir el protocolo"
+      }
+    },
+    "academy-core-fever": {
+      "1": {
+        "description": "Renuncia a las prácticas y acompaña al Zoid durante su recuperación.",
+        "label": "Permanecer a su lado"
+      },
+      "2": {
+        "description": "Revisa la conexión entre los controles y el Core.",
+        "label": "Recalibrar la interfaz"
+      },
+      "3": {
+        "description": "Entrega tu Zoid insignia y pide que te asignen uno nuevo.",
+        "label": "Cambiar de Zoid"
+      }
+    },
+    "academy-refugee-train": {
+      "1": {
+        "description": "Toma la iniciativa y distribuye tareas entre cadetes mecánicos y médicos.",
+        "label": "Organizar la estación"
+      },
+      "2": {
+        "description": "Trabaja con los técnicos para devolver el tren a la ruta.",
+        "label": "Reparar los motores"
+      },
+      "3": {
+        "description": "Deja la ayuda en manos del personal y cumple con tu entrenamiento.",
+        "label": "Continuar el entrenamiento"
+      }
+    },
+    "academy-salvage-yard": {
+      "1": {
+        "description": "Aísla el módulo y avisa a Inteligencia.",
+        "label": "Entregar los datos"
+      },
+      "2": {
+        "description": "Busca información antes de que Inteligencia cierre el hallazgo.",
+        "label": "Descifrarlo primero"
+      },
+      "3": {
+        "description": "Adapta el componente antes de que alguien lo reclame.",
+        "label": "Usar la pieza en tu Zoid"
+      }
+    },
+    "academy-intercepted-signal": {
+      "1": {
+        "description": "Registra la frecuencia y entrega la grabación al responsable de la prueba.",
+        "label": "Avisar al instructor"
+      },
+      "2": {
+        "description": "Guía al supuesto piloto hasta una zona segura sin revelar la posición del campamento.",
+        "label": "Responder la llamada"
+      },
+      "3": {
+        "description": "Localiza el emisor antes de decidir si respondes.",
+        "label": "Rastrear la señal"
+      }
+    },
+    "academy-amphibious-course": {
+      "1": {
+        "description": "Abandona la práctica y lleva el Zoid a la orilla.",
+        "label": "Emerger de inmediato"
+      },
+      "2": {
+        "description": "La fuga no es tan grande. Si te apresuras, puedes completar los objetivos.",
+        "label": "Completar el objetivo"
+      },
+      "3": {
+        "description": "Usa el sistema automático para mantenerte a flote mientras intentas sellar la fuga manualmente.",
+        "label": "Reparar bajo el agua"
+      }
+    },
+    "academy-flight-selection": {
+      "1": {
+        "description": "Estudia a fondo antes del examen para compensar tu falta de experiencia.",
+        "label": "Prepárate para la selección"
+      },
+      "2": {
+        "description": "Obtén experiencia mientras ayudas al mejor piloto de tu escuadra a superar la prueba.",
+        "label": "Preparar a otro cadete"
+      },
+      "3": {
+        "description": "Concentra el año en dominar tu Zoid insignia.",
+        "label": "Quedarte en tierra"
+      }
+    },
+    "academy-command-simulation": {
+      "1": {
+        "description": "Ordena a toda la compañía atacar al rival antes de que pueda organizarse. Después, avancen hacia la torre.",
+        "label": "Hacer un rush"
+      },
+      "2": {
+        "description": "Coloca a tu equipo en las rutas hacia la torre. Ordena atacar desde varios flancos antes de avanzar hacia el objetivo.",
+        "label": "Preparar una emboscada"
+      },
+      "3": {
+        "description": "Mantén a la compañía unida, vence al rival sin separar tus unidades y toma la torre al final.",
+        "label": "Avanzar en formación"
+      }
+    },
+    "academy-order-of-fire": {
+      "1": {
+        "description": "Dispara entre los edificios antes de que el pelotón rival se organice.",
+        "label": "Confiar en tu puntería"
+      },
+      "2": {
+        "description": "Enfrenta al enemigo únicamente en combate cuerpo a cuerpo mientras evacuan a los civiles.",
+        "label": "Proteger a los civiles"
+      },
+      "3": {
+        "description": "Toma por sorpresa al enemigo mientras el resto te cubre con disparos fuera del área donde hay civiles.",
+        "label": "Infíltrate en la aldea"
+      }
+    },
+    "academy-captured-cadet": {
+      "1": {
+        "description": "Bloquea tus armas, marca la posición y avisa al equipo médico sin acercarte.",
+        "label": "Seguir el protocolo"
+      },
+      "2": {
+        "description": "Usa los sensores de tu Zoid para revisar la cabina rival antes de pedir que detengan el ejercicio.",
+        "label": "Comprobar la señal"
+      },
+      "3": {
+        "description": "Engancha el Zoid rival y remólcalo hasta el puesto médico sin esperar a que llegue el equipo de emergencia.",
+        "label": "Evacuarlo por tu cuenta"
+      }
+    },
+    "academy-black-market": {
+      "1": {
+        "description": "No hagas preguntas sobre el origen y dale un impulso a tu Zoid.",
+        "label": "Comprar la mejora"
+      },
+      "2": {
+        "description": "Tiéndele una trampa al vendedor para que puedan atraparlo.",
+        "label": "Denunciar al vendedor"
+      },
+      "3": {
+        "description": "Ignora al vendedor. Es mejor no involucrarse con contrabandistas.",
+        "label": "Alejarte"
+      }
+    },
+    "academy-organoid-rumor": {
+      "1": {
+        "description": "Convence al grupo de que solo es una leyenda. Si fuera cierto, el ejército ya lo habría descubierto.",
+        "label": "Descartar el rumor"
+      },
+      "2": {
+        "description": "Desciende por el túnel con el cadete antes de que los descubran.",
+        "label": "Investigar"
+      },
+      "3": {
+        "description": "Un poder así podría ser útil para ganar la guerra.",
+        "label": "Informar a los superiores"
+      }
+    },
+    "academy-magnetic-front": {
+      "1": {
+        "description": "Distribuye a tu grupo para crear señales manuales y marcar puntos de referencia con los cuales orientarse.",
+        "label": "Usar la geografía"
+      },
+      "2": {
+        "description": "Busca un punto desde el cual enviar una señal de ayuda a los instructores.",
+        "label": "Solicitar ayuda"
+      },
+      "3": {
+        "description": "Apaga los sistemas y espera junto al grupo hasta que pase la tormenta.",
+        "label": "Esperar"
+      }
+    },
+    "academy-minefield": {
+      "1": {
+        "description": "Activa las minas de forma controlada.",
+        "label": "Crear una salida"
+      },
+      "2": {
+        "description": "Baja de tu Zoid y haz trabajo manual.",
+        "label": "Desactivar las minas"
+      },
+      "3": {
+        "description": "Las minas solo son peligrosas si las pisan.",
+        "label": "Planear una ruta"
+      }
+    },
+    "academy-zi-tournament": {
+      "1": {
+        "description": "Es tu oportunidad de demostrar tus habilidades.",
+        "label": "Entrenar duro"
+      },
+      "2": {
+        "description": "Estudia los patrones de combate de los cadetes más fuertes.",
+        "label": "Analizar rivales"
+      },
+      "3": {
+        "description": "El torneo no lo es todo. Debes seguir preparándote para tus prácticas.",
+        "label": "Participar sin presión"
+      }
+    },
+    "academy-joint-rescue": {
+      "1": {
+        "description": "En un rescate no hay competencia.",
+        "label": "Trabajar juntos"
+      },
+      "2": {
+        "description": "Dividir el trabajo es la clave para completar el rescate.",
+        "label": "Organizar al equipo"
+      },
+      "3": {
+        "description": "Los sistemas de los Zoids pueden hacer más eficientes las tareas.",
+        "label": "Usar la tecnología"
+      }
+    },
+    "academy-prototype-test": {
+      "1": {
+        "description": "Esa potencia adicional es lo que tu Zoid necesita.",
+        "label": "Ofrecerte a dominarlo"
+      },
+      "2": {
+        "description": "Ofrécete, pero limita la potencia del propulsor.",
+        "label": "Probarlo con limitaciones"
+      },
+      "3": {
+        "description": "Tu Zoid no es un animal de laboratorio.",
+        "label": "Rechazar la prueba"
+      }
+    },
+    "academy-sleeper-hunt": {
+      "1": {
+        "description": "Estudia su ruta y atrápalo.",
+        "label": "Tender una trampa"
+      },
+      "2": {
+        "description": "Un verdadero soldado debería poder contra un Sleeper.",
+        "label": "Atacar de frente"
+      },
+      "3": {
+        "description": "Solo tienes que evitar que te detecte antes de acercarte.",
+        "label": "Usar distracciones"
+      }
+    },
+    "academy-two-seat-drill": {
+      "1": {
+        "description": "Deja claro que tú pilotarás y que tu compañero debe seguir tus órdenes desde las armas.",
+        "label": "Tomar los controles"
+      },
+      "2": {
+        "description": "Habla con tu compañero antes del ejercicio y dejen sus problemas fuera de la cabina.",
+        "label": "Hacer las paces"
+      },
+      "3": {
+        "description": "No intenten arreglar su relación. Repartan las funciones y hablen solo cuando la maniobra lo exija.",
+        "label": "Limitarse al ejercicio"
+      }
+    },
+    "academy-reconstruction-detail": {
+      "1": {
+        "description": "Organiza los turnos y el trabajo entre cadetes y habitantes.",
+        "label": "Ofrecerte a coordinar"
+      },
+      "2": {
+        "description": "Usa tu Zoid para despejar el paso y realizar los trabajos pesados.",
+        "label": "Participar con tu Zoid"
+      },
+      "3": {
+        "description": "El examen final está cerca y no puedes perder tiempo.",
+        "label": "Quedarte en la Academia"
+      }
+    },
+    "academy-desert-survival": {
+      "1": {
+        "description": "Conserva energía y evita el calor del día.",
+        "label": "Avanzar de noche"
+      },
+      "2": {
+        "description": "Deja que el instinto del Zoid encuentre sombra, depósitos de agua y el camino correcto.",
+        "label": "Confiar en tu Zoid"
+      },
+      "3": {
+        "description": "Guarda todas tus provisiones para los últimos días.",
+        "label": "Resistir"
+      }
+    },
+    "academy-front-observer": {
+      "1": {
+        "description": "Acepta la misión, enfréntate a una situación real y demuestra tus habilidades.",
+        "label": "Aceptar"
+      },
+      "2": {
+        "description": "Pide acompañar a la unidad como observador, lejos del combate.",
+        "label": "Ir como observador"
+      },
+      "3": {
+        "description": "Quédate en la Academia y termina tu formación antes de acercarte al frente.",
+        "label": "Rechazar"
+      }
+    },
+    "academy-final-board": {
+      "1": {
+        "description": "Enfréntate a tres oficiales y demuestra tu habilidad de combate.",
+        "label": "Examen práctico de batalla"
+      },
+      "2": {
+        "description": "Una sola misión en la que debes coordinar un escuadrón y salir victorioso con el menor número de bajas.",
+        "label": "Examen simulado de tácticas"
+      },
+      "3": {
+        "description": "Completa tres circuitos distintos y muestra tus mejores movimientos con el Zoid.",
+        "label": "Examen de maniobras"
+      }
+    },
+    "academy-date-invitation": {
+      "1": {
+        "description": "Aprovecha la oportunidad de conocer mejor a esa persona.",
+        "label": "Aceptar la cita"
+      },
+      "2": {
+        "description": "Proponle salir después de los exámenes.",
+        "label": "Pedir que cambien la fecha"
+      },
+      "3": {
+        "description": "Por ahora solo tienes ojos para tu Zoid.",
+        "label": "Rechazar la invitación"
+      }
+    },
+    "academy-instructor-conflict": {
+      "1": {
+        "description": "Solicita una conversación y explica tu inconformidad con su trato.",
+        "label": "Hablar en privado"
+      },
+      "2": {
+        "description": "Defiéndete y cuestiónale si de verdad está intentando enseñarte.",
+        "label": "Confrontarlo durante la clase"
+      },
+      "3": {
+        "description": "Demuestra constancia y mejora hasta que no puedan criticarte.",
+        "label": "Aguantar las críticas"
+      }
+    },
+    "academy-cadet-conflict": {
+      "1": {
+        "description": "Dale una cucharada de su propia medicina.",
+        "label": "Lanzar su equipo al excusado"
+      },
+      "2": {
+        "description": "Propón resolver la rivalidad en un duelo de Zoids en el campo de práctica.",
+        "label": "Retarlo a una batalla"
+      },
+      "3": {
+        "description": "Pide a un oficial que intervenga en el asunto.",
+        "label": "Pedir ayuda"
+      }
+    },
+    "academy-cheating-witness": {
+      "1": {
+        "description": "Cuenta lo que viste y haz justicia antes del examen.",
+        "label": "Informar al instructor"
+      },
+      "2": {
+        "description": "Cada quien usa los métodos a su alcance, concéntrate en estudiar.",
+        "label": "Ignorar"
+      },
+      "3": {
+        "description": "Acepta el precio y dedica el tiempo de estudio a practicar con tu Zoid.",
+        "label": "Usar las respuestas"
+      }
+    }
+  },
+  "narrative": {
+    "academy-synchrony-test": {
+      "introduction": "Los instructores bloquean la navegación, el visor y los mapas de tu Zoid. Debes completar un circuito guiándote solo por el instinto de tu Zoid y tus reflejos.",
+      "title": "La prueba del pulso"
+    },
+    "academy-convoy-detail": {
+      "introduction": "Una columna de transportes debe cruzar un desfiladero del campo de maniobras. Los cadetes escoltan el convoy desde sus Zoids mientras los instructores simulan una emboscada. A mitad del ejercicio, uno de los transportes queda inmovilizado como parte de la prueba.",
+      "title": "La columna de suministros"
+    },
+    "academy-wild-migration": {
+      "introduction": "Una manada de Zoids salvajes atraviesa el campo de prácticas. El ruido de las armas simuladas puede provocar una estampida.",
+      "title": "La migración de acero"
+    },
+    "academy-ruins-survey": {
+      "introduction": "Durante una práctica de cartografía encuentras una entrada a unas ruinas antiguas. Los instructores ordenan esperar al equipo de investigación.",
+      "title": "El eco de las ruinas"
+    },
+    "academy-red-rust-storm": {
+      "introduction": "Una nube roja cubre el desierto y anula las referencias visuales durante una práctica de navegación.",
+      "title": "La tormenta de óxido"
+    },
+    "academy-rival-challenge": {
+      "introduction": "El mejor cadete de otra compañía cuestiona tu puesto y te reta a un duelo con salvas de práctica.",
+      "title": "El desafío del rival"
+    },
+    "academy-night-infiltration": {
+      "introduction": "Tu escuadra debe entrar en un fuerte simulado durante la noche sin activar sus sensores perimetrales.",
+      "title": "Luces apagadas"
+    },
+    "academy-salvo-malfunction": {
+      "introduction": "Durante un ejercicio, una torreta de práctica sigue disparando salvas después de la señal de alto. Tres cadetes quedan atrapados detrás de unas barreras.",
+      "title": "Fuera de control"
+    },
+    "academy-core-fever": {
+      "introduction": "Tu Zoid se niega a arrancar. Los técnicos no encuentran una avería y creen que el Core está reaccionando al estrés del entrenamiento.",
+      "title": "El Core no responde"
+    },
+    "academy-refugee-train": {
+      "introduction": "Una tormenta de arena deja un tren civil detenido cerca de la Academia. Las familias a bordo necesitan agua, reparaciones y un lugar donde pasar la noche.",
+      "title": "El tren varado"
+    },
+    "academy-salvage-yard": {
+      "introduction": "La Academia recibe restos de Zoids de ambos bandos para una clase de recuperación. Uno de los componentes todavía guarda datos cifrados.",
+      "title": "El patio de salvamento"
+    },
+    "academy-intercepted-signal": {
+      "introduction": "En una prueba de radio aparece una llamada de auxilio. Los instructores no dicen si es parte del ejercicio y tu equipo debe decidir cómo responder.",
+      "title": "La voz en la estática"
+    },
+    "academy-amphibious-course": {
+      "introduction": "El grupo entrena maniobras bajo el agua con Zoids anfibios. El Zoid que pilotas empieza a perder presión durante una inmersión. Parece que el fuselaje está dañado.",
+      "title": "Fuga bajo el agua"
+    },
+    "academy-flight-selection": {
+      "introduction": "Una plaza en el entrenamiento aéreo queda libre. Todos los aspirantes usarán un Zoid volador que no conocen y solo los más aptos podrán quedarse en el programa.",
+      "title": "Alas prestadas"
+    },
+    "academy-command-simulation": {
+      "introduction": "En un campo de maniobras de varios kilómetros lideras una compañía desde la cabina de tu Zoid. Deben neutralizar al equipo rival y después tomar la torre de comunicaciones. Usan munición de práctica, pero un solo impacto elimina a cualquier Zoid del ejercicio.",
+      "title": "La torre"
+    },
+    "academy-order-of-fire": {
+      "introduction": "En una simulación, un pelotón rival se atrinchera dentro de una aldea de entrenamiento. Los edificios contienen figuras que representan civiles. Si alcanzas una, cuenta como una baja. Debes expulsar al enemigo sin causar ninguna.",
+      "title": "Invasión en la aldea"
+    },
+    "academy-captured-cadet": {
+      "introduction": "Durante un ejercicio por equipos, un Zoid del rival queda aislado y transmite una señal médica. El reglamento obliga a tratar toda emergencia como real hasta que los instructores confirmen lo contrario.",
+      "title": "Señal médica"
+    },
+    "academy-black-market": {
+      "introduction": "Un proveedor en la ciudad ofrece piezas militares fuera del inventario. Afirma que pueden mejorar tu Zoid antes del examen final.",
+      "title": "La oferta"
+    },
+    "academy-organoid-rumor": {
+      "introduction": "Un cadete cuenta que el campo de entrenamiento fue construido sobre ruinas Zoidianas y ha encontrado un pasadizo secreto que conduce a ellas.",
+      "title": "El Organoide"
+    },
+    "academy-magnetic-front": {
+      "introduction": "Durante una prueba exterior, una tormenta electromagnética desactiva los comunicadores y los sistemas de navegación. Tu grupo debe encontrar una forma de volver.",
+      "title": "Sin brújula"
+    },
+    "academy-minefield": {
+      "introduction": "En una práctica hay minas simuladas en el desierto. Un transporte de entrenamiento está inmovilizado en el centro y debes sacarlo antes de que termine el tiempo.",
+      "title": "Bajo la arena"
+    },
+    "academy-zi-tournament": {
+      "introduction": "Se organiza un torneo para seleccionar a quienes representarán a la academia en una competencia nacional.",
+      "title": "Torneo nacional"
+    },
+    "academy-joint-rescue": {
+      "introduction": "En un derrumbe simulado, dos escuadras deben rescatar a sus compañeros antes de que termine el tiempo.",
+      "title": "Tregua en el cañón"
+    },
+    "academy-prototype-test": {
+      "introduction": "El equipo científico busca un cadete para probar un propulsor que exige demasiado al Core.",
+      "title": "Impulso extra"
+    },
+    "academy-sleeper-hunt": {
+      "introduction": "Los instructores sueltan un Guysack Sleeper de práctica en el perímetro. La misión es capturarlo. El Zoid usa salvas y cambia de ruta cada vez que detecta una emboscada.",
+      "title": "Entrenamiento de captura"
+    },
+    "academy-two-seat-drill": {
+      "introduction": "Un Zoid pesado de doble cabina necesita piloto y artillero. Te asignan a un cadete con quien nunca trabajas bien.",
+      "title": "Dos pilotos, un Zoid"
+    },
+    "academy-reconstruction-detail": {
+      "introduction": "Un pueblo cercano todavía arrastra daños de una antigua batalla. La Academia busca voluntarios para reparar viviendas y servicios.",
+      "title": "Tendiendo una mano"
+    },
+    "academy-desert-survival": {
+      "introduction": "El examen de supervivencia envía a cada cadete a un punto del desierto con su Zoid. Tienen una semana para llegar al punto de extracción. Llevas agua para ti y una reserva limitada de energía para tu Zoid.",
+      "title": "Una semana de arena"
+    },
+    "academy-front-observer": {
+      "introduction": "Pocos días antes de la graduación, un oficial te ofrece una plaza en una misión real. Puede ser tu oportunidad de mostrar lo que vales, pero el peligro también es real.",
+      "title": "Tu primera vez"
+    },
+    "academy-final-board": {
+      "introduction": "En el examen final, el consejo revisa tu expediente y te pide elegir qué prueba final tomarás para demostrar tu formación.",
+      "title": "El examen de graduación"
+    },
+    "academy-date-invitation": {
+      "introduction": "Alguien de tu clase te invita a salir justo cuando habías reservado la tarde para practicar con tu Zoid.",
+      "title": "Caldo de hormonas"
+    },
+    "academy-instructor-conflict": {
+      "introduction": "Un instructor critica cada uno de tus movimientos y te obliga a repetir ejercicios que otros hacen peor. Empiezas a pensar que el problema es personal.",
+      "title": "Problemas con la autoridad"
+    },
+    "academy-cadet-conflict": {
+      "introduction": "Otro cadete se burla de tu forma de pilotar y empieza a esconder tu equipo antes de las prácticas. La tensión ya está afectando tu rendimiento.",
+      "title": "Guerra en la Academia"
+    },
+    "academy-cheating-witness": {
+      "introduction": "Antes de un examen táctico descubres que un compañero consiguió las respuestas y piensa venderlas a varios cadetes.",
+      "title": "Obteniendo respuestas"
+    }
+  },
+  "outcomes": {
+    "academy-synchrony-test": {
+      "1": {
+        "success": "Completas el circuito sin forzar una sola articulación. El Zoid anticipa tus órdenes antes de que las termines.",
+        "failure": "Interpretas mal las señales de tu Zoid y pierdes el ritmo. Tras fallar varios obstáculos, el Zoid se detiene ante toda la Academia. El incidente te vuelve conocido por las razones equivocadas."
+      },
+      "2": {
+        "success": "Terminas el circuito sin errores. El resultado no es brillante, pero demuestras que puedes mantener el control en condiciones desfavorables."
+      },
+      "3": {
+        "success": "Cruzas la meta entre aplausos. Tu nombre queda primero en la tabla. El esfuerzo deja agotados tanto a ti como a tu Zoid.",
+        "failure": "Entras demasiado rápido en una curva. El Zoid golpea una barrera y el arnés te lesiona el hombro. El equipo detiene la prueba."
+      }
+    },
+    "academy-convoy-detail": {
+      "1": {
+        "success": "Detectas a los Zoids de los instructores antes de que sus marcadores alcancen los transportes y abres una ruta segura. La vigilancia constante te hace descuidar la condición de tu Zoid.",
+        "failure": "Te alejas demasiado. La columna queda sin escolta cuando comienza la emboscada simulada y varios transportes quedan marcados como destruidos."
+      },
+      "2": {
+        "success": "La marcha tarda más. Sin embargo, ningún transporte queda aislado y tu disciplina mantiene unida la columna durante toda la emboscada."
+      },
+      "3": {
+        "success": "Mantienes el cable tenso y reincorporas el transporte antes de que el rival cierre el desfiladero. Pero dejas un flanco de la columna sin protección.",
+        "failure": "El cable se suelta en mitad de la maniobra. La columna pierde parte de la carga mientras intenta despejar el paso."
+      }
+    },
+    "academy-wild-migration": {
+      "1": {
+        "success": "Tu Zoid transmite calma a la manada y la conduce hacia terreno abierto. Un Zoid joven se niega a separarse de ti y la Academia permite que lo conserves, pero pierdes todo tu día de entrenamiento.",
+        "failure": "La manada interpreta tu avance como una amenaza y daña parte del campo. Te tendrás que hacer cargo de las reparaciones."
+      },
+      "2": {
+        "success": "Nadie resulta herido. La manada daña parte del campo antes de alejarse y la evacuación consume el resto de tu día de entrenamiento."
+      },
+      "3": {
+        "success": "Terminas el circuito sin alterar la marcha de los Zoids salvajes. Tus maniobras impresionan a los instructores, aunque someten a tu Zoid a un esfuerzo innecesario.",
+        "failure": "Calculas mal la distancia y uno de los Zoids salvajes embiste al tuyo. El arnés te lesiona y los instructores detienen el ejercicio."
+      }
+    },
+    "academy-ruins-survey": {
+      "1": {
+        "success": "La unidad de investigación llega al lugar. Tu informe ayuda al equipo científico y tu nombre queda registrado en el hallazgo. La espera te impide terminar la práctica de cartografía."
+      },
+      "2": {
+        "success": "Descubres información sobre Zoids antiguos y sobre cómo los Zoidianos mejoraban su eficiencia. El equipo científico también informa que invadiste una zona restringida.",
+        "failure": "Un pulso extraño inmoviliza tu Zoid en la entrada. El incidente hace público el hallazgo y también tu indisciplina."
+      },
+      "3": {
+        "success": "Cierras la entrada sin dañar las ruinas. El equipo de investigación puede trabajar con seguridad.",
+        "failure": "El cierre provoca un derrumbe y sepulta parte de la entrada. El equipo pierde tiempo despejando el acceso y tu reputación queda dañada."
+      }
+    },
+    "academy-red-rust-storm": {
+      "1": {
+        "success": "Filtras la interferencia y llevas a la escuadra al punto de reunión. Tu Zoid termina más tenso de lo habitual.",
+        "failure": "Una lectura falsa separa a la escuadra. Llegas tarde y con la energía casi exhausta."
+      },
+      "2": {
+        "success": "Reconoces el cauce seco y encuentras una ruta alejada de las ráfagas del viento. Tu Zoid y tú ahora están más conectados.",
+        "failure": "Confundes dos montañas y conduces a tu grupo hasta un barranco. No volverán a confiar en ti."
+      },
+      "3": {
+        "success": "Pierdes la prueba, pero conservas intactos a todos tus compañeros y sus Zoids."
+      }
+    },
+    "academy-rival-challenge": {
+      "1": {
+        "success": "Vences con una maniobra limpia y ahora todos los cadetes saben quién eres.",
+        "failure": "Tu rival predice cada ataque y te obliga a rendirte. La derrota expone tus fallos frente a toda la compañía."
+      },
+      "2": {
+        "success": "Tu Zoid mantiene una ruta estable y termina primero. Pero toda la academia recordará que rechazaste el duelo.",
+        "failure": "Tu rival administra mejor la energía de su Zoid y obtiene la mejor calificación. Al menos mejoras tu habilidad de limpiar botas."
+      },
+      "3": {
+        "success": "Tu rival se burla de ti. Sin embargo, el instructor reconoce que no has venido a la Academia solo para ganar popularidad."
+      }
+    },
+    "academy-night-infiltration": {
+      "1": {
+        "success": "Cruzas la defensa sin que se active una sola alarma. El esfuerzo te deja agotado.",
+        "failure": "El sonido de los movimientos de tu Zoid delata a toda la escuadra."
+      },
+      "2": {
+        "success": "La pantalla enemiga se llena de contactos y tu escuadra entra mientras tratan de rastrearlos.",
+        "failure": "Los sistemas electromagnéticos no son tan simples como parecen. Los sensores del fuerte detectan a todo el equipo antes de que pueda avanzar."
+      },
+      "3": {
+        "success": "Tu Zoid atrae al enemigo y queda eliminado del ejercicio, pero la escuadra completa la misión. Alguien tenía que hacerlo."
+      }
+    },
+    "academy-salvo-malfunction": {
+      "1": {
+        "success": "Registras la cadencia de la torreta y tu Zoid logra destruirla. Sacas a los tres cadetes sin recibir un impacto.",
+        "failure": "Aunque solo son salvas, las ráfagas son intensas. Los impactos bloquean los sistemas de tu Zoid antes de que llegues a la barrera."
+      },
+      "2": {
+        "success": "Encuentras el proceso y detienes la torreta antes de causar daño, aunque tu Zoid recibe algunos impactos al acercarse.",
+        "failure": "El sistema es más complejo de lo que esperabas y otro cadete encuentra una ruta de salida mientras tú sigues frente a la pantalla."
+      },
+      "3": {
+        "success": "Los instructores detienen el ejercicio y sacan al grupo. Tu respuesta fue prudente, aunque lenta."
+      }
+    },
+    "academy-core-fever": {
+      "1": {
+        "success": "El Zoid vuelve a responder después de un tiempo de descanso. Perder prácticas duele, pero ahora entiendes mejor sus límites."
+      },
+      "2": {
+        "success": "Encuentras un cable desgastado y corriges la interfaz sin forzar el Core. También pierdes parte del tiempo de práctica previsto.",
+        "failure": "La calibración ajusta el sistema pero agrava el rechazo del Zoid. Tendrás que esperar a que se recupere."
+      },
+      "3": {
+        "success": "La Academia retira a tu Zoid insignia y te asigna un sustituto. Puedes volver a entrenar de inmediato, pero el nuevo Zoid todavía no confía en ti."
+      }
+    },
+    "academy-refugee-train": {
+      "1": {
+        "success": "La estación improvisada funciona toda la noche. Todas las familias reciben agua, comida y un lugar donde dormir. Pierdes tiempo de práctica, pero vale la pena.",
+        "failure": "Los afectados son demasiados y pronto pierdes el control de los suministros y las instalaciones."
+      },
+      "2": {
+        "success": "Reparas el motor y el tren puede seguir su camino al amanecer. También pierdes parte del tiempo de entrenamiento.",
+        "failure": "Una pieza no encaja y se rompe al forzarla. Los civiles tendrán que esperar al equipo de mantenimiento."
+      },
+      "3": {
+        "success": "Mejoras tus tiempos mientras otros cadetes ayudan en la estación. El día termina y sigues pensando en las familias del tren."
+      }
+    },
+    "academy-salvage-yard": {
+      "1": {
+        "success": "El archivo contiene rutas obsoletas, pero entregarlo demuestra que supiste reconocer información sensible. La decisión no cae bien a todos."
+      },
+      "2": {
+        "success": "Extraes un patrón que revela información sobre los próximos Zoids que el enemigo está por desplegar. Entregas un informe personalmente y te quedas con el crédito.",
+        "failure": "Activas una señal enemiga y revelas la posición del campamento científico."
+      },
+      "3": {
+        "success": "La pieza aumenta el poder del Zoid y demuestra una compatibilidad inesperada. La decisión no cae bien a todos.",
+        "failure": "El componente fuerza el Core y reduce el poder del Zoid hasta que pueda recibir una reparación completa."
+      }
+    },
+    "academy-intercepted-signal": {
+      "1": {
+        "success": "La llamada era una prueba de disciplina. Registraste todos los datos y seguiste el protocolo. Superas la prueba."
+      },
+      "2": {
+        "success": "Mantienes la calma del piloto y lo guías hasta una zona segura. Era parte de la prueba y reconocen tu esfuerzo, aunque el procedimiento exigía informar a los superiores.",
+        "failure": "Das demasiados datos por radio. Era una prueba y el piloto pudo haber localizado la base. Te sancionan por tomar esa decisión."
+      },
+      "3": {
+        "success": "Encuentras el emisor y descubres que pertenece al ejército enemigo. Los superiores reconocen tu habilidad.",
+        "failure": "Tardas demasiado en descubrir que era una trampa del ejército enemigo para localizar la base. Los superiores no encuentran el emisor y te castigan por no informar antes. Ahora hay espías sueltos por el territorio."
+      }
+    },
+    "academy-amphibious-course": {
+      "1": {
+        "success": "Llegas a la orilla con el Zoid estable y el instructor descubre una falla en el mantenimiento de la unidad. Sin embargo, no puedes continuar con la práctica."
+      },
+      "2": {
+        "success": "Mantienes la calma y consigues el objetivo antes de emerger. Te felicitan por tu valor, pero te advierten que no es necesario arriesgar la vida cada vez que se presenta la oportunidad.",
+        "failure": "La cabina se inunda más rápido de lo que esperabas y pierdes la consciencia. Otro cadete da aviso y el equipo de rescate logra extraerte. Despiertas en la enfermería y perderás una temporada de prácticas."
+      },
+      "3": {
+        "success": "Detienes la fuga y logras terminar la práctica. Te felicitan por mantener la calma, aunque llegaste al último.",
+        "failure": "Tus herramientas no sirven para sellar la fuga y el sistema automático no puede mantener el Zoid a flote. Envías una señal de auxilio y el equipo de rescate te lleva a la superficie."
+      }
+    },
+    "academy-flight-selection": {
+      "1": {
+        "success": "Lees día y noche. Cuando llega la prueba, logras interpretar las corrientes y aterrizas con precisión. Tendrás horas de vuelo durante el resto del año, aunque el esfuerzo te deja agotado.",
+        "failure": "Pasas varias noches estudiando sin dormir. Cuando llega la prueba, estás demasiado agotado para superarla."
+      },
+      "2": {
+        "success": "Ayudas al piloto a mejorar su técnica y en el proceso aprendes mucho sobre el manejo de Zoids aéreos.",
+        "failure": "Los otros pilotos eran mejores y tu compañero no supera la prueba, pero aprendes mucho durante la preparación."
+      },
+      "3": {
+        "success": "Mientras otros persiguen las nubes, tú perfeccionas cada reacción de tu compañero. El esfuerzo te deja agotado."
+      }
+    },
+    "academy-command-simulation": {
+      "1": {
+        "success": "Tu ofensiva toma al rival por sorpresa y elimina a casi todo su equipo. Los Zoids que quedan en pie avanzan y toman la torre. Fue una estrategia de fuerza bruta, pero funcionó.",
+        "failure": "El equipo rival reacciona a tiempo y elimina a tus Zoids antes de que puedan acercarse a la torre. Su mejor organización les da la victoria."
+      },
+      "2": {
+        "success": "El rival entra en la emboscada y recibe disparos desde varios flancos. Cuando la ventaja está de tu lado, reúnes a la compañía y tomas la torre.",
+        "failure": "El rival mantiene sus Zoids juntos, rompe una de tus líneas y elimina a cada grupo por separado antes de tomar la torre."
+      },
+      "3": {
+        "success": "El avance es lento, pero tu compañía elimina al rival sin dejar unidades aisladas. Toman la torre con pocos Zoids fuera del ejercicio, aunque la tensión te deja agotado."
+      }
+    },
+    "academy-order-of-fire": {
+      "1": {
+        "success": "Tus salvas alcanzan solo a los Zoids enemigos dentro de la aldea y no hay bajas civiles. Los instructores están sorprendidos, pero saben que fuiste imprudente.",
+        "failure": "Tu cálculo no tomó en cuenta el viento ni la distancia. Tus disparos alcanzan una vivienda y fallas la misión."
+      },
+      "2": {
+        "success": "Tu equipo no cumple el objetivo y sufre muchas bajas simuladas, pero logra poner a salvo a los civiles."
+      },
+      "3": {
+        "success": "El equipo de infiltración sorprende al enemigo por la retaguardia y logra vencerlo sin causar bajas civiles.",
+        "failure": "El enemigo detecta la infiltración y elimina a tu grupo antes de que pueda llegar a la aldea."
+      }
+    },
+    "academy-captured-cadet": {
+      "1": {
+        "success": "Los instructores detienen el ejercicio. El cadete sí necesitaba ayuda y tu aviso permite atenderlo a tiempo. Pierdes parte de la práctica, pero actuaste como debías."
+      },
+      "2": {
+        "success": "Descubres que la alerta proviene de un sensor defectuoso. Informas a los instructores y tu equipo continúa el ejercicio sin perder la ventaja.",
+        "failure": "Las lecturas parecen normales y tardas demasiado en pedir ayuda. El cadete pierde el conocimiento antes de que llegue el equipo médico."
+      },
+      "3": {
+        "success": "Llegas al puesto médico mucho antes de que el equipo pudiera alcanzarlos. El tiempo que ahorras resulta decisivo para estabilizar al cadete, aunque abandonas a tu equipo durante el ejercicio.",
+        "failure": "No tienes el entrenamiento médico necesario para saber si es seguro moverlo. Durante el traslado, el estado del cadete empeora y el equipo médico debe intervenir de urgencia."
+      }
+    },
+    "academy-black-market": {
+      "1": {
+        "success": "La pieza mejora la velocidad de tu Zoid y te ayuda a obtener mejores notas. No es ilegal si nadie se da cuenta.",
+        "failure": "La pieza te hace perder el control del Zoid. El equipo mecánico descubre la modificación y te interroga sobre su origen y sobre el vendedor."
+      },
+      "2": {
+        "success": "Citas al vendedor por la noche para cerrar la compra, pero no llegas solo. El ejército lo arresta y desmantela una red que robaba piezas experimentales.",
+        "failure": "Citas al vendedor por la noche y avisas a tus superiores, pero él no se presenta ni deja rastro. Ahora podría venderle la pieza al ejército enemigo."
+      },
+      "3": {
+        "success": "Te concentras en practicar para el examen, pero pronto te enteras de que expulsaron a otro cadete por poseer una pieza experimental."
+      }
+    },
+    "academy-organoid-rumor": {
+      "1": {
+        "success": "El grupo te cree e ignora al cadete. Días después, se enteran de que lo expulsaron por abrir un túnel y dañar las instalaciones.",
+        "failure": "Ignoran al cadete, pero tiempo después se convierte en una celebridad por poseer el poder de un Organoide."
+      },
+      "2": {
+        "success": "El rumor era cierto. En el fondo de las ruinas encuentras una cápsula con un Organoide. Al abrirla, el Organoide deja inconsciente al otro cadete, pero consigues controlarlo y ahora cuentas con su poder.",
+        "failure": "Las supuestas ruinas eran una instalación del ejército fuera de los límites de la Academia. Los dos reciben una sanción por invadirla."
+      },
+      "3": {
+        "success": "Convences al cadete de informar a los superiores sobre las ruinas. Los instructores inspeccionan el lugar y encuentran varios artefactos Zoidianos."
+      }
+    },
+    "academy-magnetic-front": {
+      "1": {
+        "success": "La escuadra logra volver sin depender de los sensores ni de la radio, pero no termina el ejercicio.",
+        "failure": "Las referencias se confunden y una parte del grupo se pierde durante horas."
+      },
+      "2": {
+        "success": "Activas una bengala desde lo alto de un risco y pronto llega un equipo para guiarlos de vuelta a la Academia.",
+        "failure": "Te separas del grupo mientras envías la señal y al llegar la ayuda deben buscar al resto."
+      },
+      "3": {
+        "success": "Después de varias horas, los sistemas vuelven a funcionar y terminan la práctica."
+      }
+    },
+    "academy-minefield": {
+      "1": {
+        "success": "Usas tus sensores y municiones para crear una ruta por la que remolcar el transporte. Consigues el objetivo de forma inteligente.",
+        "failure": "Una explosión alcanza tu Zoid y te elimina de la simulación antes de llegar al transporte."
+      },
+      "2": {
+        "success": "Tu equipo trabaja todo el día desactivando las minas una por una hasta que hay un camino para sacar el transporte."
+      },
+      "3": {
+        "success": "Mapeas las minas y tu equipo encuentra la ruta más rápida para moverse sin activarlas. Después, saca la carga del transporte poco a poco.",
+        "failure": "Mapeas las minas, pero uno de tus compañeros se equivoca al pasar entre ellas. Las explosiones simuladas destruyen todo el cargamento."
+      }
+    },
+    "academy-zi-tournament": {
+      "1": {
+        "success": "Practicas todos los días con tu Zoid. Durante el torneo, los dos alcanzan una precisión que ningún rival puede imitar y obtienen el primer puesto. Como premio, la Academia te entrega un Zoid para representar al equipo en la competencia nacional.",
+        "failure": "Te excedes con el entrenamiento y el cansancio rompe el ritmo entre ustedes. Quedan fuera en la primera ronda."
+      },
+      "2": {
+        "success": "Aprendes a contrarrestar a cada rival, aunque te derrotan en las semifinales. Aun así, formarás parte del equipo que representará a la Academia.",
+        "failure": "Tienes la estrategia adecuada para cada rival, pero los pilotos más fuertes lo descubren y cambian la suya. Pierdes en la segunda fase."
+      },
+      "3": {
+        "success": "Logras un par de victorias, pero quedas fuera en la primera ronda. Sin embargo, estás listo para los exámenes."
+      }
+    },
+    "academy-joint-rescue": {
+      "1": {
+        "success": "Los dos equipos se coordinan en el uso de herramientas y liberan a todos los cadetes antes de que termine el tiempo.",
+        "failure": "Nadie cede el mando. Las órdenes se cruzan y el tiempo termina con varios cadetes todavía atrapados en la simulación."
+      },
+      "2": {
+        "success": "Asignas funciones, turnos y señales para retirar los escombros e identificar a los heridos. Tu equipo termina primero."
+      },
+      "3": {
+        "success": "Calibras los escáneres y los sistemas de navegación para identificar dónde están los compañeros atrapados y cuál es la ruta más rápida para liberarlos. Tu equipo termina el rescate en poco tiempo.",
+        "failure": "Pierdes demasiado tiempo ajustando los visores y la prueba termina con varios compañeros todavía atrapados."
+      }
+    },
+    "academy-prototype-test": {
+      "1": {
+        "success": "Confías en tu Zoid y dominas el impulso. También identificas cuándo el Core comienza a forzarse. El equipo usa esos datos para mejorar el sistema y te entrega el prototipo.",
+        "failure": "La potencia del propulsor activa el frenado de emergencia y provoca un latigazo dentro de la cabina. El arnés te lesiona y el equipo debe buscar a otro candidato."
+      },
+      "2": {
+        "success": "Comienzas con poca potencia y la aumentas a medida que tu Zoid se acostumbra. Continúas hasta encontrar el límite seguro. No es lo que el equipo esperaba, pero ahora conocen los límites del sistema.",
+        "failure": "El equipo científico necesita probar la potencia máxima del propulsor, no sus límites. Buscarán a otro candidato."
+      },
+      "3": {
+        "success": "Otro cadete termina probando el propulsor y su Zoid sufre daños irreversibles."
+      }
+    },
+    "academy-sleeper-hunt": {
+      "1": {
+        "success": "Localizas una zona que queda fuera de su radar durante unos segundos y colocas una trampa electromagnética. El Sleeper entra en ella y se detiene.",
+        "failure": "El Sleeper cambia de ruta continuamente y evita todas tus trampas. El tiempo termina y fallas la prueba."
+      },
+      "2": {
+        "success": "Logras evitar todos sus disparos hasta alcanzarlo y neutralizarlo. Una solución efectiva pero poco elegante.",
+        "failure": "Es imposible esquivar todos sus disparos y quedas eliminado antes de acercarte lo suficiente. Estuviste en desventaja desde el inicio."
+      },
+      "3": {
+        "success": "Usas humo y explosivos de práctica para llevar al Sleeper hacia el lugar más conveniente y caer sobre él. Gastas más tiempo y recursos de lo esperado, pero consigues el objetivo."
+      }
+    },
+    "academy-two-seat-drill": {
+      "1": {
+        "success": "Tu compañero acepta tus órdenes y completan el ejercicio sin discutir. El resultado es bueno, aunque la tensión entre ustedes no desaparece.",
+        "failure": "Tu compañero se niega a obedecerte y ambos intentan imponer su criterio. Pierden el control del ejercicio mientras discuten por la cabina."
+      },
+      "2": {
+        "success": "La conversación elimina la tensión entre ustedes. Durante el ejercicio se comunican con naturalidad y el Zoid responde como si llevaran meses trabajando juntos.",
+        "failure": "La conversación se convierte en otra discusión. Entran a la cabina más molestos que antes y fallan hasta las maniobras más sencillas."
+      },
+      "3": {
+        "success": "No hacen las paces, pero cada uno cumple con su función y terminan el ejercicio sin discutir. Trabajan bien juntos, aunque solo dentro de la cabina."
+      }
+    },
+    "academy-reconstruction-detail": {
+      "1": {
+        "success": "El pueblo recupera agua, energía y refugios antes de que empiecen las lluvias. Pierdes un tiempo de práctica que no recuperarás.",
+        "failure": "Estableces jornadas muy cansadas para todos y cada vez hay menos voluntarios. Dejas obras sin terminar."
+      },
+      "2": {
+        "success": "Llevas cargamento, despejas las viviendas y devuelves la energía al centro médico. De alguna forma, también te sirve como entrenamiento.",
+        "failure": "El tamaño de tu Zoid entorpece los trabajos. Durante una maniobra, golpeas y destruyes un generador que todavía funcionaba."
+      },
+      "3": {
+        "success": "Tu rendimiento mejora pero el resto de los cadetes acudieron al llamado. Los superiores notan tu falta de empatía."
+      }
+    },
+    "academy-desert-survival": {
+      "1": {
+        "success": "Administras tus recursos y llegas al punto de extracción justo a tiempo. El hambre ya comenzaba a pasarte factura.",
+        "failure": "La oscuridad no es la mejor aliada y no consideraste el hambre. Tras cuatro días tu Zoid cae en una gruta oculta y necesitas enviar la señal de emergencia."
+      },
+      "2": {
+        "success": "Tu Zoid localiza un oasis. El agua atrae animales que te permiten conseguir alimento. Al final de la semana llegas al punto de extracción y has aprendido mucho sobre tu Zoid.",
+        "failure": "Tu Zoid nunca vivió en estado salvaje, así que no logra encontrar agua ni el camino correcto. Fallas la prueba, pero aprendes más sobre sus límites."
+      },
+      "3": {
+        "success": "No das un solo paso con tu Zoid hasta asegurarte de saber qué dirección seguir. Resistes el hambre y la sed tanto como puedes. Terminas la prueba el último día con graves quemaduras."
+      }
+    },
+    "academy-front-observer": {
+      "1": {
+        "success": "Sigues cada orden y mantienes la cabeza fría cuando la unidad se topa con un grupo de contrabandistas. El oficial te felicita y, de vuelta en la Academia, todos preguntan por tu experiencia.",
+        "failure": "La misión se vuelve peligrosa cuando la unidad se encuentra con el enemigo inesperadamente. La batalla no es como en las simulaciones y tu Zoid es alcanzado por el fuego enemigo."
+      },
+      "2": {
+        "success": "El oficial te permite incorporarte al centro de mando. Monitoreas la misión y avisas cuando descubres señales enemigas cerca. La misión es un éxito y el oficial reconoce tu habilidad.",
+        "failure": "El oficial no accede. Dice que no necesita pilotos con miedo."
+      },
+      "3": {
+        "success": "Usas los últimos días para corregir tus fallos y llegas a la graduación mejor preparado. Algunos compañeros creen que desperdiciaste una oportunidad."
+      }
+    },
+    "academy-final-board": {
+      "1": {
+        "success": "Te has preparado para esto. Los oficiales tienen ventaja numérica, así que usas el terreno y tus mejores tácticas para derribar a dos. El último logra neutralizarte, pero diste tu mejor batalla. Apruebas el examen.",
+        "failure": "Te lanzas de frente a los enemigos y su superioridad numérica termina el combate antes de lo esperado. Fallas el examen y tu graduación se suspende."
+      },
+      "2": {
+        "success": "Has estudiado las estrategias de combate a fondo y obtienes un alto puntaje en la simulación. El consejo reconoce tu habilidad táctica.",
+        "failure": "La situación es más compleja que las que estudiaste, pero al final superas la simulación con el puntaje mínimo."
+      },
+      "3": {
+        "success": "Estudiaste a fondo mecánica y logras ajustar los movimientos de tu Zoid para cada circuito. Terminas la prueba en tiempo récord.",
+        "failure": "Los ajustes hacen que los giros de tu Zoid sean más abiertos de lo que habías practicado. Terminas la prueba con un puntaje bastante bajo."
+      }
+    },
+    "academy-date-invitation": {
+      "1": {
+        "success": "Tu cita tiene boletos para una exposición sobre la civilización Zoidiana. La cita sale bien y aprendes sobre los Zoids salvajes. Regresas a la Academia con conocimientos que otros cadetes no tienen y que podrían mejorar tu sincronía con el Zoid.",
+        "failure": "No tienen mucho en común y terminas hablando del lore de tu saga favorita. No habrá una segunda cita, pero la otra persona se va sabiendo mucho más sobre la «Batalla de los Universos»."
+      },
+      "2": {
+        "success": "Acepta y puedes concentrarte en tu práctica. Llega el día de la cita y sale bien aunque durante la charla descubres que escribe fanfics de Schwarz y Herman.",
+        "failure": "La relación se enfría y el día de la cita te confiesa que ya está saliendo con alguien más."
+      },
+      "3": {
+        "success": "Mejoras tu control y refuerzas el vínculo con tu Zoid. Aunque te preguntas ¿por qué sigues solo?"
+      }
+    },
+    "academy-instructor-conflict": {
+      "1": {
+        "success": "El instructor admite que te exige más porque ve potencial en ti. Le pides que te explique tus fallos y el trato mejora.",
+        "failure": "El instructor se molesta. Dice que la Academia no es un lugar donde los cadetes deban sentirse cómodos: él da las órdenes, tú las sigues y, si no te parece, puedes desertar."
+      },
+      "2": {
+        "success": "El instructor se molesta, pero otros alumnos te respaldan y llevan el asunto ante los directivos. Ganas el respeto de tus compañeros.",
+        "failure": "El instructor cuestiona tu potencial frente a la clase y te recuerda la diferencia de rangos. Escuchas algunas risas entre tus compañeros."
+      },
+      "3": {
+        "success": "No muestras tu inconformidad y mejoras tu resistencia y control. Llega un punto en que haces las maniobras de forma casi perfecta y no pueden cuestionarte."
+      }
+    },
+    "academy-cadet-conflict": {
+      "1": {
+        "success": "El otro cadete se presenta a la práctica con un olor nauseabundo y toda la clase se burla de él. No vuelve a molestarte.",
+        "failure": "El otro cadete sabe que fuiste tú y los ataques continúan por ambos lados. Al final pierden la paciencia, se agarran a golpes y ambos reciben un castigo."
+      },
+      "2": {
+        "success": "Ganas con una maniobra limpia y obtienes el respeto de la clase.",
+        "failure": "Pierdes el duelo y las burlas empeoran, pero al menos queda constatado que intentaste hacerle frente."
+      },
+      "3": {
+        "success": "La Academia revisa el caso y castiga al otro cadete. Las burlas terminan, pero ahora te consideran un soplón."
+      }
+    },
+    "academy-cheating-witness": {
+      "1": {
+        "success": "El instructor cambia el examen y los cadetes se quedan sin respuestas. La Academia confía más en ti pero algunos cadetes te llaman soplón."
+      },
+      "2": {
+        "success": "Te concentras en mejorar tus calificaciones. Durante el examen, un oficial descubre la trampa y castiga a varios cadetes.",
+        "failure": "Eres el único que no conocía las respuestas y todos los demás obtienen una calificación superior a la tuya."
+      },
+      "3": {
+        "success": "Nadie descubre la trampa y aprovechas el tiempo para practicar. Si todos lo hacen, ¿por qué tú no?",
+        "failure": "El instructor descubre la trampa y tu nombre aparece entre quienes usaron las respuestas. Los envían a una junta disciplinaria de la Academia."
+      }
+    }
+  }
+}

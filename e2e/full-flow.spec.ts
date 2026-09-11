@@ -1,7 +1,7 @@
 import { expect, test, type Page, type TestInfo } from "@playwright/test";
 
 const gameStorageKey = "scars-of-steel:game-data";
-const failureRandomValue = 4_294_967_290;
+const failureRandomValue = 4_294_967_225;
 
 const safeEventCases = [
   {
@@ -95,13 +95,13 @@ for (const eventCase of safeEventCases) {
     const completed = await readGameSnapshot(page);
     expect(completed).toMatchObject({
       active: false,
-      age: 13,
+      age: 15,
       eventId: outcome.eventId,
       faction: eventCase.factionId,
       zoidId: eventCase.zoidId,
     });
     await expect(
-      page.getByText("You fought for 1 year. Your career ended at age 13."),
+      page.getByText("You fought for 3 years. Your career ended at age 15."),
     ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Continue career" }),
@@ -209,7 +209,24 @@ async function selectSafeDecision(page: Page) {
 
 async function finishCareer(page: Page) {
   await page.getByRole("button", { name: "Continue career" }).click();
+  for (const age of [13, 14]) {
+    await expect(page.locator(".decision-screen__choices")).toBeVisible();
+    await expect(page.getByText(`Age ${age}`, { exact: true })).toBeVisible();
+    const before = await readGameSnapshot(page);
+    await page.reload();
+    await expect(page.locator(".decision-screen__choices")).toBeVisible();
+    expect(await readGameSnapshot(page)).toEqual(before);
+    const safe = page
+      .locator(".decision-option")
+      .filter({ has: page.locator(".decision-option__kind--safe") });
+    if (await safe.count()) await safe.first().click();
+    else await page.locator(".decision-option").nth(1).click();
+    await page.getByRole("button", { name: "Continue career" }).click();
+  }
   await expect(page.locator(".final-screen h1")).toBeFocused();
+  await expect(
+    page.getByText("Soldier", { exact: true }).first(),
+  ).toBeVisible();
 }
 
 async function selectChanceDecision(page: Page) {

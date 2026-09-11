@@ -163,21 +163,22 @@ export function FinalScreen({ colorMode, onRestart, state }: FinalScreenProps) {
           </div>
         </section>
 
-        <section className="final-screen__achievements">
-          <h2>{summary.labels.achievements}</h2>
-          {summary.achievements.length > 0 ? (
+        {summary.bonuses.length > 0 ? (
+          <section className="final-screen__achievements final-screen__bonuses">
+            <h2>{summary.labels.bonuses}</h2>
             <ul>
-              {summary.achievements.map((achievement) => (
-                <AchievementTrophy
-                  achievement={achievement}
-                  key={achievement.name}
-                />
+              {summary.bonuses.map((bonus) => (
+                <li key={bonus.name}>
+                  <DistinctionIcon
+                    className="final-screen__achievement-icon"
+                    path={bonus.iconPath}
+                  />
+                  <strong>{bonus.name}</strong>
+                </li>
               ))}
             </ul>
-          ) : (
-            <p>{t("finalScreen.noAchievements")}</p>
-          )}
-        </section>
+          </section>
+        ) : null}
 
         <section className="final-screen__stats">
           <h2>{summary.labels.stats}</h2>
@@ -191,6 +192,20 @@ export function FinalScreen({ colorMode, onRestart, state }: FinalScreenProps) {
             ))}
           </div>
         </section>
+
+        {summary.achievements.length > 0 ? (
+          <section className="final-screen__achievements">
+            <h2>{summary.labels.achievements}</h2>
+            <ul>
+              {summary.achievements.map((achievement) => (
+                <AchievementTrophy
+                  achievement={achievement}
+                  key={achievement.name}
+                />
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
         <div className="final-screen__actions">
           <button

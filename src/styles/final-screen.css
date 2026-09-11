@@ -311,6 +311,20 @@
   gap: 0.2rem;
 }
 
+.final-screen__bonuses {
+  gap: 0.15rem;
+}
+
+.final-screen__bonuses ul {
+  margin: 0;
+  gap: 0.4rem;
+}
+
+.final-screen__bonuses li {
+  align-items: center;
+  padding-block: 0.15rem;
+}
+
 .final-screen__achievements li strong {
   color: var(--color-accent);
   font-size: 0.72rem;

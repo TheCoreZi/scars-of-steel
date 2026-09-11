@@ -1,10 +1,6 @@
 import { getAssetPath } from "../assets";
 import { translate } from "../i18n";
-import {
-  achievementDescriptionKeys,
-  achievementNameKeys,
-  getAchievementIconPath,
-} from "./achievements";
+import { achievementCatalog, getAchievementIconPath } from "./achievements";
 import { getNicknameKey } from "./nicknames";
 import {
   factionNameKeys,
@@ -48,6 +44,7 @@ export interface FinalSummary {
   ageLabel: string;
   battleLosses: number;
   battleWins: number;
+  bonuses: readonly Pick<FinalAchievementSummary, "iconPath" | "name">[];
   faction: Faction;
   factionImagePath: string;
   factionName: string;
@@ -56,6 +53,7 @@ export interface FinalSummary {
   labels: {
     achievements: string;
     battleRecord: string;
+    bonuses: string;
     factionTrust: string;
     fame: string;
     losses: string;
@@ -91,17 +89,26 @@ export function createFinalSummary(state: FinalGameState): FinalSummary {
 
   return {
     achievements: state.history.achievementIds.map((id) => ({
-      description: translate(achievementDescriptionKeys[id]),
+      description: translate(achievementCatalog[id].descriptionKey),
       iconPath: getAchievementIconPath(id),
-      name: translate(achievementNameKeys[id]),
+      name: translate(achievementCatalog[id].nameKey),
     })),
     age: state.pilot.age,
-    ageLabel: translate("interface:finalScreen.careerDuration", {
-      age: state.pilot.age,
-      count: careerYears,
-    }),
+    ageLabel: translate(
+      state.endReason === "dead"
+        ? "interface:finalScreen.careerDurationDeath"
+        : "interface:finalScreen.careerDuration",
+      {
+        age: state.pilot.age,
+        count: careerYears,
+      },
+    ),
     battleLosses: state.history.battles.losses,
     battleWins: state.history.battles.wins,
+    bonuses: (state.pilot.bonusIds ?? []).map((id) => ({
+      iconPath: getAssetPath(`images/bonuses/${id}.png`),
+      name: translate(`interface:annualReport.bonuses.${id}.name`),
+    })),
     faction: state.pilot.faction,
     factionImagePath: getAssetPath(
       `images/factions/${state.pilot.faction}.png`,
@@ -112,6 +119,7 @@ export function createFinalSummary(state: FinalGameState): FinalSummary {
     labels: {
       achievements: translate("interface:finalScreen.achievements"),
       battleRecord: translate("interface:finalScreen.battleRecord"),
+      bonuses: translate("interface:finalScreen.bonuses"),
       factionTrust: translate("interface:finalScreen.factionTrust"),
       fame: translate("interface:finalScreen.fame"),
       losses: translate("interface:finalScreen.losses"),

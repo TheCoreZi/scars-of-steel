@@ -50,7 +50,7 @@ export function DecisionResolutionScreen({
   } as CSSProperties;
 
   useEffect(() => {
-    headingRef.current?.focus();
+    headingRef.current?.focus({ preventScroll: true });
 
     const indicatorTimeout = reduceMotion
       ? undefined

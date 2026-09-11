@@ -1,3 +1,4 @@
+import { achievementCatalog } from "../domain/achievements";
 import { getEvent, getOutcome } from "../domain/events";
 import { getNicknameKey } from "../domain/nicknames";
 import { getTitleDefinition } from "../domain/titles";
@@ -17,7 +18,6 @@ import type {
 } from "../domain/types";
 
 const gameStorageKey = "scars-of-steel:game-data";
-const schemaVersion = 2;
 
 const aspirations = ["commander", "shadow", "war-hero", "zoid-ace"] as const;
 const careerEndReasons = [
@@ -67,7 +67,6 @@ export interface CompletedGame {
 export interface StoredGameData {
   activeGame: ActiveGameState | null;
   completedGames: readonly CompletedGame[];
-  version: typeof schemaVersion;
 }
 
 export function createCompletedGame(state: FinalGameState): CompletedGame {
@@ -75,7 +74,7 @@ export function createCompletedGame(state: FinalGameState): CompletedGame {
 }
 
 export function createEmptyGameData(): StoredGameData {
-  return { activeGame: null, completedGames: [], version: schemaVersion };
+  return { activeGame: null, completedGames: [] };
 }
 
 export function loadGameData(): StoredGameData {
@@ -100,7 +99,6 @@ export function saveGameData(data: StoredGameData): void {
 function isStoredGameData(value: unknown): value is StoredGameData {
   return (
     isRecord(value) &&
-    value.version === schemaVersion &&
     (value.activeGame === null || isActiveGame(value.activeGame)) &&
     Array.isArray(value.completedGames) &&
     value.completedGames.every(isCompletedGame)
@@ -172,9 +170,7 @@ function isCareerHistory(value: unknown): value is CareerHistory {
   return (
     isRecord(value) &&
     Array.isArray(value.achievementIds) &&
-    value.achievementIds.every(
-      (id) => typeof id === "string" && id.startsWith("achievement:"),
-    ) &&
+    value.achievementIds.every(isKnownAchievementId) &&
     isCareerBattles(value.battles) &&
     Array.isArray(value.completedEventIds) &&
     value.completedEventIds.every(isKnownEventId)
@@ -196,10 +192,9 @@ function isResolvedYear(
 ): value is ResolvedYear {
   if (
     !isRecord(value) ||
+    !isAnnualReport(value.annualReport) ||
     !Array.isArray(value.achievementIds) ||
-    !value.achievementIds.every(
-      (id) => typeof id === "string" && id.startsWith("achievement:"),
-    ) ||
+    !value.achievementIds.every(isKnownAchievementId) ||
     !isBattleRecord(value.battleRecord) ||
     !Array.isArray(value.changes) ||
     !value.changes.every(isAppliedChange) ||
@@ -215,12 +210,20 @@ function isResolvedYear(
   }
 
   try {
-    const outcome = getOutcome(
-      getEvent(eventId),
-      value.outcome.id as `outcome:${string}`,
+    const event = getEvent(eventId);
+    const outcomeId = value.outcome.id as `outcome:${string}`;
+    const outcome = getOutcome(outcomeId);
+    return (
+      value.outcome.narrativeKey === outcome.narrativeKey &&
+      JSON.stringify(value.outcome.effects) ===
+        JSON.stringify(outcome.effects) &&
+      event.decisions.some((decision) =>
+        decision.kind === "safe"
+          ? decision.outcomeId === outcomeId
+          : decision.successOutcomeId === outcomeId ||
+            decision.failureOutcomeId === outcomeId,
+      )
     );
-
-    return JSON.stringify(value.outcome) === JSON.stringify(outcome);
   } catch {
     return false;
   }
@@ -239,6 +242,17 @@ function isBattleRecord(value: unknown): boolean {
 }
 
 function isAppliedChange(value: unknown): value is AppliedChange {
+  if (
+    isRecord(value) &&
+    (value.target === "zoid-upgrades" || value.target === "zoid-power")
+  )
+    return (
+      isKnownZoidId(value.zoidId) &&
+      (value.target === "zoid-upgrades"
+        ? isNonNegativeInteger(value.current) &&
+          isNonNegativeInteger(value.previous)
+        : isBoundedValue(value.current) && isBoundedValue(value.previous))
+    );
   if (
     !isRecord(value) ||
     !isBoundedValue(value.current) ||
@@ -278,6 +292,20 @@ function isPilot(value: unknown): value is Pilot {
   return (
     isRecord(value) &&
     Number.isSafeInteger(value.age) &&
+    (value.injuryCount === undefined ||
+      isNonNegativeInteger(value.injuryCount)) &&
+    (value.bonusIds === undefined ||
+      (Array.isArray(value.bonusIds) &&
+        value.bonusIds.every((id) => id === "organoid"))) &&
+    (value.zoidProgress === undefined ||
+      (isRecord(value.zoidProgress) &&
+        Object.entries(value.zoidProgress).every(
+          ([id, progress]) =>
+            isKnownZoidId(id) &&
+            isRecord(progress) &&
+            isBoundedValue(progress.power) &&
+            isNonNegativeInteger(progress.upgrades),
+        ))) &&
     isMember(value.aspiration, aspirations) &&
     isBoundedValue(value.basePotential) &&
     isRecord(value.career) &&
@@ -359,8 +387,45 @@ function isKnownZoidId(value: unknown): value is ZoidId {
   }
 }
 
+function isKnownAchievementId(
+  value: unknown,
+): value is keyof typeof achievementCatalog {
+  return typeof value === "string" && value in achievementCatalog;
+}
+
 function isBoundedValue(value: unknown): value is number {
-  return typeof value === "number" && value >= 0 && value <= 100;
+  return (
+    typeof value === "number" &&
+    Number.isFinite(value) &&
+    value >= 0 &&
+    value <= 100
+  );
+}
+
+function isAnnualReport(value: unknown): boolean {
+  return (
+    value === undefined ||
+    (isRecord(value) &&
+      Number.isSafeInteger(value.growth) &&
+      ["injured", "promoted", "zoidDamaged"].every(
+        (key) => typeof value[key] === "boolean",
+      ) &&
+      Array.isArray(value.bonusIds) &&
+      value.bonusIds.every((id) => id === "organoid") &&
+      Array.isArray(value.rolls) &&
+      value.rolls.every(
+        (roll) =>
+          isRecord(roll) &&
+          isMember(roll.kind, ["death", "recovery", "repair"]) &&
+          isBoundedValue(roll.chance) &&
+          isBoundedValue(roll.roll) &&
+          typeof roll.success === "boolean" &&
+          roll.success === roll.roll < roll.chance &&
+          (roll.kind === "repair"
+            ? isKnownZoidId(roll.zoidId)
+            : roll.zoidId === undefined),
+      ))
+  );
 }
 
 function isNonNegativeInteger(value: unknown): boolean {

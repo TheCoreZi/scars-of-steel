@@ -16,11 +16,9 @@ import {
 const zero = createBoundedValue(0);
 
 const outcome = {
+  effects: [{ kind: "grant-zoid", poolId: "standard" }],
   id: "outcome:standard-zoid",
   narrativeKey: "outcomes:academy.standardZoid",
-  statChanges: [],
-  tags: [],
-  zoidReward: "standard",
 } as const satisfies Outcome;
 
 const safeDecision = {
@@ -28,13 +26,13 @@ const safeDecision = {
   id: "decision:accept-standard",
   kind: "safe",
   labelKey: "decisions:academy.acceptStandard.label",
-  outcome,
+  outcomeId: outcome.id,
 } as const satisfies SafeDecision;
 
 const chanceDecision = {
   baseSuccessChance: createBoundedValue(40),
   descriptionKey: "decisions:academy.controlRare.description",
-  failureOutcome: outcome,
+  failureOutcomeId: outcome.id,
   id: "decision:control-rare",
   kind: "chance",
   labelKey: "decisions:academy.controlRare.label",
@@ -42,7 +40,7 @@ const chanceDecision = {
     { stat: "piloting", weight: 0.3 },
     { stat: "synchrony", weight: 0.15 },
   ],
-  successOutcome: outcome,
+  successOutcomeId: outcome.id,
 } as const satisfies ChanceDecision;
 
 const stats = {

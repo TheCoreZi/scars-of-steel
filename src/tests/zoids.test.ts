@@ -1,10 +1,17 @@
 import { describe, expect, test, vi } from "vitest";
 
-import { getZoid, validateZoids, zoids } from "../domain/zoids";
+import { createInitialPilot } from "../domain/pilot";
+import { createBoundedValue, type Pilot } from "../domain/types";
 import {
-  hasInitialZoidPool,
-  initialZoidPools,
-  selectInitialZoid,
+  getZoid,
+  getEffectiveZoidPower,
+  validateZoids,
+  zoids,
+} from "../domain/zoids";
+import {
+  zoidPoolHasEntries,
+  zoidPools,
+  selectZoidByCategory,
   selectZoidFromPool,
   validateZoidPools,
   type ZoidPools,
@@ -13,9 +20,9 @@ import { createSeededRandomGenerator } from "../domain/random";
 import { i18n, supportedLanguages } from "../i18n";
 
 describe("initial Zoid catalog", () => {
-  test("defines 56 unique Zoids", () => {
-    expect(zoids).toHaveLength(56);
-    expect(new Set(zoids.map((zoid) => zoid.id)).size).toBe(56);
+  test("defines 57 unique Zoids including the herd reward", () => {
+    expect(zoids).toHaveLength(57);
+    expect(new Set(zoids.map((zoid) => zoid.id)).size).toBe(57);
   });
 
   test("keeps every initial pool separate from the catalog", () => {
@@ -26,7 +33,7 @@ describe("initial Zoid catalog", () => {
         "super-rare",
         "weak",
       ] as const) {
-        expect(hasInitialZoidPool(category, faction)).toBe(true);
+        expect(zoidPoolHasEntries(category, faction)).toBe(true);
       }
     }
   });
@@ -37,12 +44,12 @@ describe("initial Zoid catalog", () => {
     );
   });
 
-  test("associates 56 existing sprites without substitutions", () => {
+  test("associates all 57 sprites without substitutions", () => {
     const illustratedZoids = zoids.filter((zoid) => zoid.imagePath);
 
-    expect(illustratedZoids).toHaveLength(56);
+    expect(illustratedZoids).toHaveLength(57);
     expect(new Set(illustratedZoids.map((zoid) => zoid.imagePath)).size).toBe(
-      56,
+      57,
     );
     expect(
       illustratedZoids.every((zoid) =>
@@ -52,6 +59,9 @@ describe("initial Zoid catalog", () => {
   });
 
   test("finds Zoids by identifier", () => {
+    expect(getZoid("zoid:elephantus")).toMatchObject({
+      imagePath: "/images/zoids/elephantus.png",
+    });
     expect(getZoid("zoid:command-wolf")).toMatchObject({
       basePower: 35,
       faction: "helic",
@@ -64,22 +74,22 @@ describe("initial Zoid catalog", () => {
   });
 
   test("validates the initial pools against the catalog", () => {
-    expect(() => validateZoidPools(initialZoidPools)).not.toThrow();
+    expect(() => validateZoidPools(zoidPools)).not.toThrow();
     expect(
-      Object.values(initialZoidPools).flatMap((categories) =>
+      Object.values(zoidPools).flatMap((categories) =>
         Object.values(categories).flat(),
       ),
     ).toHaveLength(56);
   });
 
   test("selects a Zoid with default pool weights", () => {
-    const zoid = selectInitialZoid(
+    const zoid = selectZoidByCategory(
       "rare",
       "helic",
       createSeededRandomGenerator(42),
     );
 
-    expect(initialZoidPools.helic.rare.map(({ id }) => id)).toContain(zoid.id);
+    expect(zoidPools.helic.rare.map(({ id }) => id)).toContain(zoid.id);
   });
 
   test("passes default and explicit weights to the random generator", () => {
@@ -99,10 +109,10 @@ describe("initial Zoid catalog", () => {
 
   test("rejects an invalid explicit pool weight", () => {
     const pools = {
-      ...initialZoidPools,
+      ...zoidPools,
       helic: {
-        ...initialZoidPools.helic,
-        rare: initialZoidPools.helic.rare.map((entry, index) =>
+        ...zoidPools.helic,
+        rare: zoidPools.helic.rare.map((entry, index) =>
           index === 0 ? { ...entry, weight: 0 } : entry,
         ),
       },
@@ -117,5 +127,39 @@ describe("initial Zoid catalog", () => {
         expect(i18n.exists(zoid.nameKey, { lng: language })).toBe(true);
       }
     }
+  });
+});
+
+describe("Zoid improvements", () => {
+  test.each([
+    [0, 40],
+    [1, 46],
+    [2, 52],
+    [3, 58],
+    [20, 100],
+  ])("applies %s improvements as a linear power bonus", (upgrades, power) => {
+    const initialPilot = createInitialPilot({
+      aspiration: "zoid-ace",
+      faction: "helic",
+      id: "pilot:zoid-power",
+      name: "Lena",
+    });
+    const pilot: Pilot = {
+      ...initialPilot,
+      zoidProgress: {
+        "zoid:command-wolf": {
+          power: createBoundedValue(40),
+          upgrades,
+        },
+      },
+      zoids: {
+        damagedIds: [],
+        reserveIds: [],
+        signatureId: "zoid:command-wolf",
+      },
+    };
+
+    expect(getEffectiveZoidPower(pilot, "zoid:command-wolf")).toBe(power);
+    expect(pilot.zoidProgress?.["zoid:command-wolf"]?.power).toBe(40);
   });
 });

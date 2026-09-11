@@ -9,23 +9,13 @@ import {
   type Outcome,
   type OutcomeId,
   type Pilot,
-  type StatChange,
   type Stats,
 } from "./types";
-import { hasInitialZoidPool } from "./zoidPools";
-
-const outcome = (
-  id: string,
-  zoidReward: Outcome["zoidReward"],
-  statChanges: readonly StatChange[],
-  tags: readonly Outcome["tags"][number][] = [],
-): Outcome => ({
-  id: `outcome:${id}`,
-  narrativeKey: `outcomes:academy.${id}`,
-  statChanges,
-  tags,
-  zoidReward,
-});
+import { isZoidRewardPoolAvailable } from "./zoidPools";
+import { academyEvents } from "./academyEvents";
+import { initialOutcomeCatalog } from "./initialOutcomes";
+import { academyOutcomeCatalog } from "./academyOutcomes";
+import { calculateSuccessChance } from "./probability";
 
 const firstExercises = {
   decisions: [
@@ -35,19 +25,13 @@ const firstExercises = {
       id: "decision:first-exercises-accept-standard",
       kind: "safe",
       labelKey: "decisions:academy.firstExercises.acceptStandard.label",
-      outcome: outcome("firstExercisesAcceptStandard", "standard", [
-        { amount: 2, stat: "piloting", target: "stat" },
-        { amount: 3, stat: "synchrony", target: "stat" },
-      ]),
+      outcomeId: "outcome:firstExercisesAcceptStandard",
     },
     {
       baseSuccessChance: createBoundedValue(40),
       descriptionKey:
         "decisions:academy.firstExercises.controlRare.description",
-      failureOutcome: outcome("firstExercisesControlRareFailure", "weak", [
-        { amount: -3, stat: "charisma", target: "stat" },
-        { amount: -1, stat: "piloting", target: "stat" },
-      ]),
+      failureOutcomeId: "outcome:firstExercisesControlRareFailure",
       id: "decision:first-exercises-control-rare",
       kind: "chance",
       labelKey: "decisions:academy.firstExercises.controlRare.label",
@@ -55,11 +39,7 @@ const firstExercises = {
         { stat: "piloting", weight: 0.3 },
         { stat: "synchrony", weight: 0.15 },
       ],
-      successOutcome: outcome("firstExercisesControlRareSuccess", "rare", [
-        { amount: 2, stat: "charisma", target: "stat" },
-        { amount: 2, stat: "piloting", target: "stat" },
-        { amount: 2, stat: "synchrony", target: "stat" },
-      ]),
+      successOutcomeId: "outcome:firstExercisesControlRareSuccess",
     },
     {
       descriptionKey:
@@ -67,10 +47,7 @@ const firstExercises = {
       id: "decision:first-exercises-request-standard",
       kind: "safe",
       labelKey: "decisions:academy.firstExercises.requestStandard.label",
-      outcome: outcome("firstExercisesRequestStandard", "standard", [
-        { amount: -2, stat: "charisma", target: "stat" },
-        { amount: 3, stat: "synchrony", target: "stat" },
-      ]),
+      outcomeId: "outcome:firstExercisesRequestStandard",
     },
   ],
   id: "event:first-exercises",
@@ -83,10 +60,7 @@ const strayZoid = {
     {
       baseSuccessChance: createBoundedValue(30),
       descriptionKey: "decisions:academy.strayZoid.capture.description",
-      failureOutcome: outcome("strayZoidCaptureFailure", "weak", [
-        { amount: -2, stat: "piloting", target: "stat" },
-        { amount: -2, stat: "strength", target: "stat" },
-      ]),
+      failureOutcomeId: "outcome:strayZoidCaptureFailure",
       id: "decision:stray-zoid-capture",
       kind: "chance",
       labelKey: "decisions:academy.strayZoid.capture.label",
@@ -94,20 +68,12 @@ const strayZoid = {
         { stat: "tactics", weight: 0.3 },
         { stat: "piloting", weight: 0.15 },
       ],
-      successOutcome: outcome("strayZoidCaptureSuccess", "rare", [
-        { amount: 2, stat: "charisma", target: "stat" },
-        { amount: 2, stat: "piloting", target: "stat" },
-        { amount: 3, stat: "synchrony", target: "stat" },
-      ]),
+      successOutcomeId: "outcome:strayZoidCaptureSuccess",
     },
     {
       baseSuccessChance: createBoundedValue(40),
       descriptionKey: "decisions:academy.strayZoid.destroy.description",
-      failureOutcome: outcome("strayZoidDestroyFailure", "weak", [
-        { amount: -3, stat: "piloting", target: "stat" },
-        { amount: -1, stat: "strength", target: "stat" },
-        { amount: -1, stat: "synchrony", target: "stat" },
-      ]),
+      failureOutcomeId: "outcome:strayZoidDestroyFailure",
       id: "decision:stray-zoid-destroy",
       kind: "chance",
       labelKey: "decisions:academy.strayZoid.destroy.label",
@@ -115,21 +81,14 @@ const strayZoid = {
         { stat: "tactics", weight: 0.3 },
         { stat: "piloting", weight: 0.15 },
       ],
-      successOutcome: outcome("strayZoidDestroySuccess", "standard", [
-        { amount: 3, stat: "piloting", target: "stat" },
-        { amount: 2, stat: "strength", target: "stat" },
-      ]),
+      successOutcomeId: "outcome:strayZoidDestroySuccess",
     },
     {
       descriptionKey: "decisions:academy.strayZoid.protect.description",
       id: "decision:stray-zoid-protect",
       kind: "safe",
       labelKey: "decisions:academy.strayZoid.protect.label",
-      outcome: outcome("strayZoidProtect", "standard", [
-        { amount: 1, stat: "tactics", target: "stat" },
-        { amount: 1, stat: "technique", target: "stat" },
-        { amount: 2, stat: "charisma", target: "stat" },
-      ]),
+      outcomeId: "outcome:strayZoidProtect",
     },
   ],
   id: "event:stray-zoid",
@@ -144,35 +103,19 @@ const mechanicsProgram = {
       id: "decision:mechanics-program-join",
       kind: "safe",
       labelKey: "decisions:academy.mechanicsProgram.join.label",
-      outcome: outcome(
-        "mechanicsProgramJoin",
-        "rare",
-        [
-          { amount: -2, stat: "piloting", target: "stat" },
-          { amount: 2, stat: "synchrony", target: "stat" },
-          { amount: 4, stat: "technique", target: "stat" },
-        ],
-        ["outcome-tag:mechanics-program"],
-      ),
+      outcomeId: "outcome:mechanicsProgramJoin",
     },
     {
       descriptionKey: "decisions:academy.mechanicsProgram.reject.description",
       id: "decision:mechanics-program-reject",
       kind: "safe",
       labelKey: "decisions:academy.mechanicsProgram.reject.label",
-      outcome: outcome("mechanicsProgramReject", "standard", [
-        { amount: 3, stat: "piloting", target: "stat" },
-        { amount: 2, stat: "strength", target: "stat" },
-      ]),
+      outcomeId: "outcome:mechanicsProgramReject",
     },
     {
       baseSuccessChance: createBoundedValue(60),
       descriptionKey: "decisions:academy.mechanicsProgram.help.description",
-      failureOutcome: outcome("mechanicsProgramHelpFailure", "weak", [
-        { amount: -2, stat: "piloting", target: "stat" },
-        { amount: -3, stat: "strength", target: "stat" },
-        { amount: -2, stat: "technique", target: "stat" },
-      ]),
+      failureOutcomeId: "outcome:mechanicsProgramHelpFailure",
       id: "decision:mechanics-program-help",
       kind: "chance",
       labelKey: "decisions:academy.mechanicsProgram.help.label",
@@ -180,11 +123,7 @@ const mechanicsProgram = {
         { stat: "technique", weight: 0.3 },
         { stat: "strength", weight: 0.15 },
       ],
-      successOutcome: outcome("mechanicsProgramHelpSuccess", "rare", [
-        { amount: 2, stat: "piloting", target: "stat" },
-        { amount: 2, stat: "synchrony", target: "stat" },
-        { amount: 4, stat: "technique", target: "stat" },
-      ]),
+      successOutcomeId: "outcome:mechanicsProgramHelpSuccess",
     },
   ],
   id: "event:mechanics-program",
@@ -199,30 +138,12 @@ const veteranOffer = {
       id: "decision:veteran-offer-accept",
       kind: "safe",
       labelKey: "decisions:academy.veteranOffer.accept.label",
-      outcome: outcome(
-        "veteranOfferAccept",
-        "super-rare",
-        [
-          { amount: 2, indicator: "fame", target: "career-indicator" },
-          { amount: 2, stat: "tactics", target: "stat" },
-          { amount: -2, stat: "strength", target: "stat" },
-        ],
-        ["outcome-tag:veteran-debt"],
-      ),
+      outcomeId: "outcome:veteranOfferAccept",
     },
     {
       baseSuccessChance: createBoundedValue(60),
       descriptionKey: "decisions:academy.veteranOffer.report.description",
-      failureOutcome: outcome(
-        "veteranOfferReportFailure",
-        "weak",
-        [
-          { amount: -3, indicator: "fame", target: "career-indicator" },
-          { amount: -2, stat: "charisma", target: "stat" },
-          { amount: -1, stat: "tactics", target: "stat" },
-        ],
-        ["outcome-tag:veteran-discredit"],
-      ),
+      failureOutcomeId: "outcome:veteranOfferReportFailure",
       id: "decision:veteran-offer-report",
       kind: "chance",
       labelKey: "decisions:academy.veteranOffer.report.label",
@@ -230,31 +151,14 @@ const veteranOffer = {
         { stat: "charisma", weight: 0.3 },
         { stat: "tactics", weight: 0.15 },
       ],
-      successOutcome: outcome(
-        "veteranOfferReportSuccess",
-        "standard",
-        [
-          { amount: 3, indicator: "fame", target: "career-indicator" },
-          { amount: 2, stat: "charisma", target: "stat" },
-          { amount: 1, stat: "tactics", target: "stat" },
-        ],
-        ["outcome-tag:reported-veteran"],
-      ),
+      successOutcomeId: "outcome:veteranOfferReportSuccess",
     },
     {
       descriptionKey: "decisions:academy.veteranOffer.silence.description",
       id: "decision:veteran-offer-silence",
       kind: "safe",
       labelKey: "decisions:academy.veteranOffer.silence.label",
-      outcome: outcome(
-        "veteranOfferSilence",
-        "standard",
-        [
-          { amount: 2, stat: "tactics", target: "stat" },
-          { amount: 3, stat: "synchrony", target: "stat" },
-        ],
-        ["outcome-tag:veteran-secret"],
-      ),
+      outcomeId: "outcome:veteranOfferSilence",
     },
   ],
   id: "event:veteran-offer",
@@ -268,17 +172,7 @@ const humanitarianMission = {
       baseSuccessChance: createBoundedValue(60),
       descriptionKey:
         "decisions:academy.humanitarianMission.volunteer.description",
-      failureOutcome: outcome(
-        "humanitarianMissionVolunteerFailure",
-        "weak",
-        [
-          { amount: 1, indicator: "fame", target: "career-indicator" },
-          { amount: 1, stat: "charisma", target: "stat" },
-          { amount: -2, stat: "piloting", target: "stat" },
-          { amount: -4, stat: "strength", target: "stat" },
-        ],
-        ["outcome-tag:injured", "outcome-tag:humanitarian-aid"],
-      ),
+      failureOutcomeId: "outcome:humanitarianMissionVolunteerFailure",
       id: "decision:humanitarian-mission-volunteer",
       kind: "chance",
       labelKey: "decisions:academy.humanitarianMission.volunteer.label",
@@ -286,18 +180,7 @@ const humanitarianMission = {
         { stat: "charisma", weight: 0.3 },
         { stat: "strength", weight: 0.15 },
       ],
-      successOutcome: outcome(
-        "humanitarianMissionVolunteerSuccess",
-        "rare",
-        [
-          { amount: 2, indicator: "fame", target: "career-indicator" },
-          { amount: 3, stat: "charisma", target: "stat" },
-          { amount: -2, stat: "piloting", target: "stat" },
-          { amount: -2, stat: "strength", target: "stat" },
-          { amount: 2, stat: "synchrony", target: "stat" },
-        ],
-        ["outcome-tag:humanitarian-aid"],
-      ),
+      successOutcomeId: "outcome:humanitarianMissionVolunteerSuccess",
     },
     {
       descriptionKey:
@@ -305,11 +188,7 @@ const humanitarianMission = {
       id: "decision:humanitarian-mission-ignore",
       kind: "safe",
       labelKey: "decisions:academy.humanitarianMission.ignore.label",
-      outcome: outcome("humanitarianMissionIgnore", "standard", [
-        { amount: -2, stat: "charisma", target: "stat" },
-        { amount: 3, stat: "piloting", target: "stat" },
-        { amount: 3, stat: "strength", target: "stat" },
-      ]),
+      outcomeId: "outcome:humanitarianMissionIgnore",
     },
     {
       descriptionKey:
@@ -317,11 +196,7 @@ const humanitarianMission = {
       id: "decision:humanitarian-mission-organize",
       kind: "safe",
       labelKey: "decisions:academy.humanitarianMission.organize.label",
-      outcome: outcome("humanitarianMissionOrganize", "standard", [
-        { amount: 3, stat: "tactics", target: "stat" },
-        { amount: 2, stat: "strength", target: "stat" },
-        { amount: -2, stat: "synchrony", target: "stat" },
-      ]),
+      outcomeId: "outcome:humanitarianMissionOrganize",
     },
   ],
   id: "event:humanitarian-mission",
@@ -337,37 +212,31 @@ export const eventCatalog = {
   veteranOffer,
 } as const satisfies Record<string, DecisionEvent>;
 
-const events = Object.values(eventCatalog);
+export const events = [...Object.values(eventCatalog), ...academyEvents];
+export const outcomeCatalog = {
+  ...initialOutcomeCatalog,
+  ...academyOutcomeCatalog,
+} as const satisfies Record<OutcomeId, Outcome>;
+const outcomeById: Readonly<Record<OutcomeId, Outcome>> = outcomeCatalog;
 
 const eventById = new Map<EventId, DecisionEvent>(
   events.map((event) => [event.id, event]),
 );
-const defaultProbabilityNeutralStat = 2;
-const probabilityStatImpactScale = 8;
 
 export function calculateAdjustedSuccessChance(
   decision: ChanceDecision,
   stats: Stats,
+  potential = 0,
 ) {
-  const neutralStat =
-    decision.probabilityNeutralStat ?? defaultProbabilityNeutralStat;
-  const statImpact = decision.probabilityStats.reduce(
-    (total, { stat, weight }) => {
-      const distance = stats[stat] - neutralStat;
-
-      return (
-        total +
-        weight *
-          probabilityStatImpactScale *
-          Math.sign(distance) *
-          Math.sqrt(Math.abs(distance))
-      );
-    },
-    0,
+  return createBoundedValue(
+    calculateSuccessChance(
+      decision.baseSuccessChance,
+      decision.probabilityStats,
+      stats,
+      potential,
+      decision.probabilityNeutralStat,
+    ),
   );
-  const adjustedChance = Math.round(decision.baseSuccessChance + statImpact);
-
-  return createBoundedValue(Math.min(95, Math.max(5, adjustedChance)));
 }
 
 export function getEvent(id: EventId): DecisionEvent {
@@ -380,23 +249,11 @@ export function getEvent(id: EventId): DecisionEvent {
   return event;
 }
 
-export function getOutcome(
-  event: DecisionEvent,
-  outcomeId: OutcomeId,
-): Outcome {
-  for (const decision of event.decisions) {
-    const outcomes =
-      decision.kind === "safe"
-        ? [decision.outcome]
-        : [decision.successOutcome, decision.failureOutcome];
-    const result = outcomes.find((outcome) => outcome.id === outcomeId);
-
-    if (result) {
-      return result;
-    }
-  }
-
-  throw new RangeError(`Unknown outcome identifier: ${outcomeId}.`);
+export function getOutcome(outcomeId: OutcomeId): Outcome {
+  const outcome = outcomeById[outcomeId];
+  if (!outcome)
+    throw new RangeError(`Unknown outcome identifier: ${outcomeId}.`);
+  return outcome;
 }
 
 export function resolveDecision(
@@ -408,13 +265,14 @@ export function resolveDecision(
     return {
       decisionId: decision.id,
       kind: "safe",
-      outcomeId: decision.outcome.id,
+      outcomeId: decision.outcomeId,
     };
   }
 
   const adjustedSuccessChance = calculateAdjustedSuccessChance(
     decision,
     pilot.stats,
+    pilot.potential,
   );
   const roll = createBoundedValue(random.probability() * 100);
   const result = roll < adjustedSuccessChance ? "success" : "failure";
@@ -425,8 +283,8 @@ export function resolveDecision(
     kind: "chance",
     outcomeId:
       result === "success"
-        ? decision.successOutcome.id
-        : decision.failureOutcome.id,
+        ? decision.successOutcomeId
+        : decision.failureOutcomeId,
     result,
     roll,
   };
@@ -461,12 +319,12 @@ export function validateEvents(events: readonly DecisionEvent[]): void {
 
 function validateDecision(
   decision: Decision,
-  outcomeIds: Set<OutcomeId>,
+  referencedOutcomeIds: Set<OutcomeId>,
 ): void {
-  const outcomes =
+  const outcomeIds =
     decision.kind === "safe"
-      ? [decision.outcome]
-      : [decision.successOutcome, decision.failureOutcome];
+      ? [decision.outcomeId]
+      : [decision.successOutcomeId, decision.failureOutcomeId];
 
   if (decision.kind === "chance") {
     const probabilityStatNames = decision.probabilityStats.map(
@@ -510,37 +368,41 @@ function validateDecision(
     throw new TypeError(`Decision ${decision.id} has an invalid probability.`);
   }
 
-  for (const result of outcomes) {
-    if (outcomeIds.has(result.id)) {
-      throw new TypeError(`Duplicate outcome identifier: ${result.id}.`);
-    }
-
-    if (result.statChanges.length < 1) {
-      throw new TypeError(
-        `Outcome ${result.id} must include at least one change.`,
-      );
-    }
-
-    if (
-      result.statChanges.some(
-        ({ amount }) => !Number.isFinite(amount) || amount === 0,
-      )
-    ) {
-      throw new TypeError(`Outcome ${result.id} has an invalid change.`);
-    }
-
-    if (
-      result.zoidReward &&
-      (!hasInitialZoidPool(result.zoidReward, "guylos") ||
-        !hasInitialZoidPool(result.zoidReward, "helic"))
-    ) {
-      throw new TypeError(
-        `Outcome ${result.id} uses an unavailable Zoid category.`,
-      );
-    }
-
-    outcomeIds.add(result.id);
+  for (const outcomeId of outcomeIds) {
+    if (referencedOutcomeIds.has(outcomeId))
+      throw new TypeError(`Duplicate outcome identifier: ${outcomeId}.`);
+    if (!outcomeById[outcomeId])
+      throw new TypeError(`Decision ${decision.id} references ${outcomeId}.`);
+    referencedOutcomeIds.add(outcomeId);
   }
 }
 
+export function validateOutcomes(
+  outcomes: Readonly<Record<OutcomeId, Outcome>>,
+): void {
+  for (const [id, outcome] of Object.entries(outcomes)) {
+    if (id !== outcome.id)
+      throw new TypeError(
+        `Outcome catalog key ${id} does not match its identifier.`,
+      );
+    if (outcome.effects.length < 1)
+      throw new TypeError(`Outcome ${id} must include at least one effect.`);
+    for (const effect of outcome.effects) {
+      if (
+        "amount" in effect &&
+        (!Number.isFinite(effect.amount) || effect.amount === 0)
+      )
+        throw new TypeError(`Outcome ${id} has an invalid effect amount.`);
+      if (
+        (effect.kind === "grant-zoid" ||
+          effect.kind === "replace-signature-zoid") &&
+        (!isZoidRewardPoolAvailable(effect.poolId, "guylos") ||
+          !isZoidRewardPoolAvailable(effect.poolId, "helic"))
+      )
+        throw new TypeError(`Outcome ${id} uses an unavailable Zoid pool.`);
+    }
+  }
+}
+
+validateOutcomes(outcomeCatalog);
 validateEvents(events);

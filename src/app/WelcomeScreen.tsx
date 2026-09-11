@@ -2,6 +2,7 @@ import { useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getAssetPath } from "../assets";
+import { events } from "../domain/events";
 import { militaryRankNameKeys, specialRankNameKeys } from "../domain/pilot";
 import { getRankInsignia } from "../domain/ranks";
 import { getTitleDefinition } from "../domain/titles";
@@ -13,9 +14,8 @@ import { RankInsignia } from "./RankInsignia";
 import { Badge, Button, Panel } from "./UiPrimitives";
 
 const welcomeFacts = {
-  decisions: 5,
+  decisions: events.length,
   factions: 2,
-  paths: 21,
   wars: 1,
 } as const;
 const serviceRecordIcons = { fame: "★", potential: "⚡" } as const;
@@ -40,6 +40,16 @@ export function WelcomeScreen({
   const startedRef = useRef(false);
   const titleId = useId();
   const { t } = useTranslation("interface");
+  const formattedPaths =
+    __ACADEMY_STORIES__ >= 1_000_000
+      ? t("welcome.facts.runsMillion", {
+          count: Math.floor(__ACADEMY_STORIES__ / 1_000_000),
+        })
+      : __ACADEMY_STORIES__ >= 1_000
+        ? t("welcome.facts.runsThousand", {
+            count: Math.floor(__ACADEMY_STORIES__ / 1_000),
+          })
+        : t("welcome.facts.runsCount", { count: __ACADEMY_STORIES__ });
 
   function handleStart() {
     if (startedRef.current) {
@@ -87,7 +97,7 @@ export function WelcomeScreen({
             <dt>{t("welcome.facts.decisions")}</dt>
           </div>
           <div>
-            <dd>{welcomeFacts.paths}</dd>
+            <dd>{formattedPaths}</dd>
             <dt>{t("welcome.facts.paths")}</dt>
           </div>
           <div>

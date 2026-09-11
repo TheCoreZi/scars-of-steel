@@ -1,0 +1,38 @@
+{
+  "devEvents": {
+    "chanceOutcome": "DEV · Resultado de elecciones con probabilidad",
+    "failure": "Forzar fallo",
+    "next": "DEV · Siguiente evento",
+    "random": "Aleatorio",
+    "success": "Forzar éxito"
+  },
+  "annualReport": {
+    "title": "Informe del año",
+    "bonuses": {
+      "organoid": {
+        "name": "Organoide",
+        "description": "+50% Crecimiento de Estadísticas",
+        "earned": "Obtenido Organoide"
+      }
+    },
+    "injured": "Este año sufriste una lesión.",
+    "damaged": "Tu Zoid sufrió daños este año.",
+    "organoid": "Aumenta un 50 % las ganancias de Pilotaje, Sincronía y potencia del Zoid.",
+    "promoted": "¡Has ascendido!",
+    "power": "Potencia del Zoid",
+    "upgrades": "Mejoras del Zoid",
+    "deathYes": "Falleciste a causa de tus heridas.",
+    "recoveryYes": "Te recuperaste.",
+    "recoveryPartial": "Te recuperaste de algunas heridas, pero sigues herido.",
+    "recoveryNo": "Sigues herido.",
+    "repairYes": "Tu {{zoid}} fue reparado.",
+    "repairPartial": "Se reparó parte de los daños de tu {{zoid}}, pero aún necesita reparaciones.",
+    "repairNo": "Tu {{zoid}} sigue dañado.",
+    "statusInjured": "Piloto herido",
+    "statusDamaged": "Zoid dañado",
+    "statusOrganoid": "Organoid",
+    "statusPower": "Potencia: {{power}}",
+    "upgradeCount_one": "{{count}} mejora",
+    "upgradeCount_other": "{{count}} mejoras"
+  }
+}

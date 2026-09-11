@@ -17,8 +17,18 @@ import "./styles/career-status.css";
 import "./index.css";
 import "./styles/final-screen.css";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+void renderApp();
+
+async function renderApp() {
+  let app = <App />;
+  if (
+    import.meta.env.DEV &&
+    new URLSearchParams(window.location.search).has("review-events")
+  ) {
+    const { EventReviewApp } = await import("./app/EventReviewApp");
+    app = <EventReviewApp />;
+  }
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>{app}</StrictMode>,
+  );
+}

@@ -1,8 +1,8 @@
 import { describe, expect, test, vi } from "vitest";
 
 import { simulateBattleYear } from "../domain/battles";
-import { eventCatalog } from "../domain/events";
-import { applyOutcome, getAchievementIds } from "../domain/outcomes";
+import { eventCatalog, getEvent } from "../domain/events";
+import { applyOutcome } from "../domain/outcomes";
 import { createInitialPilot } from "../domain/pilot";
 import type { RandomGenerator } from "../domain/random";
 import {
@@ -41,7 +41,7 @@ describe("year resolution", () => {
     expect(result.pilotAfter.stats.piloting).toBe(7);
     expect(result.pilotAfter.stats.synchrony).toBe(5);
     expect(result.pilotAfter.potential).toBe(
-      Math.round(getZoid(result.zoidIds[0]).basePower * 0.25),
+      Math.round(getZoid(result.zoidIds[0]).basePower * 0.25) + 1,
     );
     expect(result.battleRecord).toEqual({
       assigned: 0,
@@ -57,6 +57,11 @@ describe("year resolution", () => {
     expect(result.changes).toEqual([
       { current: 7, previous: 5, stat: "piloting", target: "stat" },
       { current: 5, previous: 2, stat: "synchrony", target: "stat" },
+      {
+        current: result.pilotAfter.potential,
+        previous: result.pilotAfter.potential - 1,
+        target: "potential",
+      },
       {
         current: 45,
         faction: "helic",
@@ -87,17 +92,17 @@ describe("year resolution", () => {
 
   test("limits values, omits ineffective changes, and preserves existing Zoids", () => {
     const outcome = {
+      effects: [
+        { amount: -10, indicator: "fame", kind: "change-career-indicator" },
+        { amount: 200, kind: "change-stat", stat: "piloting" },
+        { kind: "grant-zoid", poolId: "standard" },
+      ],
       id: "outcome:test-limits",
       narrativeKey: "outcomes:academy.firstExercisesAcceptStandard",
-      statChanges: [
-        { amount: -10, indicator: "fame", target: "career-indicator" },
-        { amount: 200, stat: "piloting", target: "stat" },
-      ],
-      tags: [],
-      zoidReward: "standard",
     } as const satisfies Outcome;
-    const first = applyOutcome(pilot, outcome, "zoid:godos");
-    const second = applyOutcome(first.pilotAfter, outcome, "zoid:guysack");
+    const random = createRandom(0, [], ["zoid:godos", "zoid:guysack"]);
+    const first = applyOutcome(pilot, outcome, random);
+    const second = applyOutcome(first.pilotAfter, outcome, random);
 
     expect(second.pilotAfter.career.fame).toBe(0);
     expect(second.pilotAfter.stats.piloting).toBe(100);
@@ -124,22 +129,6 @@ describe("year resolution", () => {
     expect(result.achievementIds).toContain(id);
   });
 
-  test.each([
-    ["outcome-tag:humanitarian-aid", ["achievement:true-soldier"]],
-    ["outcome-tag:mechanics-program", ["achievement:born-in-workshop"]],
-    ["outcome-tag:reported-veteran", ["achievement:not-on-my-watch"]],
-    ["outcome-tag:unrelated", []],
-  ] as const)("maps %s to its exact achievements", (tag, achievementIds) => {
-    const outcome = {
-      id: "outcome:achievement-test",
-      narrativeKey: "outcomes:academy.firstExercisesAcceptStandard",
-      statChanges: [],
-      tags: [tag],
-    } as const satisfies Outcome;
-
-    expect(getAchievementIds(outcome)).toEqual(achievementIds);
-  });
-
   test("applies an injury declared by the outcome", () => {
     const event = eventCatalog.humanitarianMission;
     const result = resolveYear(
@@ -155,6 +144,42 @@ describe("year resolution", () => {
 });
 
 describe("battle and war simulation", () => {
+  test("uses military rank rather than age to unlock real battles", () => {
+    const event = getEvent("event:academy-synchrony-test");
+    const assignedPilot: Pilot = {
+      ...pilot,
+      age: 20,
+      career: {
+        ...pilot.career,
+        factionTrust: createBoundedValue(100),
+      },
+      zoids: {
+        damagedIds: [],
+        reserveIds: [],
+        signatureId: "zoid:godos",
+      },
+    };
+    const cadet = resolveYear(
+      event.decisions[1],
+      event,
+      assignedPilot,
+      createRandom(0),
+    );
+    const soldier = resolveYear(
+      event.decisions[1],
+      event,
+      {
+        ...assignedPilot,
+        age: 13,
+        career: { ...assignedPilot.career, militaryRank: "soldier" },
+      },
+      createRandom(0),
+    );
+
+    expect(cadet.battleRecord.participated).toBe(0);
+    expect(soldier.battleRecord.participated).toBeGreaterThan(0);
+  });
+
   test("simulates unassigned battles at equal odds", () => {
     const random = createRandom(0);
     const battles = getWarBattleCount(pilot.career.warState, random);
@@ -286,13 +311,21 @@ function createCombatPilot(): Pilot {
 function createRandom(
   probability: number,
   chances: readonly boolean[] = [],
+  weightedValues: readonly string[] = [],
 ): RandomGenerator {
   let chanceIndex = 0;
+  let weightedIndex = 0;
 
   return {
     chance: vi.fn(() => chances[chanceIndex++] ?? false),
     integer: vi.fn((min) => min),
     probability: vi.fn(() => probability),
-    weighted: vi.fn((entries) => entries[0].value),
+    weighted: <T>(entries: readonly { value: T }[]) => {
+      const expected = weightedValues[weightedIndex++];
+      return (
+        entries.find(({ value }) => Object.is(value, expected))?.value ??
+        entries[0].value
+      );
+    },
   };
 }

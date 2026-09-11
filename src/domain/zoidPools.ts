@@ -1,6 +1,6 @@
 import type { RandomGenerator } from "./random";
-import type { Faction, Zoid, ZoidCategory, ZoidId } from "./types";
-import { getZoid, zoids } from "./zoids";
+import type { Faction, Zoid, ZoidCategory, ZoidId, ZoidPoolId } from "./types";
+import { getZoid } from "./zoids";
 
 export interface ZoidPoolEntry {
   id: ZoidId;
@@ -15,7 +15,7 @@ function createPool(ids: readonly ZoidId[]): readonly ZoidPoolEntry[] {
   return ids.map((id) => ({ id }));
 }
 
-export const initialZoidPools = {
+export const zoidPools = {
   guylos: {
     rare: createPool([
       "zoid:black-rhymos",
@@ -94,19 +94,19 @@ export const initialZoidPools = {
   },
 } as const satisfies ZoidPools;
 
-export function hasInitialZoidPool(
+export function zoidPoolHasEntries(
   category: ZoidCategory,
   faction: Faction,
 ): boolean {
-  return (initialZoidPools[faction][category]?.length ?? 0) > 0;
+  return (zoidPools[faction][category]?.length ?? 0) > 0;
 }
 
-export function selectInitialZoid(
+export function selectZoidByCategory(
   category: ZoidCategory,
   faction: Faction,
   random: RandomGenerator,
 ): Zoid {
-  return selectZoidFromPool(initialZoidPools[faction][category], random);
+  return selectZoidFromPool(zoidPools[faction][category], random);
 }
 
 export function selectZoidFromPool(
@@ -145,10 +145,72 @@ export function validateZoidPools(pools: ZoidPools): void {
       }
     }
   }
-
-  if (ids.size !== zoids.length) {
-    throw new TypeError("Initial Zoid pools must include the full catalog.");
-  }
 }
 
-validateZoidPools(initialZoidPools);
+export const academyRewardPools = {
+  "aerial-academy": {
+    helic: [
+      { id: "zoid:glidoler", weight: 100 },
+      { id: "zoid:double-sworder", weight: 100 },
+      { id: "zoid:pegasuros", weight: 10 },
+      { id: "zoid:pteras", weight: 1 },
+    ],
+    guylos: [
+      { id: "zoid:saicurtis", weight: 100 },
+      { id: "zoid:sinker", weight: 100 },
+      { id: "zoid:storch", weight: 10 },
+      { id: "zoid:redler", weight: 1 },
+    ],
+  },
+  herd: {
+    helic: [
+      { id: "zoid:elephantus", weight: 100 },
+      { id: "zoid:cannon-tortoise", weight: 50 },
+      { id: "zoid:mammoth", weight: 10 },
+      { id: "zoid:dibison", weight: 1 },
+    ],
+    guylos: [
+      { id: "zoid:geruder", weight: 20 },
+      { id: "zoid:twin-horn", weight: 20 },
+      { id: "zoid:black-rhymos", weight: 5 },
+      { id: "zoid:metal-rhymos", weight: 1 },
+    ],
+  },
+} as const satisfies Record<string, Record<Faction, readonly ZoidPoolEntry[]>>;
+
+export const replacementPools = [
+  { value: "weak", weight: 100 },
+  { value: "rare", weight: 10 },
+  { value: "super-rare", weight: 1 },
+] as const;
+
+export function isZoidRewardPoolAvailable(
+  reward: ZoidPoolId,
+  faction: Faction,
+): boolean {
+  if (reward === "academy-replacement")
+    return replacementPools.every(({ value }) =>
+      zoidPoolHasEntries(value, faction),
+    );
+  if (reward === "herd" || reward === "aerial-academy")
+    return academyRewardPools[reward][faction].length > 0;
+  return zoidPoolHasEntries(reward, faction);
+}
+
+export function selectRewardZoid(
+  reward: ZoidPoolId,
+  faction: Faction,
+  random: RandomGenerator,
+): Zoid {
+  if (reward === "academy-replacement")
+    return selectZoidByCategory(
+      random.weighted(replacementPools),
+      faction,
+      random,
+    );
+  if (reward === "herd" || reward === "aerial-academy")
+    return selectZoidFromPool(academyRewardPools[reward][faction], random);
+  return selectZoidByCategory(reward, faction, random);
+}
+
+validateZoidPools(zoidPools);

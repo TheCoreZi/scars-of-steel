@@ -1,5 +1,4 @@
 import { useId } from "react";
-
 import type { Decision, DecisionEvent, EventGameState } from "../domain/types";
 import { AnimationToggle } from "./AppControls";
 import { CareerStatusBar } from "./CareerStatusBar";
