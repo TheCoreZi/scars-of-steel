@@ -57,7 +57,7 @@ describe("career status bar", () => {
       "career-status__compact-label",
     );
     expect(container.querySelector(".career-status__mobile")).toBeNull();
-    expect(within(desktop!).getByText("Zoid")).toBeInTheDocument();
+    expect(within(desktop!).queryByText("Zoid")).not.toBeInTheDocument();
     expect(
       within(desktop!).queryByText("Zoid unassigned"),
     ).not.toBeInTheDocument();
@@ -178,6 +178,9 @@ describe("career status bar", () => {
     const pilotWithZoid = {
       ...pilot,
       potential: createBoundedValue(35),
+      zoidProgress: {
+        "zoid:command-wolf": { power: createBoundedValue(42), upgrades: 3 },
+      },
       zoids: {
         damagedIds: [],
         reserveIds: [],
@@ -188,6 +191,18 @@ describe("career status bar", () => {
     const { container } = render(<CareerStatusBar pilot={pilotWithZoid} />);
 
     expect(screen.getByText("Command Wolf")).toBeInTheDocument();
+    const zoidPanel = screen.getByRole("region", {
+      name: "Zoid: Command Wolf",
+    });
+    expect(within(zoidPanel).getByText("Power: 61")).toBeInTheDocument();
+    expect(
+      within(zoidPanel)
+        .getByRole("img", { name: "3 upgrades" })
+        .querySelectorAll("polyline"),
+    ).toHaveLength(3);
+    expect(
+      container.querySelector(".career-status__pilot"),
+    ).not.toHaveTextContent("Power:");
     expect(
       container.querySelector(".career-status__desktop .career-status__zoid"),
     ).toHaveAttribute("src", "/images/zoids/command_wolf.png");
@@ -196,6 +211,35 @@ describe("career status bar", () => {
         name: "Potential: 35 of 100",
       }),
     ).toBeInTheDocument();
+  });
+
+  test("shows injuries and damage as red cross markers", () => {
+    const injuredPilot = {
+      ...pilot,
+      condition: "injured",
+      zoids: {
+        damagedIds: ["zoid:command-wolf"],
+        reserveIds: [],
+        signatureId: "zoid:command-wolf",
+      },
+    } satisfies PilotWithZoid;
+
+    const { container } = render(<CareerStatusBar pilot={injuredPilot} />);
+    const pilotPanel = container.querySelector<HTMLElement>(
+      ".career-status__pilot",
+    )!;
+    const zoidPanel = screen.getByRole("region", {
+      name: "Zoid: Command Wolf",
+    });
+
+    expect(
+      within(pilotPanel).getByRole("img", { name: "Pilot injured" }),
+    ).toHaveClass("career-status__condition--pilot");
+    expect(
+      within(zoidPanel).getByRole("img", { name: "Zoid damaged" }),
+    ).toHaveClass("career-status__condition--zoid");
+    expect(within(pilotPanel).queryByText("Pilot injured")).toBeNull();
+    expect(within(zoidPanel).queryByText("Zoid damaged")).toBeNull();
   });
 
   test("renders the Storch sprite", () => {

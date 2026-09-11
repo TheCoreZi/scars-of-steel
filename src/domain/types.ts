@@ -3,7 +3,9 @@ declare const warStateBrand: unique symbol;
 
 export type AchievementId =
   | "achievement:born-in-workshop"
+  | "achievement:first-romance"
   | "achievement:not-on-my-watch"
+  | "achievement:snitch"
   | "achievement:true-soldier";
 export type Aspiration = "commander" | "shadow" | "war-hero" | "zoid-ace";
 export type BoundedValue = number & {
@@ -39,7 +41,6 @@ export type MilitaryRank =
   | "soldier";
 export type NicknameId = `nickname:${string}`;
 export type OutcomeId = `outcome:${string}`;
-export type OutcomeTag = `outcome-tag:${string}`;
 export type PilotCondition = "active" | "dead" | "injured";
 export type PilotId = `pilot:${string}`;
 export type SpecialRank =
@@ -81,6 +82,9 @@ export type TranslationNamespace =
 export type WarIntensity = "active" | "fierce" | "low";
 export type ZoidCategory = "rare" | "standard" | "super-rare" | "weak";
 export type ZoidId = `zoid:${string}`;
+export type ZoidPoolId =
+  ZoidCategory | "herd" | "aerial-academy" | "academy-replacement";
+export type BonusId = "organoid";
 
 export interface Stats {
   charisma: BoundedValue;
@@ -135,13 +139,18 @@ interface PilotData {
   age: number;
   aspiration: Aspiration;
   basePotential: BoundedValue;
+  bonusIds?: readonly BonusId[];
   career: StoredCareerData;
   condition: PilotCondition;
   faction: Faction;
   id: PilotId;
+  injuryCount?: number;
   name: string;
   potential: BoundedValue;
   stats: Stats;
+  zoidProgress?: Readonly<
+    Partial<Record<ZoidId, { power: BoundedValue; upgrades: number }>>
+  >;
 }
 
 export interface PilotWithoutZoid extends PilotData {
@@ -166,33 +175,72 @@ export interface Zoid {
   nameKey: TranslationKey<"zoids">;
 }
 
-export type StatChange =
+export type OutcomeEffect =
   | {
       amount: number;
+      kind: "change-stat";
       stat: StatName;
-      target: "stat";
     }
   | {
       amount: number;
       indicator: "faction-trust" | "fame";
-      target: "career-indicator";
+      kind: "change-career-indicator";
     }
   | {
       amount: number;
       faction: Faction;
-      target: "war-state";
+      kind: "change-war-control";
     }
   | {
       amount: number;
-      target: "potential";
+      kind: "change-potential";
+    }
+  | {
+      amount: number;
+      kind: "change-zoid-power";
+    }
+  | {
+      amount: number;
+      kind: "change-zoid-upgrades";
+    }
+  | {
+      achievementId: AchievementId;
+      kind: "grant-achievement";
+    }
+  | {
+      bonusId: BonusId;
+      kind: "grant-bonus";
+    }
+  | {
+      kind: "grant-zoid";
+      poolId: ZoidPoolId;
+    }
+  | {
+      kind: "replace-signature-zoid";
+      poolId: ZoidPoolId;
+    }
+  | {
+      kind: "damage-signature-zoid";
+    }
+  | {
+      kind: "injure-pilot";
+    }
+  | {
+      kind: "kill-pilot";
+    }
+  | {
+      kind: "remove-zoid";
+      zoidId: ZoidId;
+    }
+  | {
+      kind: "end-career";
+      reason: Exclude<CareerEndReason, "dead" | "no-eligible-events">;
     };
 
 export interface Outcome {
+  effects: readonly OutcomeEffect[];
   id: OutcomeId;
   narrativeKey: TranslationKey<"outcomes">;
-  statChanges: readonly StatChange[];
-  tags: readonly OutcomeTag[];
-  zoidReward?: ZoidCategory;
 }
 
 interface DecisionData {
@@ -202,35 +250,38 @@ interface DecisionData {
 }
 
 export interface ProbabilityStat {
-  stat: StatName;
+  stat: StatName | "potential";
   weight: number;
 }
 
 export interface ChanceDecision extends DecisionData {
   baseSuccessChance: BoundedValue;
-  failureOutcome: Outcome;
+  failureOutcomeId: OutcomeId;
   kind: "chance";
   outcome?: never;
   probabilityNeutralStat?: BoundedValue;
   probabilityStats: readonly [ProbabilityStat, ...ProbabilityStat[]];
-  successOutcome: Outcome;
+  successOutcomeId: OutcomeId;
 }
 
 export interface SafeDecision extends DecisionData {
   baseSuccessChance?: never;
-  failureOutcome?: never;
+  failureOutcomeId?: never;
   kind: "safe";
-  outcome: Outcome;
+  outcomeId: OutcomeId;
   probabilityNeutralStat?: never;
   probabilityStats?: never;
-  successOutcome?: never;
+  successOutcomeId?: never;
 }
 
 export type Decision = ChanceDecision | SafeDecision;
 
 export interface DecisionEvent {
+  ages?: readonly number[];
   decisions: readonly [Decision, Decision, Decision];
   id: EventId;
+  factions?: readonly Faction[];
+  requiresZoid?: boolean;
   introductionKey: TranslationKey<"narrative">;
   titleKey: TranslationKey<"narrative">;
 }
@@ -279,6 +330,12 @@ export interface CareerHistory {
 
 export type AppliedChange =
   | {
+      current: number;
+      previous: number;
+      target: "zoid-power" | "zoid-upgrades";
+      zoidId: ZoidId;
+    }
+  | {
       current: BoundedValue;
       previous: BoundedValue;
       stat: StatName;
@@ -303,6 +360,7 @@ export type AppliedChange =
     };
 
 export interface ResolvedYear {
+  annualReport?: AnnualReport;
   achievementIds: readonly AchievementId[];
   battleRecord: BattleRecord;
   changes: readonly AppliedChange[];
@@ -311,6 +369,23 @@ export interface ResolvedYear {
   pilotBefore: Pilot;
   resolution: DecisionResolution;
   zoidIds: readonly ZoidId[];
+}
+
+export interface AnnualRoll {
+  chance: number;
+  roll: number;
+  success: boolean;
+  kind: "death" | "recovery" | "repair";
+  zoidId?: ZoidId;
+}
+
+export interface AnnualReport {
+  bonusIds: readonly BonusId[];
+  growth: number;
+  injured: boolean;
+  promoted: boolean;
+  rolls: readonly AnnualRoll[];
+  zoidDamaged: boolean;
 }
 
 export interface PilotDraft {

@@ -3,7 +3,7 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 
 test("keeps every screen accessible and free of horizontal overflow", async ({
   page,
-}) => {
+}, testInfo) => {
   await page.goto("/");
   await auditCurrentScreen(page, "welcome");
   await expect(
@@ -19,6 +19,22 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
     page.getByRole("contentinfo", { name: "Fan project notice" }),
   ).toBeAttached();
   await completePilotCreation(page);
+  await expect(page.locator('[data-transitioning="true"]')).toHaveCount(0);
+  await expect
+    .poll(() =>
+      page
+        .locator(".decision-option")
+        .last()
+        .evaluate((option) => {
+          const transition = option.closest(".screen-transition");
+          return Boolean(
+            transition &&
+            transition.getBoundingClientRect().bottom >=
+              option.getBoundingClientRect().bottom - 1,
+          );
+        }),
+    )
+    .toBe(true);
   await auditCurrentScreen(page, "decision selection");
 
   const chanceDecision = page
@@ -40,8 +56,34 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
   await auditCurrentScreen(page, "decision outcome");
   await page.getByRole("button", { name: "Continue career" }).click();
 
+  for (const age of [13, 14]) {
+    await expect(page.locator(".decision-screen__choices")).toBeVisible();
+    await auditCurrentScreen(page, `academy age ${age}`);
+    const safe = page
+      .locator(".decision-option")
+      .filter({ has: page.locator(".decision-option__kind--safe") });
+    if (await safe.count()) await safe.first().click();
+    else await page.locator(".decision-option").nth(1).click();
+    await expect(page.locator(".outcome-screen h1")).toBeFocused();
+    await auditCurrentScreen(page, `academy outcome ${age}`);
+    if (age === 14)
+      await expect(page.locator(".career-status__rank")).toHaveText("Soldier");
+    if (age === 14)
+      await page.screenshot({
+        animations: "disabled",
+        path: testInfo.outputPath("academy-outcome.png"),
+        fullPage: true,
+      });
+    await page.getByRole("button", { name: "Continue career" }).click();
+  }
+
   await expect(page.locator(".final-screen h1")).toBeFocused();
   await auditCurrentScreen(page, "final screen");
+  await page.screenshot({
+    animations: "disabled",
+    path: testInfo.outputPath("academy-final.png"),
+    fullPage: true,
+  });
 
   await page.getByRole("button", { name: "New run" }).click();
   await page.getByRole("button", { name: "Expand service records" }).click();
@@ -89,6 +131,25 @@ test("completes the full flow with the keyboard", async ({
   });
   await focusWithTab(page, continueButton);
   await page.keyboard.press("Enter");
+
+  for (const age of [13, 14]) {
+    await expect(page.getByText(`Age ${age}`, { exact: true })).toBeVisible();
+    await expect(page.locator(".decision-screen__choices")).toBeVisible();
+    const safe = page
+      .locator(".decision-option")
+      .filter({ has: page.locator(".decision-option__kind--safe") });
+    const option = (await safe.count())
+      ? safe.first()
+      : page.locator(".decision-option").nth(1);
+    await focusWithTab(page, option);
+    await page.keyboard.press("Enter");
+    await expect(page.locator(".outcome-screen h1")).toBeFocused();
+    await focusWithTab(
+      page,
+      page.getByRole("button", { name: "Continue career" }),
+    );
+    await page.keyboard.press("Enter");
+  }
 
   await expect(page.locator(".final-screen h1")).toBeFocused();
 });

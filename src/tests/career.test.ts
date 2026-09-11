@@ -20,10 +20,9 @@ const pilot = createInitialPilot({
   name: "Lena",
 });
 const outcome = {
+  effects: [],
   id: "outcome:career-test",
   narrativeKey: "outcomes:academy.firstExercisesAcceptStandard",
-  statChanges: [],
-  tags: [],
 } as const satisfies Outcome;
 
 describe("career progression", () => {
@@ -33,10 +32,24 @@ describe("career progression", () => {
   });
 
   test("selects only unplayed events for the current age", () => {
-    expect(getEligibleEventIds(12, [initialEventPool[0]])).toEqual(
+    expect(getEligibleEventIds(pilot, [initialEventPool[0]])).toEqual(
       initialEventPool.slice(1),
     );
-    expect(getEligibleEventIds(13, [])).toEqual([]);
+    const assignedPilot = {
+      ...pilot,
+      zoids: {
+        damagedIds: [],
+        reserveIds: [],
+        signatureId: "zoid:godos" as const,
+      },
+    };
+    expect(getEligibleEventIds({ ...assignedPilot, age: 13 }, [])).toHaveLength(
+      32,
+    );
+    expect(getEligibleEventIds({ ...assignedPilot, age: 14 }, [])).toHaveLength(
+      34,
+    );
+    expect(getEligibleEventIds({ ...assignedPilot, age: 15 }, [])).toEqual([]);
   });
 
   test("accumulates battles, events, and unique achievements", () => {
@@ -100,12 +113,15 @@ describe("career progression", () => {
   });
 
   test.each([
-    ["outcome-tag:disappeared", "disappeared"],
-    ["outcome-tag:non-operational", "non-operational"],
-    ["outcome-tag:retired", "retired"],
-  ] as const)("uses %s as a terminal outcome", (tag, reason) => {
+    ["disappeared", "disappeared"],
+    ["non-operational", "non-operational"],
+    ["retired", "retired"],
+  ] as const)("uses %s as a terminal outcome", (effectReason, reason) => {
     expect(
-      getCareerEndReason(pilot, initialEventPool, { ...outcome, tags: [tag] }),
+      getCareerEndReason(pilot, initialEventPool, {
+        ...outcome,
+        effects: [{ kind: "end-career", reason: effectReason }],
+      }),
     ).toBe(reason);
   });
 });

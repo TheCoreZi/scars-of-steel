@@ -18,27 +18,31 @@ import nicknames from "./locales/es/nicknames.json";
 import outcomes from "./locales/es/outcomes.json";
 import titles from "./locales/es/titles.json";
 import zoids from "./locales/es/zoids.json";
+import academyEn from "./locales/en/academy.json";
+import academyEs from "./locales/es/academy.json";
+import academyUiEn from "./locales/en/academy-ui.json";
+import academyUiEs from "./locales/es/academy-ui.json";
 
 export const defaultNamespace = "interface";
 export const languageStorageKey = "scars-of-steel:language";
 export const resources = {
   en: {
     achievements: achievementsEn,
-    decisions: decisionsEn,
-    interface: interfaceEn,
-    narrative: narrativeEn,
+    decisions: { ...decisionsEn, ...academyEn.decisions },
+    interface: { ...interfaceEn, ...academyUiEn },
+    narrative: { ...narrativeEn, ...academyEn.narrative },
     nicknames: nicknamesEn,
-    outcomes: outcomesEn,
+    outcomes: { ...outcomesEn, ...academyEn.outcomes },
     titles: titlesEn,
     zoids: zoidsEn,
   },
   es: {
     achievements,
-    decisions,
-    interface: interfaceTranslations,
-    narrative,
+    decisions: { ...decisions, ...academyEs.decisions },
+    interface: { ...interfaceTranslations, ...academyUiEs },
+    narrative: { ...narrative, ...academyEs.narrative },
     nicknames,
-    outcomes,
+    outcomes: { ...outcomes, ...academyEs.outcomes },
     titles,
     zoids,
   },

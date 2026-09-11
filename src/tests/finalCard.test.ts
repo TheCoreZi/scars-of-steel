@@ -15,6 +15,7 @@ const summary = {
   ageLabel: "Age 13",
   battleLosses: 3,
   battleWins: 7,
+  bonuses: [],
   faction: "helic",
   factionImagePath: "/images/factions/helic.png",
   factionName: "Helic Republic",
@@ -23,6 +24,7 @@ const summary = {
   labels: {
     achievements: "Achievements",
     battleRecord: "Battle record",
+    bonuses: "Bonuses earned",
     factionTrust: "Faction trust",
     fame: "Fame",
     losses: "Losses",
@@ -121,11 +123,11 @@ describe("final card renderer", () => {
     );
     expect(fillText).toHaveBeenCalledWith("CADET", 1085, 150);
     expect(fillText).toHaveBeenCalledWith("7 Wins · 3 Losses", 628, 606);
-    expect(fillText).toHaveBeenCalledWith("Born in the workshop", 126, 737);
+    expect(fillText).toHaveBeenCalledWith("Born in the workshop", 126, 973);
     expect(fillText).toHaveBeenCalledWith(
       "You learned every machine.",
       126,
-      765,
+      1001,
     );
 
     await createFinalCardBlob(
@@ -153,6 +155,40 @@ describe("final card renderer", () => {
     expect(dimensions[2][1]).toBeGreaterThan(dimensions[0][1]);
 
     await createFinalCardBlob(summary, "light");
+
+    fillText.mockClear();
+    await createFinalCardBlob({ ...summary, achievements: [] }, "dark");
+    expect(dimensions.at(-1)).toEqual([1200, 945]);
+    expect(fillText).not.toHaveBeenCalledWith(
+      "ACHIEVEMENTS",
+      expect.anything(),
+      expect.anything(),
+    );
+    expect(fillText).not.toHaveBeenCalledWith(
+      "BONUSES EARNED",
+      expect.anything(),
+      expect.anything(),
+    );
+
+    await createFinalCardBlob(
+      {
+        ...summary,
+        bonuses: [
+          {
+            iconPath: "/images/bonuses/organoid.png",
+            name: "Organoid",
+          },
+        ],
+      },
+      "dark",
+    );
+    expect(fillText).toHaveBeenCalledWith("BONUSES EARNED", 82, 689);
+    expect(fillText).toHaveBeenCalledWith("Organoid", 126, 723);
+    expect(fillText).not.toHaveBeenCalledWith(
+      "+50% Stat Growth",
+      expect.anything(),
+      expect.anything(),
+    );
 
     expect(fillStyles).toEqual(
       expect.arrayContaining(["#965b00", "#e7ecf8", "#dce5fa", "#242527"]),

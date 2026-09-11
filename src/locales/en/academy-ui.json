@@ -1,0 +1,38 @@
+{
+  "devEvents": {
+    "chanceOutcome": "DEV · Chance decision result",
+    "failure": "Force failure",
+    "next": "DEV · Next event",
+    "random": "Random",
+    "success": "Force success"
+  },
+  "annualReport": {
+    "title": "Yearly report",
+    "bonuses": {
+      "organoid": {
+        "name": "Organoid",
+        "description": "+50% Stat Growth",
+        "earned": "Obtained Organoid"
+      }
+    },
+    "injured": "You suffered an injury this year.",
+    "damaged": "Your Zoid was damaged this year.",
+    "organoid": "Increases gains in Piloting, Synchrony, and Zoid power by 50%.",
+    "promoted": "You've been promoted!",
+    "power": "Zoid power",
+    "upgrades": "Zoid upgrades",
+    "deathYes": "You died from your injuries.",
+    "recoveryYes": "You recovered.",
+    "recoveryPartial": "Some wounds healed, but you are still injured.",
+    "recoveryNo": "You remain injured.",
+    "repairYes": "Your {{zoid}} was repaired.",
+    "repairPartial": "Some damage to your {{zoid}} was repaired, but more repairs are needed.",
+    "repairNo": "Your {{zoid}} remains damaged.",
+    "statusInjured": "Pilot injured",
+    "statusDamaged": "Zoid damaged",
+    "statusOrganoid": "Organoid",
+    "statusPower": "Power: {{power}}",
+    "upgradeCount_one": "{{count}} upgrade",
+    "upgradeCount_other": "{{count}} upgrades"
+  }
+}

@@ -14,7 +14,9 @@ import { eventCatalog } from "../domain/events";
 import { createInitialPilot } from "../domain/pilot";
 import type { RandomGenerator } from "../domain/random";
 import {
+  createBoundedValue,
   createWarState,
+  type AppliedChange,
   type AnimatingEventGameState,
   type Decision,
   type DecisionEvent,
@@ -269,7 +271,7 @@ describe("decision resolution", () => {
       "outcome-screen__decision",
     );
     expect(
-      screen.getByRole("heading", { level: 2, name: "Battles" }),
+      screen.getByRole("heading", { level: 2, name: "Yearly report" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { level: 2, name: "Pilot progress" }),
@@ -350,6 +352,7 @@ describe("decision resolution", () => {
       createRandom(0),
     );
     const onCloseYear = vi.fn();
+    result.annualReport!.bonusIds = ["organoid"];
     const state = {
       eventId: mechanicsEvent.id,
       history,
@@ -362,6 +365,20 @@ describe("decision resolution", () => {
 
     expect(screen.getByText("Achievement earned")).toBeInTheDocument();
     expect(screen.getByText("Born in the workshop")).toBeInTheDocument();
+    const achievement = screen.getByText("Born in the workshop").closest("li");
+    expect(achievement).toHaveClass("outcome-screen__achievement");
+    expect(achievement?.querySelector("img")).toHaveAttribute(
+      "src",
+      expect.stringContaining("images/icons/achievements/wrench.svg"),
+    );
+    const bonus = screen.getByText("Obtained Organoid").closest("li");
+    expect(bonus).toHaveClass("outcome-screen__bonus");
+    expect(bonus?.querySelector("img")).toHaveAttribute(
+      "src",
+      "/images/bonuses/organoid.png",
+    );
+    expect(screen.getByText("+50% Stat Growth")).toBeInTheDocument();
+    expect(screen.queryByText("Bonus earned")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Continue career" }));
     expect(onCloseYear).toHaveBeenCalledOnce();
   });
@@ -431,6 +448,142 @@ describe("decision resolution", () => {
     ).toHaveTextContent("+4Technique");
     expect(within(changes).queryByText("Helic Republic status")).toBeNull();
   });
+
+  test("combines changes for the same value before showing outcome tags", () => {
+    const result = resolveYear(
+      event.decisions[0],
+      event,
+      pilot,
+      createRandom(0),
+    );
+    const changes = [
+      {
+        current: createBoundedValue(13),
+        previous: createBoundedValue(10),
+        target: "potential",
+      },
+      {
+        current: createBoundedValue(17),
+        previous: createBoundedValue(13),
+        target: "potential",
+      },
+      {
+        current: createBoundedValue(7),
+        previous: createBoundedValue(5),
+        stat: "strength",
+        target: "stat",
+      },
+      {
+        current: createBoundedValue(2),
+        previous: createBoundedValue(7),
+        stat: "strength",
+        target: "stat",
+      },
+      {
+        current: createBoundedValue(3),
+        previous: createBoundedValue(2),
+        stat: "synchrony",
+        target: "stat",
+      },
+      {
+        current: createBoundedValue(2),
+        previous: createBoundedValue(3),
+        stat: "synchrony",
+        target: "stat",
+      },
+    ] as const satisfies readonly AppliedChange[];
+    const state = {
+      eventId: event.id,
+      history,
+      phase: "outcome",
+      pilot: result.pilotAfter,
+      result: { ...result, changes },
+      screen: "event",
+    } as const satisfies EventGameState;
+    const { container } = renderScreen(state);
+    const displayedChanges = container.querySelector<HTMLElement>(
+      ".outcome-screen__terminal-changes",
+    )!;
+
+    expect(
+      within(displayedChanges).getByText("Potential").closest("li"),
+    ).toHaveTextContent("+7Potential");
+    expect(
+      within(displayedChanges).getByText("Strength").closest("li"),
+    ).toHaveTextContent("-3Strength");
+    expect(within(displayedChanges).queryByText("Synchrony")).toBeNull();
+  });
+
+  test.each([false, true])(
+    "groups recovery messages with partial recovery %s",
+    (partial) => {
+      const state = createAnimatingState(0.2);
+      const zoidId = "zoid:godos" as const;
+      const { container } = renderScreen({
+        ...state,
+        phase: "outcome",
+        result: {
+          ...state.result,
+          pilotAfter: {
+            ...state.result.pilotAfter,
+            condition: partial ? "injured" : "active",
+            injuryCount: partial ? 1 : 0,
+            zoids: {
+              damagedIds: partial ? [zoidId] : [],
+              reserveIds: [],
+              signatureId: zoidId,
+            },
+          },
+          annualReport: {
+            bonusIds: [],
+            growth: 0,
+            injured: false,
+            promoted: false,
+            zoidDamaged: false,
+            rolls: [
+              { kind: "recovery", chance: 50, roll: 0, success: true },
+              {
+                kind: "recovery",
+                chance: 50,
+                roll: partial ? 99 : 0,
+                success: !partial,
+              },
+              { kind: "repair", chance: 50, roll: 0, success: true, zoidId },
+              {
+                kind: "repair",
+                chance: 50,
+                roll: partial ? 99 : 0,
+                success: !partial,
+                zoidId,
+              },
+            ],
+          },
+        },
+      });
+      const records = Array.from(
+        container.querySelectorAll(".outcome-screen__record"),
+      );
+      expect(
+        records.filter(
+          (record) =>
+            record.textContent ===
+            (partial
+              ? "Some wounds healed, but you are still injured."
+              : "You recovered."),
+        ),
+      ).toHaveLength(1);
+      expect(
+        records.filter(
+          (record) =>
+            record.textContent ===
+            (partial
+              ? "Some damage to your Godos was repaired, but more repairs are needed."
+              : "Your Godos was repaired."),
+        ),
+      ).toHaveLength(1);
+      expect(screen.queryByText("You remain injured.")).toBeNull();
+    },
+  );
 
   test("describes participation in the faction battle report", () => {
     const result = resolveYear(

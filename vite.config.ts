@@ -1,9 +1,13 @@
 import react from "@vitejs/plugin-react";
 import type { Plugin } from "vite";
 import { configDefaults, defineConfig } from "vitest/config";
+import { estimateAcademyRuns } from "./src/domain/runEstimate.ts";
 
 export default defineConfig({
   base: "/",
+  define: {
+    __ACADEMY_STORIES__: JSON.stringify(estimateAcademyRuns()),
+  },
   plugins: [react(), buildInfo()],
   test: {
     environment: "jsdom",

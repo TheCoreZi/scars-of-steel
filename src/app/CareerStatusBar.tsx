@@ -11,7 +11,7 @@ import {
 } from "../domain/pilot";
 import { getRankInsignia } from "../domain/ranks";
 import type { Pilot, Zoid } from "../domain/types";
-import { getZoid } from "../domain/zoids";
+import { getZoid, getEffectiveZoidPower } from "../domain/zoids";
 import { translate } from "../i18n";
 import { RankInsignia } from "./RankInsignia";
 
@@ -77,7 +77,7 @@ function StatusDetails({
 
   return (
     <div className="career-status__details">
-      <ZoidPanel zoid={zoid} zoidName={zoidName} />
+      <ZoidPanel pilot={pilot} zoid={zoid} zoidName={zoidName} />
       <div className="career-status__pilot">
         <span className="career-status__pilot-heading">
           <small className="career-status__rank" title={rankName}>
@@ -88,7 +88,30 @@ function StatusDetails({
           </small>
           <small className="career-status__pilot-faction">{factionName}</small>
         </span>
-        <strong>{pilot.name}</strong>
+        <span className="career-status__pilot-name">
+          <strong>{pilot.name}</strong>
+          {pilot.condition === "injured" ? (
+            <span
+              aria-label={t("annualReport.statusInjured")}
+              className="career-status__conditions career-status__condition--pilot"
+              role="img"
+              title={t("annualReport.statusInjured")}
+            >
+              {Array.from({ length: pilot.injuryCount ?? 1 }, (_, index) => (
+                <span
+                  aria-hidden="true"
+                  className="career-status__condition"
+                  key={index}
+                />
+              ))}
+            </span>
+          ) : null}
+        </span>
+        <span className="career-status__metadata">
+          {pilot.bonusIds?.includes("organoid") ? (
+            <span>{t("annualReport.statusOrganoid")}</span>
+          ) : null}
+        </span>
         <span className="career-status__metadata">
           <span>{translate(lifeStageNameKeys[getLifeStage(pilot.age)])}</span>
           <span>{t("careerStatus.ageCompact", { age: pilot.age })}</span>
@@ -165,12 +188,15 @@ function StatusDetails({
 }
 
 interface ZoidPanelProps {
+  pilot: Pilot;
   zoid: Zoid | null;
   zoidName: string | null;
 }
 
-function ZoidPanel({ zoid, zoidName }: ZoidPanelProps) {
+function ZoidPanel({ pilot, zoid, zoidName }: ZoidPanelProps) {
   const { t } = useTranslation("interface");
+  const upgrades = zoid ? (pilot.zoidProgress?.[zoid.id]?.upgrades ?? 0) : 0;
+  const visibleUpgrades = Math.min(6, upgrades);
 
   return (
     <section
@@ -181,7 +207,6 @@ function ZoidPanel({ zoid, zoidName }: ZoidPanelProps) {
       }
       className="career-status__zoid-panel"
     >
-      <small>{t("careerStatus.zoid")}</small>
       <span className="career-status__zoid-content">
         <span className="career-status__zoid-visual">
           {zoid?.imagePath ? (
@@ -191,9 +216,61 @@ function ZoidPanel({ zoid, zoidName }: ZoidPanelProps) {
               {zoidFallbackIcon}
             </span>
           )}
+          {zoid && pilot.zoids?.damagedIds.includes(zoid.id) ? (
+            <span
+              aria-label={t("annualReport.statusDamaged")}
+              className="career-status__conditions career-status__condition--zoid"
+              role="img"
+              title={t("annualReport.statusDamaged")}
+            >
+              {pilot.zoids.damagedIds
+                .filter((id) => id === zoid.id)
+                .map((_, index) => (
+                  <span
+                    aria-hidden="true"
+                    className="career-status__condition"
+                    key={index}
+                  />
+                ))}
+            </span>
+          ) : null}
+          {upgrades > 0 ? (
+            <span
+              className="career-status__zoid-upgrades"
+              role="img"
+              aria-label={t("annualReport.upgradeCount", { count: upgrades })}
+              title={t("annualReport.upgradeCount", { count: upgrades })}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox={`0 0 14 ${visibleUpgrades * 6 + 2}`}
+                width="14"
+                height={visibleUpgrades * 6 + 2}
+              >
+                {Array.from({ length: visibleUpgrades }, (_, index) => (
+                  <polyline
+                    key={index}
+                    points={`2,${index * 6 + 6} 7,${index * 6 + 2} 12,${index * 6 + 6}`}
+                  />
+                ))}
+              </svg>
+              {upgrades > visibleUpgrades ? (
+                <span aria-hidden="true">+{upgrades - visibleUpgrades}</span>
+              ) : null}
+            </span>
+          ) : null}
         </span>
         {zoidName ? (
-          <strong className="career-status__zoid-name">{zoidName}</strong>
+          <strong className="career-status__zoid-name" title={zoidName}>
+            {zoidName}
+          </strong>
+        ) : null}
+        {zoid ? (
+          <small className="career-status__zoid-power">
+            {t("annualReport.statusPower", {
+              power: getEffectiveZoidPower(pilot, zoid.id),
+            })}
+          </small>
         ) : null}
       </span>
     </section>

@@ -1,4 +1,12 @@
 {
+  "firstRomance": {
+    "name": "First romance",
+    "description": "There was more to the academy than training."
+  },
+  "snitch": {
+    "name": "Snitch",
+    "description": "You reported a cadet for cheating."
+  },
   "bornInWorkshop": {
     "description": "You entered the mechanics program and learned to understand every machine from the inside.",
     "name": "Born in the workshop"

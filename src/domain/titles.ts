@@ -6,6 +6,7 @@ import type {
   TitleId,
   TranslationKey,
 } from "./types";
+import { hasMinimumRank } from "./ranks";
 
 export interface TitleGrantContext {
   endReason: CareerEndReason;
@@ -61,7 +62,7 @@ export const titleCatalog = [
   titleDefinition(
     "title:false-promise",
     "falsePromise",
-    ({ pilot }) => pilot.age < 15,
+    ({ pilot }) => !hasMinimumRank(pilot.career.militaryRank, "soldier"),
   ),
   titleDefinition(
     "title:puppeteer",

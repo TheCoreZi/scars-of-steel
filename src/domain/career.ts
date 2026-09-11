@@ -7,9 +7,22 @@ import type {
   ResolvedYear,
 } from "./types";
 import { getFactionControl } from "./war";
+import { getOutcomeEndReason } from "./outcomes";
 
-export function advanceCareerYear(pilot: Pilot): Pilot {
-  return { ...pilot, age: pilot.age + 1 };
+export function advanceCareerYear(pilot: Pilot, outcome?: Outcome): Pilot {
+  const promoted =
+    pilot.age === 14 &&
+    pilot.condition !== "dead" &&
+    pilot.career.militaryRank === "cadet" &&
+    (!outcome || !getOutcomeEndReason(outcome));
+  return {
+    ...pilot,
+    age: pilot.age + 1,
+    career: {
+      ...pilot.career,
+      militaryRank: promoted ? "soldier" : pilot.career.militaryRank,
+    },
+  };
 }
 
 export function createCareerHistory(): CareerHistory {
@@ -42,17 +55,8 @@ export function getCareerEndReason(
     return "war-lost";
   }
 
-  if (outcome.tags.includes("outcome-tag:retired")) {
-    return "retired";
-  }
-
-  if (outcome.tags.includes("outcome-tag:disappeared")) {
-    return "disappeared";
-  }
-
-  if (outcome.tags.includes("outcome-tag:non-operational")) {
-    return "non-operational";
-  }
+  const outcomeEndReason = getOutcomeEndReason(outcome);
+  if (outcomeEndReason) return outcomeEndReason;
 
   return eligibleEventIds.length === 0 ? "no-eligible-events" : null;
 }

@@ -2,10 +2,26 @@ import { getAssetPath } from "../assets";
 import {
   createBoundedValue,
   type Faction,
+  type Pilot,
   type TranslationKey,
   type Zoid,
   type ZoidId,
 } from "./types";
+
+const powerPerUpgrade = 0.15;
+
+export function getZoidPowerBeforeUpgrades(pilot: Pilot, id: ZoidId): number {
+  return pilot.zoidProgress?.[id]?.power ?? getZoid(id).basePower;
+}
+
+export function getEffectiveZoidPower(pilot: Pilot, id: ZoidId): number {
+  const progress = pilot.zoidProgress?.[id];
+  const power = progress?.power ?? getZoid(id).basePower;
+  return Math.min(
+    100,
+    Math.round(power * (1 + (progress?.upgrades ?? 0) * powerPerUpgrade)),
+  );
+}
 
 interface ZoidDefinition {
   basePower: number;
@@ -106,6 +122,13 @@ const definitions: readonly ZoidDefinition[] = [
     id: "double-sworder",
     image: "double_sworder",
     name: "doubleSworder",
+  },
+  {
+    basePower: 20,
+    faction: "helic",
+    id: "elephantus",
+    image: "elephantus",
+    name: "elephantus",
   },
   {
     basePower: 12,

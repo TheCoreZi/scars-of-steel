@@ -1,9 +1,6 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 
-import {
-  achievementDescriptionKeys,
-  achievementNameKeys,
-} from "../domain/achievements";
+import { achievementCatalog } from "../domain/achievements";
 import { getNicknameKey, nicknameIds } from "../domain/nicknames";
 import { titleCatalog } from "../domain/titles";
 import {
@@ -137,12 +134,11 @@ test("formats the localized final pilot name", () => {
 
 test("provides every final distinction in both languages", () => {
   for (const language of supportedLanguages) {
-    for (const descriptionKey of Object.values(achievementDescriptionKeys)) {
-      expect(i18n.exists(descriptionKey, { lng: language })).toBe(true);
-    }
-
-    for (const nameKey of Object.values(achievementNameKeys)) {
-      expect(i18n.exists(nameKey, { lng: language })).toBe(true);
+    for (const achievement of Object.values(achievementCatalog)) {
+      expect(i18n.exists(achievement.descriptionKey, { lng: language })).toBe(
+        true,
+      );
+      expect(i18n.exists(achievement.nameKey, { lng: language })).toBe(true);
     }
 
     for (const nicknameId of nicknameIds) {

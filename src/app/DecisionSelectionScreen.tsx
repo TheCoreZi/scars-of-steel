@@ -35,7 +35,7 @@ export function DecisionSelectionScreen({
   );
 
   useEffect(() => {
-    headingRef.current?.focus();
+    headingRef.current?.focus({ preventScroll: true });
   }, []);
 
   return (
@@ -109,7 +109,7 @@ function DecisionOption({ decision, onDecision, pilot }: DecisionOptionProps) {
   const { t } = useTranslation("interface");
   const success =
     decision.kind === "chance"
-      ? calculateAdjustedSuccessChance(decision, pilot.stats)
+      ? calculateAdjustedSuccessChance(decision, pilot.stats, pilot.potential)
       : null;
   const accessibilityLabel =
     success === null

@@ -82,12 +82,12 @@ describe("welcome screen", () => {
     expect(screen.getByText("2").nextElementSibling).toHaveTextContent(
       "factions",
     );
-    expect(screen.getByText("5").nextElementSibling).toHaveTextContent(
+    expect(screen.getByText("39").nextElementSibling).toHaveTextContent(
       "decisions",
     );
-    expect(screen.getByText("21").nextElementSibling).toHaveTextContent(
-      "possible paths",
-    );
+    expect(
+      screen.getByText("possible stories").previousElementSibling,
+    ).toHaveTextContent(/^\+\d+ (Thousand|Million)$/u);
     expect(screen.getByText("1").nextElementSibling).toHaveTextContent(
       "war to decide",
     );
@@ -471,12 +471,12 @@ describe("pilot creation", () => {
 
     await screen.findByText("Choose your response");
     const heading = screen.getByRole("heading", { level: 1 });
-    expect(heading).toHaveFocus();
+    await waitFor(() => expect(heading).toHaveFocus());
     expect(screen.getByText("Choose your response")).toBeInTheDocument();
     expect(document.querySelectorAll(".decision-option")).toHaveLength(3);
     expect(screen.getByLabelText("Career status")).toBeInTheDocument();
     expect(screen.queryByText("Zoid unassigned")).not.toBeInTheDocument();
-    expect(screen.getByText("Zoid")).toBeInTheDocument();
+    expect(screen.getByLabelText("Zoid unassigned")).toBeInTheDocument();
     expect(heading.closest(".app-shell")).toHaveAttribute(
       "data-faction",
       "helic",
@@ -511,9 +511,7 @@ describe("pilot creation", () => {
       expect(document.querySelectorAll(".decision-option")).toHaveLength(0);
       expect(document.querySelector(".decision-screen__choices")).toBeNull();
     });
-    expect(document.querySelectorAll(".decision-screen__prompt")).toHaveLength(
-      8,
-    );
+    expect(screen.getByText("Yearly report")).toBeInTheDocument();
     await waitFor(() =>
       expect(document.querySelector(".outcome-screen h1")).toHaveFocus(),
     );
@@ -529,6 +527,21 @@ describe("pilot creation", () => {
     expect(
       screen.getByRole("button", { name: "Continue career" }),
     ).toBeInTheDocument();
+    const selector = screen.getByRole("combobox", {
+      name: "DEV · Next event",
+    });
+    const option = selector.querySelectorAll("option")[1];
+    expect(option).toBeDefined();
+    fireEvent.change(selector, { target: { value: option.value } });
+    fireEvent.click(screen.getByRole("button", { name: "Continue career" }));
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+        option.textContent!,
+      );
+    });
+    expect(
+      screen.queryByRole("combobox", { name: "DEV · Next event" }),
+    ).toBeNull();
   });
 
   test("restores the exact resolved chance roll", async () => {
@@ -564,6 +577,48 @@ describe("pilot creation", () => {
       await screen.findByRole("img", { name: /Resolution target/u }),
     ).toHaveAttribute("style", style);
   });
+
+  test.each([
+    ["Force success", "success"],
+    ["Force failure", "failure"],
+  ])(
+    "forces a chance decision to resolve as %s in development",
+    async (option, result) => {
+      render(<App />);
+      await startPilotCreation();
+      fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
+        target: { value: "Lena" },
+      });
+      fireEvent.click(screen.getByRole("radio", { name: "Helic Republic" }));
+      fireEvent.click(screen.getByRole("radio", { name: "War hero" }));
+      fireEvent.click(
+        screen.getByRole("button", { name: "Submit enlistment" }),
+      );
+
+      await screen.findByText("Choose your response");
+      const selector = screen.getByRole("combobox", {
+        name: "DEV · Chance decision result",
+      });
+      const selectedValue = within(selector)
+        .getByRole("option", { name: option })
+        .getAttribute("value");
+      fireEvent.change(selector, { target: { value: selectedValue } });
+      const chanceDecision = Array.from(
+        document.querySelectorAll<HTMLButtonElement>(".decision-option"),
+      ).find((decision) => decision.ariaLabel?.includes(". With risk."));
+      fireEvent.click(chanceDecision!);
+
+      expect(await screen.findByRole("status")).toHaveAttribute(
+        "data-result",
+        result,
+      );
+      expect(
+        screen.queryByRole("combobox", {
+          name: "DEV · Chance decision result",
+        }),
+      ).toBeNull();
+    },
+  );
 
   test("restores pilot creation after remounting", async () => {
     const firstRender = render(<App />);
@@ -639,11 +694,34 @@ describe("pilot creation", () => {
       await screen.findByRole("button", { name: "Continue career" }),
     );
 
+    for (const age of [13, 14]) {
+      await screen.findByText("Choose your response");
+      expect(screen.getByText(`Age ${age}`)).toBeInTheDocument();
+      const options = Array.from(
+        document.querySelectorAll<HTMLButtonElement>(".decision-option"),
+      );
+      const safe = options.find((option) =>
+        option.ariaLabel?.includes(". Safe."),
+      );
+      if (safe) fireEvent.click(safe);
+      else {
+        // The graduation board has three chance choices; the tactics exam cannot end the run early.
+        fireEvent.click(options[1]);
+      }
+      fireEvent.click(
+        await screen.findByRole(
+          "button",
+          { name: "Continue career" },
+          { timeout: 4000 },
+        ),
+      );
+    }
+
     expect(
-      await screen.findByRole("heading", { name: "False promise" }),
+      await screen.findByRole("heading", { name: "Village hero" }),
     ).toHaveFocus();
     expect(
-      screen.getByText("You fought for 1 year. Your career ended at age 13."),
+      screen.getByText("You fought for 3 years. Your career ended at age 15."),
     ).toBeInTheDocument();
     expect(screen.getByText("Signature Zoid")).toBeInTheDocument();
     expect(
@@ -665,12 +743,12 @@ describe("pilot creation", () => {
     );
     const record = screen.getByText("Lena").closest("li");
     expect(record).not.toBeNull();
-    expect(within(record!).getByLabelText("Cadet")).toBeInTheDocument();
+    expect(within(record!).getByLabelText("Soldier")).toBeInTheDocument();
     expect(within(record!).getByLabelText(/Potential:/u)).toBeInTheDocument();
     expect(within(record!).getByLabelText(/Fame:/u)).toBeInTheDocument();
     fireEvent.click(within(record!).getByRole("button"));
     expect(
-      await screen.findByRole("heading", { name: "False promise" }),
+      await screen.findByRole("heading", { name: "Village hero" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("main").closest(".app-shell")).toHaveAttribute(
       "data-faction",

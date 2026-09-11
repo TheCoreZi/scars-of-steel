@@ -5,6 +5,18 @@ export interface RankInsigniaDefinition {
   imagePath: string;
 }
 
+export const militaryRankLevels = {
+  cadet: 0,
+  captain: 50,
+  commander: 70,
+  corporal: 20,
+  general: 80,
+  lieutenant: 40,
+  major: 60,
+  sergeant: 30,
+  soldier: 10,
+} as const satisfies Record<MilitaryRank, number>;
+
 export const rankInsigniaDefinitions = {
   cadet: { imagePath: getAssetPath("images/ranks/cadet.png") },
   captain: { imagePath: getAssetPath("images/ranks/captain.png") },
@@ -19,4 +31,11 @@ export const rankInsigniaDefinitions = {
 
 export function getRankInsignia(rank: MilitaryRank): RankInsigniaDefinition {
   return rankInsigniaDefinitions[rank];
+}
+
+export function hasMinimumRank(
+  rank: MilitaryRank,
+  minimum: MilitaryRank,
+): boolean {
+  return militaryRankLevels[rank] >= militaryRankLevels[minimum];
 }

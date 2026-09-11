@@ -64,6 +64,46 @@ afterEach(() => {
 });
 
 describe("final screen", () => {
+  test("hides empty achievement and bonus sections", () => {
+    const emptyState: FinalGameState = {
+      ...state,
+      history: { ...state.history, achievementIds: [] },
+      pilot: { ...state.pilot, bonusIds: [] },
+    };
+    render(
+      <FinalScreen
+        colorMode={darkColorMode}
+        onRestart={() => undefined}
+        state={emptyState}
+      />,
+    );
+    expect(screen.queryByRole("heading", { name: "Achievements" })).toBeNull();
+    expect(
+      screen.queryByRole("heading", { name: "Bonuses earned" }),
+    ).toBeNull();
+    expect(document.querySelector(".final-screen__achievements")).toBeNull();
+  });
+  test("includes earned bonuses in the summary and shared card", async () => {
+    const bonusState: FinalGameState = {
+      ...state,
+      pilot: { ...state.pilot, bonusIds: ["organoid"] },
+    };
+    render(
+      <FinalScreen
+        colorMode={darkColorMode}
+        onRestart={() => undefined}
+        state={bonusState}
+      />,
+    );
+    expect(screen.getByText("Bonuses earned")).toBeInTheDocument();
+    const bonus = screen.getByText("Organoid").closest("li");
+    expect(bonus?.closest("section")).toHaveClass("final-screen__bonuses");
+    expect(bonus?.querySelector("img")).toHaveAttribute(
+      "src",
+      expect.stringContaining("images/bonuses/organoid.png"),
+    );
+    expect(screen.queryByText("+50% Stat Growth")).not.toBeInTheDocument();
+  });
   test("shows the complete localized final summary", async () => {
     await i18n.changeLanguage("es");
     render(

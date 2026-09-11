@@ -7,6 +7,7 @@ import {
   getOutcome,
   resolveDecision,
   validateEvents,
+  validateOutcomes,
 } from "../domain/events";
 import { initialEventPool, selectInitialEvent } from "../domain/eventPools";
 import { createInitialPilot } from "../domain/pilot";
@@ -17,7 +18,6 @@ import {
   type DecisionEvent,
   type Outcome,
   type SafeDecision,
-  type StatChange,
   type Stats,
 } from "../domain/types";
 import { i18n, supportedLanguages } from "../i18n";
@@ -29,23 +29,27 @@ const pilot = createInitialPilot({
   name: "Lena",
 });
 const initialEvents = initialEventPool.map(getEvent);
+const validationOutcomeIds = [
+  eventCatalog.firstExercises.decisions[0].outcomeId,
+  eventCatalog.firstExercises.decisions[2].outcomeId,
+  eventCatalog.mechanicsProgram.decisions[0].outcomeId,
+] as const;
 
 const testOutcome = {
+  effects: [
+    { amount: 1, kind: "change-stat", stat: "piloting" },
+    { amount: 1, kind: "change-stat", stat: "synchrony" },
+    { kind: "grant-zoid", poolId: "standard" },
+  ],
   id: "outcome:test",
   narrativeKey: "outcomes:academy.firstExercisesAcceptStandard",
-  statChanges: [
-    { amount: 1, stat: "piloting", target: "stat" },
-    { amount: 1, stat: "synchrony", target: "stat" },
-  ],
-  tags: [],
-  zoidReward: "standard",
 } as const satisfies Outcome;
 
 function createChanceDecision(baseSuccessChance: number): ChanceDecision {
   return {
     baseSuccessChance: createBoundedValue(baseSuccessChance),
     descriptionKey: "decisions:academy.firstExercises.controlRare.description",
-    failureOutcome: testOutcome,
+    failureOutcomeId: testOutcome.id,
     id: "decision:test",
     kind: "chance",
     labelKey: "decisions:academy.firstExercises.controlRare.label",
@@ -53,7 +57,7 @@ function createChanceDecision(baseSuccessChance: number): ChanceDecision {
       { stat: "piloting", weight: 0.3 },
       { stat: "synchrony", weight: 0.15 },
     ],
-    successOutcome: testOutcome,
+    successOutcomeId: testOutcome.id,
   };
 }
 
@@ -79,20 +83,14 @@ function createRandom(probability: number, integer = 4): RandomGenerator {
   };
 }
 
-function createValidationEvent(statChanges: readonly StatChange[]) {
+function createValidationEvent() {
   const createDecision = (index: number): SafeDecision => ({
     descriptionKey:
       "decisions:academy.firstExercises.acceptStandard.description",
     id: `decision:validation-${index}`,
     kind: "safe",
     labelKey: "decisions:academy.firstExercises.acceptStandard.label",
-    outcome: {
-      id: `outcome:validation-${index}`,
-      narrativeKey: "outcomes:academy.firstExercisesAcceptStandard",
-      statChanges,
-      tags: [],
-      zoidReward: "standard",
-    },
+    outcomeId: validationOutcomeIds[index - 1],
   });
 
   return {
@@ -106,20 +104,12 @@ function createValidationEvent(statChanges: readonly StatChange[]) {
 function createValidationChanceEvent(
   changes: Partial<ChanceDecision> = {},
 ): DecisionEvent {
-  const event = createValidationEvent([
-    { amount: 1, stat: "piloting", target: "stat" },
-  ]);
+  const event = createValidationEvent();
   const decision = {
     ...createChanceDecision(40),
-    failureOutcome: {
-      ...testOutcome,
-      id: "outcome:validation-chance-failure",
-    },
+    failureOutcomeId: eventCatalog.firstExercises.decisions[1].failureOutcomeId,
     id: "decision:validation-chance",
-    successOutcome: {
-      ...testOutcome,
-      id: "outcome:validation-chance-success",
-    },
+    successOutcomeId: eventCatalog.firstExercises.decisions[1].successOutcomeId,
     ...changes,
   } as ChanceDecision;
 
@@ -142,11 +132,14 @@ describe("Initial event content", () => {
       for (const decision of event.decisions) {
         const outcomes =
           decision.kind === "safe"
-            ? [decision.outcome]
-            : [decision.successOutcome, decision.failureOutcome];
+            ? [getOutcome(decision.outcomeId)]
+            : [
+                getOutcome(decision.successOutcomeId),
+                getOutcome(decision.failureOutcomeId),
+              ];
 
         for (const outcome of outcomes) {
-          expect(getOutcome(event, outcome.id)).toBe(outcome);
+          expect(getOutcome(outcome.id)).toBe(outcome);
         }
       }
     }
@@ -163,9 +156,7 @@ describe("Initial event content", () => {
   });
 
   test("requires three decisions with unique identifiers", () => {
-    const event = createValidationEvent([
-      { amount: 1, stat: "piloting", target: "stat" },
-    ]);
+    const event = createValidationEvent();
 
     expect(() =>
       validateEvents([
@@ -189,76 +180,45 @@ describe("Initial event content", () => {
     ).toThrow("Duplicate decision identifier");
   });
 
-  test("requires unique outcome identifiers", () => {
-    const event = createValidationEvent([
-      { amount: 1, stat: "piloting", target: "stat" },
-    ]);
-
+  test("requires at least one effect in every outcome", () => {
     expect(() =>
-      validateEvents([
-        {
-          ...event,
-          decisions: [
-            event.decisions[0],
-            {
-              ...event.decisions[1],
-              outcome: {
-                ...event.decisions[1].outcome,
-                id: event.decisions[0].outcome.id,
-              },
-            },
-            event.decisions[2],
-          ],
-        },
-      ]),
-    ).toThrow("Duplicate outcome identifier");
-  });
-
-  test("requires at least one change in every outcome", () => {
-    expect(() =>
-      validateEvents([
-        createValidationEvent([
-          { amount: 1, stat: "piloting", target: "stat" },
-        ]),
-      ]),
+      validateOutcomes({ [testOutcome.id]: testOutcome }),
     ).not.toThrow();
-    expect(() => validateEvents([createValidationEvent([])])).toThrow(
-      "must include at least one change",
-    );
+    expect(() =>
+      validateOutcomes({
+        "outcome:empty": {
+          effects: [],
+          id: "outcome:empty",
+          narrativeKey: testOutcome.narrativeKey,
+        },
+      }),
+    ).toThrow("must include at least one effect");
   });
 
   test.each([0, Number.NaN, Number.POSITIVE_INFINITY])(
     "rejects the invalid outcome change %s",
     (amount) => {
       expect(() =>
-        validateEvents([
-          createValidationEvent([{ amount, stat: "piloting", target: "stat" }]),
-        ]),
-      ).toThrow("has an invalid change");
+        validateOutcomes({
+          "outcome:invalid": {
+            effects: [{ amount, kind: "change-stat", stat: "piloting" }],
+            id: "outcome:invalid",
+            narrativeKey: testOutcome.narrativeKey,
+          },
+        }),
+      ).toThrow("has an invalid effect amount");
     },
   );
 
   test("requires an available Zoid pool for each outcome reward", () => {
-    const event = createValidationEvent([
-      { amount: 1, stat: "piloting", target: "stat" },
-    ]);
     const outcome = {
-      ...event.decisions[0].outcome,
-      zoidReward: "missing",
+      ...testOutcome,
+      effects: [{ kind: "grant-zoid", poolId: "missing" }],
     } as unknown as Outcome;
 
-    expect(() =>
-      validateEvents([
-        {
-          ...event,
-          decisions: [
-            { ...event.decisions[0], outcome },
-            event.decisions[1],
-            event.decisions[2],
-          ],
-        },
-      ]),
-    ).toThrow("uses an unavailable Zoid category");
+    expect(() => validateOutcomes({ [outcome.id]: outcome })).toThrow(
+      "uses an unavailable Zoid pool",
+    );
   });
 
   test("requires unique probability stats with positive finite weights", () => {
@@ -337,8 +297,11 @@ describe("Initial event content", () => {
 
         const outcomes =
           decision.kind === "safe"
-            ? [decision.outcome]
-            : [decision.successOutcome, decision.failureOutcome];
+            ? [getOutcome(decision.outcomeId)]
+            : [
+                getOutcome(decision.successOutcomeId),
+                getOutcome(decision.failureOutcomeId),
+              ];
 
         for (const result of outcomes) {
           for (const language of supportedLanguages) {
@@ -470,7 +433,7 @@ describe("decision resolution", () => {
     expect(resolveDecision(decision, pilot, random)).toEqual({
       decisionId: decision.id,
       kind: "safe",
-      outcomeId: decision.outcome.id,
+      outcomeId: decision.outcomeId,
     });
     expect(random.probability).not.toHaveBeenCalled();
   });

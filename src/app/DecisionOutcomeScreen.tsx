@@ -1,10 +1,15 @@
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 
-import { achievementNameKeys } from "../domain/achievements";
+import {
+  achievementCatalog,
+  getAchievementIconPath,
+} from "../domain/achievements";
+import { getRankInsignia } from "../domain/ranks";
 import {
   battleFactionNameKeys,
   factionNameKeys,
+  militaryRankNameKeys,
   statNameKeys,
 } from "../domain/pilot";
 import type {
@@ -19,6 +24,7 @@ import { getWarReport } from "../domain/war";
 import { getZoid } from "../domain/zoids";
 import { translate } from "../i18n";
 import { Badge } from "./UiPrimitives";
+import { RankInsignia } from "./RankInsignia";
 
 const statNames = [
   "charisma",
@@ -56,8 +62,9 @@ export function DecisionOutcomeScreen({
     battleFactionNameKeys[result.pilotAfter.faction],
   );
   const growthMessageKey = getGrowthMessageKey(result.changes);
-  const outcomeChanges = result.changes.filter(
-    ({ target }) => target !== "war-state",
+  const promotedRank = result.pilotAfter.career.militaryRank;
+  const outcomeChanges = consolidateChanges(
+    result.changes.filter(({ target }) => target !== "war-state"),
   );
   const warReport = getWarReport(
     result.pilotBefore.career.warState,
@@ -65,7 +72,7 @@ export function DecisionOutcomeScreen({
   );
 
   useEffect(() => {
-    headingRef.current?.focus();
+    headingRef.current?.focus({ preventScroll: true });
   }, []);
 
   function cancelAbandon() {
@@ -119,8 +126,12 @@ export function DecisionOutcomeScreen({
 
             {outcomeChanges.length > 0 ? (
               <ul className="outcome-screen__terminal-changes">
-                {outcomeChanges.map((change) => (
-                  <OutcomeChange change={change} key={getChangeKey(change)} />
+                {outcomeChanges.map(({ amount, change }) => (
+                  <OutcomeChange
+                    amount={amount}
+                    change={change}
+                    key={getChangeKey(change)}
+                  />
                 ))}
               </ul>
             ) : null}
@@ -128,7 +139,7 @@ export function DecisionOutcomeScreen({
 
           <section className="outcome-screen__report-section">
             <TerminalLine prompt=">">
-              <h2>{t("outcomeScreen.battles")}</h2>
+              <h2>{t("annualReport.title")}</h2>
             </TerminalLine>
             <TerminalLine>
               <p className="outcome-screen__record">
@@ -145,6 +156,28 @@ export function DecisionOutcomeScreen({
                 <p className="outcome-screen__record">{translate(key)}</p>
               </TerminalLine>
             ))}
+            {getRecoveryMessages(result)
+              .filter((roll) => roll.kind !== "death" || roll.success)
+              .map((roll, index) => (
+                <TerminalLine key={index}>
+                  <p className="outcome-screen__record">
+                    {roll.kind === "repair"
+                      ? t(
+                          `annualReport.repair${roll.partial ? "Partial" : roll.success ? "Yes" : "No"}`,
+                          {
+                            zoid: roll.zoidId
+                              ? translate(getZoid(roll.zoidId).nameKey)
+                              : "",
+                          },
+                        )
+                      : roll.kind === "death"
+                        ? t("annualReport.deathYes")
+                        : t(
+                            `annualReport.recovery${roll.partial ? "Partial" : roll.success ? "Yes" : "No"}`,
+                          )}
+                  </p>
+                </TerminalLine>
+              ))}
             <TerminalLine>
               <p
                 className="outcome-screen__war-report"
@@ -156,14 +189,44 @@ export function DecisionOutcomeScreen({
                 })}
               </p>
             </TerminalLine>
+            {result.annualReport?.promoted ? (
+              <div
+                className="promotion-panel"
+                role="group"
+                aria-label={t("annualReport.promoted")}
+              >
+                <span className="promotion-panel__insignia">
+                  <RankInsignia insignia={getRankInsignia(promotedRank)} />
+                </span>
+                <span className="promotion-panel__text">
+                  <small>{t("annualReport.promoted")}</small>
+                  <strong>
+                    {translate(militaryRankNameKeys[promotedRank])}
+                  </strong>
+                </span>
+              </div>
+            ) : null}
           </section>
 
-          {result.achievementIds.length > 0 ? (
+          {result.achievementIds.length > 0 ||
+          result.annualReport?.bonusIds.length ? (
             <ul className="outcome-screen__achievements">
               {result.achievementIds.map((id) => (
-                <li key={id}>
-                  <small>{t("outcomeScreen.achievementEarned")}</small>
-                  <strong>{translate(achievementNameKeys[id])}</strong>
+                <li className="outcome-screen__achievement" key={id}>
+                  <img src={getAchievementIconPath(id)} alt="" />
+                  <div>
+                    <small>{t("outcomeScreen.achievementEarned")}</small>
+                    <strong>{translate(achievementCatalog[id].nameKey)}</strong>
+                  </div>
+                </li>
+              ))}
+              {result.annualReport?.bonusIds.map((id) => (
+                <li className="outcome-screen__bonus" key={id}>
+                  <img src={`/images/bonuses/${id}.png`} alt="" />
+                  <div>
+                    <strong>{t(`annualReport.bonuses.${id}.earned`)}</strong>
+                    <p>{t(`annualReport.bonuses.${id}.description`)}</p>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -217,6 +280,30 @@ export function DecisionOutcomeScreen({
 interface AbandonDialogProps {
   onCancel: () => void;
   onConfirm: () => void;
+}
+
+function getRecoveryMessages(result: ResolvedYear) {
+  const groups = new Map<
+    string,
+    {
+      kind: "death" | "recovery" | "repair";
+      partial: boolean;
+      success: boolean;
+      zoidId?: ZoidId;
+    }
+  >();
+  for (const roll of result.annualReport?.rolls ?? []) {
+    const key = `${roll.kind}:${roll.zoidId ?? ""}`;
+    const success = roll.success || (groups.get(key)?.success ?? false);
+    const remains =
+      roll.kind === "recovery"
+        ? result.pilotAfter.condition === "injured"
+        : roll.kind === "repair" && roll.zoidId
+          ? result.pilotAfter.zoids?.damagedIds.includes(roll.zoidId)
+          : false;
+    groups.set(key, { ...roll, partial: success && Boolean(remains), success });
+  }
+  return [...groups.values()];
 }
 
 function AbandonDialog({ onCancel, onConfirm }: AbandonDialogProps) {
@@ -340,12 +427,16 @@ function getBattleStatusKeys(result: ResolvedYear) {
 
   if (result.battleRecord.killed) {
     keys.push("interface:outcomeScreen.battleKilled");
+  } else if (result.annualReport?.injured) {
+    keys.push("interface:annualReport.injured");
   } else if (result.battleRecord.injured) {
     keys.push("interface:outcomeScreen.battleInjured");
   }
 
   if (result.battleRecord.zoidDestroyed) {
     keys.push("interface:outcomeScreen.zoidDestroyed");
+  } else if (result.annualReport?.zoidDamaged) {
+    keys.push("interface:annualReport.damaged");
   } else if (result.battleRecord.zoidDamaged) {
     keys.push("interface:outcomeScreen.zoidDamaged");
   }
@@ -414,10 +505,11 @@ function OutcomeStat({ current, previous, stat }: OutcomeStatProps) {
 }
 
 interface OutcomeChangeProps {
+  amount: number;
   change: AppliedChange;
 }
 
-function OutcomeChange({ change }: OutcomeChangeProps) {
+function OutcomeChange({ amount, change }: OutcomeChangeProps) {
   const { t } = useTranslation("interface");
   const label =
     change.target === "stat"
@@ -432,14 +524,40 @@ function OutcomeChange({ change }: OutcomeChangeProps) {
           ? t("outcomeScreen.warState", {
               faction: translate(factionNameKeys[change.faction]),
             })
-          : t("outcomeScreen.potential");
+          : change.target === "zoid-power"
+            ? t("annualReport.power")
+            : change.target === "zoid-upgrades"
+              ? t("annualReport.upgrades")
+              : t("outcomeScreen.potential");
 
   return (
-    <li data-negative={change.current < change.previous || undefined}>
-      <strong>{getSignedDelta(change.current - change.previous)}</strong>
+    <li data-negative={amount < 0 || undefined}>
+      <strong>{getSignedDelta(amount)}</strong>
       <span>{label}</span>
     </li>
   );
+}
+
+interface ConsolidatedChange {
+  amount: number;
+  change: AppliedChange;
+}
+
+function consolidateChanges(
+  changes: readonly AppliedChange[],
+): ConsolidatedChange[] {
+  const consolidated = new Map<string, ConsolidatedChange>();
+
+  for (const change of changes) {
+    const key = getChangeKey(change);
+    const previous = consolidated.get(key);
+    consolidated.set(key, {
+      amount: (previous?.amount ?? 0) + change.current - change.previous,
+      change: previous?.change ?? change,
+    });
+  }
+
+  return [...consolidated.values()].filter(({ amount }) => amount !== 0);
 }
 
 function getSignedDelta(delta: number): string {
@@ -466,6 +584,11 @@ function getChangeKey(change: AppliedChange): string {
   if (change.target === "career-indicator") {
     return `indicator:${change.indicator}`;
   }
+  if (change.target === "zoid-power" || change.target === "zoid-upgrades") {
+    return `${change.target}:${change.zoidId}`;
+  }
 
-  return change.target === "war-state" ? `war:${change.faction}` : "potential";
+  return change.target === "war-state"
+    ? `war:${change.faction}`
+    : change.target;
 }

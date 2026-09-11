@@ -42,8 +42,11 @@ export function simulateBattleYear(
   battles: number,
   warState: WarState,
   random: RandomGenerator,
+  allowPilotBattles = true,
 ): BattleYear {
-  const assigned = getAssignedBattles(pilot, battles, random);
+  const assigned = allowPilotBattles
+    ? getAssignedBattles(pilot, battles, random)
+    : 0;
   const [firstSide, secondSide] = warState.sides;
   const opposingFaction = getOpposingFaction(warState, pilot.faction);
   let currentPilot = pilot;
@@ -136,7 +139,11 @@ function simulatePilotBattle(
   const won =
     random.probability() * 100 <= getPerformance(pilot, warState, random);
   const injured = random.chance(getInjuryChance(pilot, won) / 100);
-  const killed = injured && random.chance(getDeathChance(pilot) / 100);
+  const injuryCount =
+    (pilot.injuryCount ?? (pilot.condition === "injured" ? 1 : 0)) +
+    Number(injured);
+  const killed =
+    injured && random.chance(getDeathChance({ ...pilot, injuryCount }) / 100);
   const zoidDamaged = random.chance(getZoidDamageChance(pilot, won) / 100);
   const zoidDestroyed =
     zoidDamaged && random.chance(getZoidDestructionChance(pilot) / 100);
@@ -145,7 +152,8 @@ function simulatePilotBattle(
     : pilot;
   const updatedPilot = {
     ...damagedPilot,
-    condition: killed ? "dead" : injured ? "injured" : "active",
+    condition: killed ? "dead" : injuryCount > 0 ? "injured" : "active",
+    injuryCount,
   } as Pilot;
 
   return {
@@ -194,14 +202,15 @@ function getInjuryAgeModifier(age: number) {
   return Math.min(15, 5 + (age - 50) * 0.2);
 }
 
-function getDeathChance(pilot: Pilot) {
-  return Math.min(
+export function getDeathChance(pilot: Pilot) {
+  const base = Math.min(
     15,
     Math.max(
       0.1,
       1 + getDeathAgeModifier(pilot.age) - pilot.stats.strength * 0.01,
     ),
   );
+  return Math.min(100, base * Math.max(1, pilot.injuryCount ?? 1));
 }
 
 function getDeathAgeModifier(age: number) {
@@ -225,7 +234,13 @@ function getZoidDamageChance(pilot: Pilot, won: boolean) {
 }
 
 function getZoidDestructionChance(pilot: Pilot) {
-  return Math.min(15, Math.max(0.1, 1 - pilot.stats.synchrony * 0.01));
+  const damageCount =
+    (pilot.zoids?.damagedIds.filter((id) => id === pilot.zoids?.signatureId)
+      .length ?? 0) + 1;
+  return Math.min(
+    100,
+    Math.min(15, Math.max(0.1, 1 - pilot.stats.synchrony * 0.01)) * damageCount,
+  );
 }
 
 function updateZoidCondition(
@@ -239,9 +254,7 @@ function updateZoidCondition(
       ...pilot,
       zoids: {
         ...pilot.zoids,
-        damagedIds: damagedIds.includes(signatureId)
-          ? damagedIds
-          : [...damagedIds, signatureId],
+        damagedIds: [...damagedIds, signatureId],
       },
     };
   }

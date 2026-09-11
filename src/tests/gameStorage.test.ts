@@ -15,11 +15,10 @@ afterEach(() => {
 });
 
 describe("game storage", () => {
-  test("loads versioned game data", () => {
+  test("loads valid game data", () => {
     const data = {
       activeGame: null,
       completedGames: [],
-      version: 2,
     } as const satisfies StoredGameData;
 
     saveGameData(data);
@@ -29,7 +28,7 @@ describe("game storage", () => {
 
   test.each([
     "not-json",
-    JSON.stringify({ activeGame: null, completedGames: [], version: 1 }),
+    JSON.stringify({ activeGame: null, completedGames: "invalid" }),
     JSON.stringify({ activeGame: { screen: "event" }, version: 2 }),
   ])("ignores damaged or incompatible data", (storedValue) => {
     window.localStorage.setItem(gameStorageKey, storedValue);
