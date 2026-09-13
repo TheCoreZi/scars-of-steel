@@ -23,7 +23,7 @@ const initialPilot = createInitialPilot({
 });
 const basePilot = {
   ...initialPilot,
-  career: { ...initialPilot.career, militaryRank: "soldier" },
+  career: { ...initialPilot.career, militaryRank: "private" },
 } as const satisfies Pilot;
 
 function select(
@@ -40,7 +40,7 @@ function select(
 
 function withCareer(
   changes: Partial<Pilot["career"]>,
-  militaryRank: MilitaryRank = "soldier",
+  militaryRank: MilitaryRank = "private",
 ): Pilot["career"] {
   return { ...basePilot.career, militaryRank, ...changes };
 }

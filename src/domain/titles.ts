@@ -62,7 +62,7 @@ export const titleCatalog = [
   titleDefinition(
     "title:false-promise",
     "falsePromise",
-    ({ pilot }) => !hasMinimumRank(pilot.career.militaryRank, "soldier"),
+    ({ pilot }) => !hasMinimumRank(pilot.career.militaryRank, "private"),
   ),
   titleDefinition(
     "title:puppeteer",

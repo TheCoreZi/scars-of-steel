@@ -88,8 +88,8 @@ afterEach(() => window.localStorage.clear());
 describe("academy catalog", () => {
   test("validates all events and their Spanish and English text", () => {
     expect(academyEvents).toHaveLength(34);
-    expect(events).toHaveLength(39);
-    expect(events.flatMap(({ decisions }) => decisions)).toHaveLength(117);
+    expect(events).toHaveLength(49);
+    expect(events.flatMap(({ decisions }) => decisions)).toHaveLength(147);
     expect(() => validateEvents(events)).not.toThrow();
     for (const event of events) {
       const keys: string[] = [event.titleKey, event.introductionKey];
@@ -125,14 +125,14 @@ describe("academy catalog", () => {
     expect(getEligibleEventIds(pilot, [])).toHaveLength(32);
     expect(getEligibleEventIds({ ...pilot, age: 14 }, [])).toHaveLength(34);
     expect(getEligibleEventIds({ ...initial, age: 13 }, [])).toHaveLength(0);
-    expect(getEligibleEventIds({ ...pilot, age: 15 }, [])).toHaveLength(0);
+    expect(getEligibleEventIds({ ...pilot, age: 15 }, [])).toHaveLength(8);
     expect(
       getEligibleEventIds({ ...pilot, age: 14 }, [academyEvents[0].id]),
     ).not.toContain(academyEvents[0].id);
   });
 
   test.each(["guylos", "helic"] as const)(
-    "completes a three-year %s career and promotes to soldier",
+    "completes a three-year %s career and promotes to private",
     (faction) => {
       let current: Pilot = { ...initial, faction };
       let history = createCareerHistory();
@@ -151,7 +151,7 @@ describe("academy catalog", () => {
         const result = resolveYear(decision, event, current, random);
         expect(result.battleRecord.participated).toBe(0);
         expect(result.pilotAfter.career.militaryRank).toBe(
-          age === 14 ? "soldier" : "cadet",
+          age === 14 ? "private" : "cadet",
         );
         expect(result.annualReport?.promoted).toBe(age === 14);
         history = recordResolvedYear(history, event.id, result);
@@ -162,10 +162,10 @@ describe("academy catalog", () => {
             getEligibleEventIds(current, history.completedEventIds),
             result.outcome,
           ),
-        ).toBe(age === 14 ? "no-eligible-events" : null);
+        ).toBe(null);
       }
       expect(current.age).toBe(15);
-      expect(current.career.militaryRank).toBe("soldier");
+      expect(current.career.militaryRank).toBe("private");
       expect(new Set(history.completedEventIds).size).toBe(3);
     },
   );

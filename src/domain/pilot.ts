@@ -90,8 +90,8 @@ export const militaryRankNameKeys = {
   general: "interface:careerStatus.ranks.general",
   lieutenant: "interface:careerStatus.ranks.lieutenant",
   major: "interface:careerStatus.ranks.major",
+  private: "interface:careerStatus.ranks.private",
   sergeant: "interface:careerStatus.ranks.sergeant",
-  soldier: "interface:careerStatus.ranks.soldier",
 } as const satisfies Record<MilitaryRank, TranslationKey<"interface">>;
 
 export const specialRankNameKeys = {
@@ -130,9 +130,9 @@ export function createInitialPilot({
 
   return {
     age: 12,
-    bonusIds: [],
     aspiration,
     basePotential: zero,
+    bonusIds: [],
     career: {
       factionTrust: zero,
       fame: zero,
@@ -140,6 +140,7 @@ export function createInitialPilot({
       specialRank: null,
       warState: createWarState("helic", 50, "guylos", 50),
     },
+    careerFlags: [],
     condition: "active",
     faction,
     id,

@@ -95,13 +95,11 @@ for (const eventCase of safeEventCases) {
     const completed = await readGameSnapshot(page);
     expect(completed).toMatchObject({
       active: false,
-      age: 15,
-      eventId: outcome.eventId,
+      age: 21,
       faction: eventCase.factionId,
-      zoidId: eventCase.zoidId,
     });
     await expect(
-      page.getByText("You fought for 3 years. Your career ended at age 15."),
+      page.getByText("You fought for 9 years. Your career ended at age 21."),
     ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Continue career" }),
@@ -208,8 +206,9 @@ async function selectSafeDecision(page: Page) {
 }
 
 async function finishCareer(page: Page) {
+  await stabilizeCareer(page);
   await page.getByRole("button", { name: "Continue career" }).click();
-  for (const age of [13, 14]) {
+  for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
     await expect(page.locator(".decision-screen__choices")).toBeVisible();
     await expect(page.getByText(`Age ${age}`, { exact: true })).toBeVisible();
     const before = await readGameSnapshot(page);
@@ -221,12 +220,41 @@ async function finishCareer(page: Page) {
       .filter({ has: page.locator(".decision-option__kind--safe") });
     if (await safe.count()) await safe.first().click();
     else await page.locator(".decision-option").nth(1).click();
+    await stabilizeCareer(page);
     await page.getByRole("button", { name: "Continue career" }).click();
   }
   await expect(page.locator(".final-screen h1")).toBeFocused();
-  await expect(
-    page.getByText("Soldier", { exact: true }).first(),
-  ).toBeVisible();
+  await expect(page.locator(".final-screen__rank strong")).toBeVisible();
+}
+
+async function stabilizeCareer(page: Page) {
+  await page.evaluate((storageKey) => {
+    const storedValue = window.localStorage.getItem(storageKey);
+    if (!storedValue) throw new Error("Expected persisted game data.");
+
+    const data = JSON.parse(storedValue);
+    const activeGame = data.activeGame;
+    if (!activeGame?.pilot) throw new Error("Expected an active pilot.");
+
+    const warState = {
+      intensity: "low",
+      sides: [
+        { control: 50, faction: "helic" },
+        { control: 50, faction: "guylos" },
+      ],
+    };
+    activeGame.pilot.career.warState = warState;
+    activeGame.pilot.condition = "active";
+    activeGame.pilot.injuryCount = 0;
+    if (activeGame.result?.pilotAfter) {
+      activeGame.result.pilotAfter.career.warState = warState;
+      activeGame.result.pilotAfter.condition = "active";
+      activeGame.result.pilotAfter.injuryCount = 0;
+    }
+    window.localStorage.setItem(storageKey, JSON.stringify(data));
+  }, gameStorageKey);
+  await page.reload();
+  await expect(page.locator(".outcome-screen h1")).toBeFocused();
 }
 
 async function selectChanceDecision(page: Page) {

@@ -63,6 +63,7 @@ const pilotWithoutZoid = {
     specialRank: null,
     warState: createWarState("helic", 50, "guylos", 50),
   },
+  careerFlags: [],
   condition: "active",
   faction: "helic",
   id: "pilot:test",

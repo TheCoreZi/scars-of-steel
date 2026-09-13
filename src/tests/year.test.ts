@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
 
-import { simulateBattleYear } from "../domain/battles";
+import { getAssignedBattles, simulateBattleYear } from "../domain/battles";
 import { eventCatalog, getEvent } from "../domain/events";
 import { applyOutcome } from "../domain/outcomes";
 import { createInitialPilot } from "../domain/pilot";
@@ -144,6 +144,28 @@ describe("year resolution", () => {
 });
 
 describe("battle and war simulation", () => {
+  test("applies rank, trust, and variance in order", () => {
+    const privatePilot = {
+      ...createCombatPilot(),
+      career: {
+        ...createCombatPilot().career,
+        factionTrust: createBoundedValue(0),
+        militaryRank: "private" as const,
+      },
+    };
+    const trustedPrivate = {
+      ...privatePilot,
+      career: {
+        ...privatePilot.career,
+        factionTrust: createBoundedValue(100),
+      },
+    };
+
+    expect(getAssignedBattles(privatePilot, 40, createRandom(0.5))).toBe(2);
+    expect(getAssignedBattles(trustedPrivate, 40, createRandom(0))).toBe(5);
+    expect(getAssignedBattles(trustedPrivate, 40, createRandom(1))).toBe(7);
+  });
+
   test("uses military rank rather than age to unlock real battles", () => {
     const event = getEvent("event:academy-synchrony-test");
     const assignedPilot: Pilot = {
@@ -165,19 +187,19 @@ describe("battle and war simulation", () => {
       assignedPilot,
       createRandom(0),
     );
-    const soldier = resolveYear(
+    const privatePilot = resolveYear(
       event.decisions[1],
       event,
       {
         ...assignedPilot,
         age: 13,
-        career: { ...assignedPilot.career, militaryRank: "soldier" },
+        career: { ...assignedPilot.career, militaryRank: "private" },
       },
       createRandom(0),
     );
 
     expect(cadet.battleRecord.participated).toBe(0);
-    expect(soldier.battleRecord.participated).toBeGreaterThan(0);
+    expect(privatePilot.battleRecord.participated).toBeGreaterThan(0);
   });
 
   test("simulates unassigned battles at equal odds", () => {
@@ -252,7 +274,7 @@ describe("battle and war simulation", () => {
     );
 
     expect(result.record).toMatchObject({
-      assigned: 2,
+      assigned: 1,
       injured: true,
       killed: true,
       participated: 1,

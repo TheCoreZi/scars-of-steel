@@ -1,3 +1,4 @@
+import { createDecisionEventFactory } from "./eventDefinitions";
 import type { RandomGenerator } from "./random";
 import {
   createBoundedValue,
@@ -15,194 +16,146 @@ import { isZoidRewardPoolAvailable } from "./zoidPools";
 import { academyEvents } from "./academyEvents";
 import { initialOutcomeCatalog } from "./initialOutcomes";
 import { academyOutcomeCatalog } from "./academyOutcomes";
+import { earlyServiceEvents } from "./earlyServiceEvents";
+import { earlyServiceOutcomeCatalog } from "./earlyServiceOutcomes";
 import { calculateSuccessChance } from "./probability";
 
-const firstExercises = {
-  decisions: [
-    {
-      descriptionKey:
-        "decisions:academy.firstExercises.acceptStandard.description",
-      id: "decision:first-exercises-accept-standard",
-      kind: "safe",
-      labelKey: "decisions:academy.firstExercises.acceptStandard.label",
-      outcomeId: "outcome:firstExercisesAcceptStandard",
-    },
-    {
-      baseSuccessChance: createBoundedValue(40),
-      descriptionKey:
-        "decisions:academy.firstExercises.controlRare.description",
-      failureOutcomeId: "outcome:firstExercisesControlRareFailure",
-      id: "decision:first-exercises-control-rare",
-      kind: "chance",
-      labelKey: "decisions:academy.firstExercises.controlRare.label",
-      probabilityStats: [
-        { stat: "piloting", weight: 0.3 },
-        { stat: "synchrony", weight: 0.15 },
-      ],
-      successOutcomeId: "outcome:firstExercisesControlRareSuccess",
-    },
-    {
-      descriptionKey:
-        "decisions:academy.firstExercises.requestStandard.description",
-      id: "decision:first-exercises-request-standard",
-      kind: "safe",
-      labelKey: "decisions:academy.firstExercises.requestStandard.label",
-      outcomeId: "outcome:firstExercisesRequestStandard",
-    },
-  ],
-  id: "event:first-exercises",
-  introductionKey: "narrative:academy.firstExercises.introduction",
-  titleKey: "narrative:academy.firstExercises.title",
-} as const satisfies DecisionEvent;
+const {
+  chance: initialChance,
+  event: initialEvent,
+  safe: initialSafe,
+} = createDecisionEventFactory({
+  createDecisionId: (event, key) =>
+    `decision:${event}-${toKebabCase(key ?? "")}`,
+  createEventPath: (event) => `academy.${toCamelCase(event)}`,
+  createOutcomeId: (event, key, _position, result, kind) =>
+    `outcome:${toCamelCase(event)}${capitalize(key ?? "")}${
+      kind === "chance" ? capitalize(result) : ""
+    }`,
+  createTranslationPath: (event, key) => `academy.${toCamelCase(event)}.${key}`,
+});
 
-const strayZoid = {
-  decisions: [
-    {
-      baseSuccessChance: createBoundedValue(30),
-      descriptionKey: "decisions:academy.strayZoid.capture.description",
-      failureOutcomeId: "outcome:strayZoidCaptureFailure",
-      id: "decision:stray-zoid-capture",
-      kind: "chance",
-      labelKey: "decisions:academy.strayZoid.capture.label",
-      probabilityStats: [
-        { stat: "tactics", weight: 0.3 },
-        { stat: "piloting", weight: 0.15 },
-      ],
-      successOutcomeId: "outcome:strayZoidCaptureSuccess",
-    },
-    {
-      baseSuccessChance: createBoundedValue(40),
-      descriptionKey: "decisions:academy.strayZoid.destroy.description",
-      failureOutcomeId: "outcome:strayZoidDestroyFailure",
-      id: "decision:stray-zoid-destroy",
-      kind: "chance",
-      labelKey: "decisions:academy.strayZoid.destroy.label",
-      probabilityStats: [
-        { stat: "tactics", weight: 0.3 },
-        { stat: "piloting", weight: 0.15 },
-      ],
-      successOutcomeId: "outcome:strayZoidDestroySuccess",
-    },
-    {
-      descriptionKey: "decisions:academy.strayZoid.protect.description",
-      id: "decision:stray-zoid-protect",
-      kind: "safe",
-      labelKey: "decisions:academy.strayZoid.protect.label",
-      outcomeId: "outcome:strayZoidProtect",
-    },
-  ],
-  id: "event:stray-zoid",
-  introductionKey: "narrative:academy.strayZoid.introduction",
-  titleKey: "narrative:academy.strayZoid.title",
-} as const satisfies DecisionEvent;
+const firstExercises = initialEvent("first-exercises", [
+  initialSafe("acceptStandard"),
+  initialChance(
+    40,
+    [
+      {
+        stat: "piloting",
+        weight: 0.3,
+      },
+      {
+        stat: "synchrony",
+        weight: 0.15,
+      },
+    ],
+    "controlRare",
+  ),
+  initialSafe("requestStandard"),
+]);
 
-const mechanicsProgram = {
-  decisions: [
-    {
-      descriptionKey: "decisions:academy.mechanicsProgram.join.description",
-      id: "decision:mechanics-program-join",
-      kind: "safe",
-      labelKey: "decisions:academy.mechanicsProgram.join.label",
-      outcomeId: "outcome:mechanicsProgramJoin",
-    },
-    {
-      descriptionKey: "decisions:academy.mechanicsProgram.reject.description",
-      id: "decision:mechanics-program-reject",
-      kind: "safe",
-      labelKey: "decisions:academy.mechanicsProgram.reject.label",
-      outcomeId: "outcome:mechanicsProgramReject",
-    },
-    {
-      baseSuccessChance: createBoundedValue(60),
-      descriptionKey: "decisions:academy.mechanicsProgram.help.description",
-      failureOutcomeId: "outcome:mechanicsProgramHelpFailure",
-      id: "decision:mechanics-program-help",
-      kind: "chance",
-      labelKey: "decisions:academy.mechanicsProgram.help.label",
-      probabilityStats: [
-        { stat: "technique", weight: 0.3 },
-        { stat: "strength", weight: 0.15 },
-      ],
-      successOutcomeId: "outcome:mechanicsProgramHelpSuccess",
-    },
-  ],
-  id: "event:mechanics-program",
-  introductionKey: "narrative:academy.mechanicsProgram.introduction",
-  titleKey: "narrative:academy.mechanicsProgram.title",
-} as const satisfies DecisionEvent;
+const strayZoid = initialEvent("stray-zoid", [
+  initialChance(
+    30,
+    [
+      {
+        stat: "tactics",
+        weight: 0.3,
+      },
+      {
+        stat: "piloting",
+        weight: 0.15,
+      },
+    ],
+    "capture",
+  ),
+  initialChance(
+    40,
+    [
+      {
+        stat: "tactics",
+        weight: 0.3,
+      },
+      {
+        stat: "piloting",
+        weight: 0.15,
+      },
+    ],
+    "destroy",
+  ),
+  initialSafe("protect"),
+]);
 
-const veteranOffer = {
-  decisions: [
-    {
-      descriptionKey: "decisions:academy.veteranOffer.accept.description",
-      id: "decision:veteran-offer-accept",
-      kind: "safe",
-      labelKey: "decisions:academy.veteranOffer.accept.label",
-      outcomeId: "outcome:veteranOfferAccept",
-    },
-    {
-      baseSuccessChance: createBoundedValue(60),
-      descriptionKey: "decisions:academy.veteranOffer.report.description",
-      failureOutcomeId: "outcome:veteranOfferReportFailure",
-      id: "decision:veteran-offer-report",
-      kind: "chance",
-      labelKey: "decisions:academy.veteranOffer.report.label",
-      probabilityStats: [
-        { stat: "charisma", weight: 0.3 },
-        { stat: "tactics", weight: 0.15 },
-      ],
-      successOutcomeId: "outcome:veteranOfferReportSuccess",
-    },
-    {
-      descriptionKey: "decisions:academy.veteranOffer.silence.description",
-      id: "decision:veteran-offer-silence",
-      kind: "safe",
-      labelKey: "decisions:academy.veteranOffer.silence.label",
-      outcomeId: "outcome:veteranOfferSilence",
-    },
-  ],
-  id: "event:veteran-offer",
-  introductionKey: "narrative:academy.veteranOffer.introduction",
-  titleKey: "narrative:academy.veteranOffer.title",
-} as const satisfies DecisionEvent;
+const mechanicsProgram = initialEvent("mechanics-program", [
+  initialSafe("join"),
+  initialSafe("reject"),
+  initialChance(
+    60,
+    [
+      {
+        stat: "technique",
+        weight: 0.3,
+      },
+      {
+        stat: "strength",
+        weight: 0.15,
+      },
+    ],
+    "help",
+  ),
+]);
 
-const humanitarianMission = {
-  decisions: [
-    {
-      baseSuccessChance: createBoundedValue(60),
-      descriptionKey:
-        "decisions:academy.humanitarianMission.volunteer.description",
-      failureOutcomeId: "outcome:humanitarianMissionVolunteerFailure",
-      id: "decision:humanitarian-mission-volunteer",
-      kind: "chance",
-      labelKey: "decisions:academy.humanitarianMission.volunteer.label",
-      probabilityStats: [
-        { stat: "charisma", weight: 0.3 },
-        { stat: "strength", weight: 0.15 },
-      ],
-      successOutcomeId: "outcome:humanitarianMissionVolunteerSuccess",
-    },
-    {
-      descriptionKey:
-        "decisions:academy.humanitarianMission.ignore.description",
-      id: "decision:humanitarian-mission-ignore",
-      kind: "safe",
-      labelKey: "decisions:academy.humanitarianMission.ignore.label",
-      outcomeId: "outcome:humanitarianMissionIgnore",
-    },
-    {
-      descriptionKey:
-        "decisions:academy.humanitarianMission.organize.description",
-      id: "decision:humanitarian-mission-organize",
-      kind: "safe",
-      labelKey: "decisions:academy.humanitarianMission.organize.label",
-      outcomeId: "outcome:humanitarianMissionOrganize",
-    },
-  ],
-  id: "event:humanitarian-mission",
-  introductionKey: "narrative:academy.humanitarianMission.introduction",
-  titleKey: "narrative:academy.humanitarianMission.title",
-} as const satisfies DecisionEvent;
+const veteranOffer = initialEvent("veteran-offer", [
+  initialSafe("accept"),
+  initialChance(
+    60,
+    [
+      {
+        stat: "charisma",
+        weight: 0.3,
+      },
+      {
+        stat: "tactics",
+        weight: 0.15,
+      },
+    ],
+    "report",
+  ),
+  initialSafe("silence"),
+]);
+
+const humanitarianMission = initialEvent("humanitarian-mission", [
+  initialChance(
+    60,
+    [
+      {
+        stat: "charisma",
+        weight: 0.3,
+      },
+      {
+        stat: "strength",
+        weight: 0.15,
+      },
+    ],
+    "volunteer",
+  ),
+  initialSafe("ignore"),
+  initialSafe("organize"),
+]);
+
+function capitalize(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function toCamelCase(value: string): string {
+  return value.replace(/-([a-z])/g, (_match, letter: string) =>
+    letter.toUpperCase(),
+  );
+}
+
+function toKebabCase(value: string): string {
+  return value.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+}
 
 export const eventCatalog = {
   firstExercises,
@@ -212,10 +165,15 @@ export const eventCatalog = {
   veteranOffer,
 } as const satisfies Record<string, DecisionEvent>;
 
-export const events = [...Object.values(eventCatalog), ...academyEvents];
+export const events = [
+  ...Object.values(eventCatalog),
+  ...academyEvents,
+  ...earlyServiceEvents,
+];
 export const outcomeCatalog = {
   ...initialOutcomeCatalog,
   ...academyOutcomeCatalog,
+  ...earlyServiceOutcomeCatalog,
 } as const satisfies Record<OutcomeId, Outcome>;
 const outcomeById: Readonly<Record<OutcomeId, Outcome>> = outcomeCatalog;
 
@@ -300,8 +258,10 @@ export function validateEvents(events: readonly DecisionEvent[]): void {
       throw new TypeError(`Duplicate event identifier: ${event.id}.`);
     }
 
-    if (event.decisions.length !== 3) {
-      throw new TypeError(`Event ${event.id} must have three decisions.`);
+    if (event.decisions.length < 2) {
+      throw new TypeError(
+        `Event ${event.id} must have at least two decisions.`,
+      );
     }
 
     eventIds.add(event.id);

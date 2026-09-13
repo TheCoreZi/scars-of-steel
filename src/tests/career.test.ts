@@ -5,6 +5,7 @@ import {
   createCareerHistory,
   getCareerEndReason,
   recordResolvedYear,
+  resolveAnnualPromotion,
 } from "../domain/career";
 import { getEligibleEventIds, initialEventPool } from "../domain/eventPools";
 import { eventCatalog } from "../domain/events";
@@ -31,6 +32,38 @@ describe("career progression", () => {
     expect(pilot.age).toBe(12);
   });
 
+  test("promotes by rank eligibility and grants five faction trust", () => {
+    const battleRecord = {
+      assigned: 0,
+      available: 0,
+      injured: false,
+      killed: false,
+      losses: 0,
+      participated: 0,
+      wins: 0,
+      zoidDamaged: false,
+      zoidDestroyed: false,
+    } as const;
+    const random = createSeededRandomGenerator(1);
+    const privatePilot = {
+      ...pilot,
+      age: 13,
+      career: { ...pilot.career, militaryRank: "private" as const },
+    };
+
+    expect(resolveAnnualPromotion(pilot, battleRecord, random)).toBe(pilot);
+    expect(
+      resolveAnnualPromotion(privatePilot, battleRecord, {
+        ...random,
+        probability: () => 0,
+      }).career,
+    ).toMatchObject({ factionTrust: 5, militaryRank: "corporal" });
+    expect(advanceCareerYear({ ...pilot, age: 14 }).career).toMatchObject({
+      factionTrust: 5,
+      militaryRank: "private",
+    });
+  });
+
   test("selects only unplayed events for the current age", () => {
     expect(getEligibleEventIds(pilot, [initialEventPool[0]])).toEqual(
       initialEventPool.slice(1),
@@ -49,7 +82,9 @@ describe("career progression", () => {
     expect(getEligibleEventIds({ ...assignedPilot, age: 14 }, [])).toHaveLength(
       34,
     );
-    expect(getEligibleEventIds({ ...assignedPilot, age: 15 }, [])).toEqual([]);
+    expect(getEligibleEventIds({ ...assignedPilot, age: 15 }, [])).toHaveLength(
+      8,
+    );
   });
 
   test("accumulates battles, events, and unique achievements", () => {

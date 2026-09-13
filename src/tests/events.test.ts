@@ -155,17 +155,17 @@ describe("Initial event content", () => {
     );
   });
 
-  test("requires three decisions with unique identifiers", () => {
+  test("requires at least two decisions with unique identifiers", () => {
     const event = createValidationEvent();
 
     expect(() =>
       validateEvents([
         {
           ...event,
-          decisions: event.decisions.slice(0, 2),
+          decisions: event.decisions.slice(0, 1),
         } as unknown as DecisionEvent,
       ]),
-    ).toThrow("must have three decisions");
+    ).toThrow("must have at least two decisions");
     expect(() =>
       validateEvents([
         {

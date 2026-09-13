@@ -82,7 +82,7 @@ describe("welcome screen", () => {
     expect(screen.getByText("2").nextElementSibling).toHaveTextContent(
       "factions",
     );
-    expect(screen.getByText("39").nextElementSibling).toHaveTextContent(
+    expect(screen.getByText("49").nextElementSibling).toHaveTextContent(
       "decisions",
     );
     expect(
@@ -694,7 +694,7 @@ describe("pilot creation", () => {
       await screen.findByRole("button", { name: "Continue career" }),
     );
 
-    for (const age of [13, 14]) {
+    for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
       await screen.findByText("Choose your response");
       expect(screen.getByText(`Age ${age}`)).toBeInTheDocument();
       const options = Array.from(
@@ -718,15 +718,12 @@ describe("pilot creation", () => {
     }
 
     expect(
-      await screen.findByRole("heading", { name: "Village hero" }),
-    ).toHaveFocus();
+      await screen.findByRole("button", { name: "Download PNG" }),
+    ).toBeInTheDocument();
     expect(
-      screen.getByText("You fought for 3 years. Your career ended at age 15."),
+      screen.getByText("You fought for 9 years. Your career ended at age 21."),
     ).toBeInTheDocument();
     expect(screen.getByText("Signature Zoid")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Download PNG" }),
-    ).toBeInTheDocument();
 
     expect(screen.getByRole("button", { name: "New run" })).toBeInTheDocument();
     cleanup();
@@ -743,12 +740,12 @@ describe("pilot creation", () => {
     );
     const record = screen.getByText("Lena").closest("li");
     expect(record).not.toBeNull();
-    expect(within(record!).getByLabelText("Soldier")).toBeInTheDocument();
+    expect(record!.querySelector(".service-records__rank")).toBeInTheDocument();
     expect(within(record!).getByLabelText(/Potential:/u)).toBeInTheDocument();
     expect(within(record!).getByLabelText(/Fame:/u)).toBeInTheDocument();
     fireEvent.click(within(record!).getByRole("button"));
     expect(
-      await screen.findByRole("heading", { name: "Village hero" }),
+      await screen.findByRole("button", { name: "Download PNG" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("main").closest(".app-shell")).toHaveAttribute(
       "data-faction",

@@ -45,7 +45,7 @@
       "lieutenant": "Lieutenant",
       "major": "Major",
       "sergeant": "Sergeant",
-      "soldier": "Soldier"
+      "private": "Private"
     },
     "specialRanks": {
       "blitzOrbit": "Blitz Orbit",
@@ -159,7 +159,7 @@
     "badge": "Annual report",
     "battleInjured": "You were injured and withdrew from the remaining battles.",
     "battleKilled": "You died in combat.",
-    "battleReport": "Of {{available}} battles for {{faction}}, you participated in {{participated}} and won {{wins}}.",
+    "battleReport": "You were assigned to {{assigned}} battles. You had a record of {{wins}}-{{losses}}.",
     "battles": "Battles",
     "channel": "Career archive // secure transmission",
     "close": "Continue career",

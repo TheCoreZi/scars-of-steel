@@ -617,7 +617,7 @@ describe("decision resolution", () => {
 
     expect(
       screen.getByText(
-        "Of 20 battles for the Helic Republic, you participated in 5 and won 3.",
+        "You were assigned to 5 battles. You had a record of 3-2.",
       ),
     ).toBeInTheDocument();
   });

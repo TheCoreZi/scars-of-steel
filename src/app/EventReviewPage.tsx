@@ -13,7 +13,6 @@ import {
 const copy = {
   achievement: "Logro otorgado",
   age: "Año",
-  ageRange: "13–14",
   allAges: "Todos los años",
   bonus: "Bonus otorgado",
   chance: "Probabilidad base",
@@ -51,14 +50,14 @@ const copy = {
   probabilityHelp:
     "Cada resultado supone que los seis stats y el potencial tienen el valor indicado.",
   probabilityStats: "Stats para la probabilidad",
-  review: "Revisión de eventos de academia",
+  review: "Revisión de eventos",
   reward: "Zoid otorgado",
   save: "Guardar CSV",
   saved: "Sin cambios pendientes",
   sourceDetails: "Datos técnicos y de lore",
   stats: "Stats",
   success: "Success",
-  temporary: "Herramienta temporal · años 13–14",
+  temporary: "Herramienta de revisión",
   weight: "Peso",
 } as const;
 
@@ -141,6 +140,7 @@ export function EventReviewPage({ initialCsv }: EventReviewPageProps) {
   const [status, setStatus] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const events = useMemo(() => groupEvents(document), [document]);
+  const ageOptions = getAgeOptions(document);
   const filteredEvents = events.filter((event) => {
     const text = [
       event.id,
@@ -315,7 +315,7 @@ export function EventReviewPage({ initialCsv }: EventReviewPageProps) {
     });
     const link = window.document.createElement("a");
     const url = URL.createObjectURL(blob);
-    link.download = "academy-events-years-13-14.csv";
+    link.download = getDownloadFilename(document);
     link.href = url;
     link.click();
     URL.revokeObjectURL(url);
@@ -392,8 +392,11 @@ export function EventReviewPage({ initialCsv }: EventReviewPageProps) {
             value={ageFilter}
           >
             <option value="">{copy.allAges}</option>
-            <option value="13-14">{copy.ageRange}</option>
-            <option value="14">14</option>
+            {ageOptions.map((age) => (
+              <option key={age} value={age}>
+                {age}
+              </option>
+            ))}
           </select>
           <nav className="event-review__event-list">
             {filteredEvents.length === 0 ? <p>{copy.noEvents}</p> : null}
@@ -794,6 +797,18 @@ function getEventCell(
   column: string,
 ): string {
   return getCell(document, event.rowIndexes[0], column);
+}
+
+function getAgeOptions(document: CsvDocument): string[] {
+  const ageIndex = document.headers.indexOf(columns.age);
+  return [
+    ...new Set(document.rows.map((row) => row[ageIndex]).filter(Boolean)),
+  ];
+}
+
+function getDownloadFilename(document: CsvDocument): string {
+  const age = getAgeOptions(document).join("-") || "all";
+  return `events-years-${age}.csv`;
 }
 
 function getCell(

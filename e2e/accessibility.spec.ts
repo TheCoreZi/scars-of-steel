@@ -4,6 +4,7 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 test("keeps every screen accessible and free of horizontal overflow", async ({
   page,
 }, testInfo) => {
+  testInfo.setTimeout(60_000);
   await page.goto("/");
   await auditCurrentScreen(page, "welcome");
   await expect(
@@ -56,18 +57,18 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
   await auditCurrentScreen(page, "decision outcome");
   await page.getByRole("button", { name: "Continue career" }).click();
 
-  for (const age of [13, 14]) {
+  for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
     await expect(page.locator(".decision-screen__choices")).toBeVisible();
-    await auditCurrentScreen(page, `academy age ${age}`);
+    await auditCurrentScreen(page, `career age ${age}`);
     const safe = page
       .locator(".decision-option")
       .filter({ has: page.locator(".decision-option__kind--safe") });
     if (await safe.count()) await safe.first().click();
     else await page.locator(".decision-option").nth(1).click();
     await expect(page.locator(".outcome-screen h1")).toBeFocused();
-    await auditCurrentScreen(page, `academy outcome ${age}`);
+    await auditCurrentScreen(page, `career outcome ${age}`);
     if (age === 14)
-      await expect(page.locator(".career-status__rank")).toHaveText("Soldier");
+      await expect(page.locator(".career-status__rank")).toHaveText("Private");
     if (age === 14)
       await page.screenshot({
         animations: "disabled",
@@ -81,7 +82,7 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
   await auditCurrentScreen(page, "final screen");
   await page.screenshot({
     animations: "disabled",
-    path: testInfo.outputPath("academy-final.png"),
+    path: testInfo.outputPath("early-service-final.png"),
     fullPage: true,
   });
 
@@ -132,7 +133,7 @@ test("completes the full flow with the keyboard", async ({
   await focusWithTab(page, continueButton);
   await page.keyboard.press("Enter");
 
-  for (const age of [13, 14]) {
+  for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
     await expect(page.getByText(`Age ${age}`, { exact: true })).toBeVisible();
     await expect(page.locator(".decision-screen__choices")).toBeVisible();
     const safe = page

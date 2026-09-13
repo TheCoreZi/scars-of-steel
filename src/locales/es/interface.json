@@ -45,7 +45,7 @@
       "lieutenant": "Teniente",
       "major": "Mayor",
       "sergeant": "Sargento",
-      "soldier": "Soldado"
+      "private": "Soldado raso"
     },
     "specialRanks": {
       "blitzOrbit": "Blitz Orbit",
@@ -159,7 +159,7 @@
     "badge": "Informe anual",
     "battleInjured": "Terminaste con heridas y te retiraste de las batallas restantes.",
     "battleKilled": "Moriste en combate.",
-    "battleReport": "De {{available}} batallas para {{faction}}, participaste en {{participated}} y venciste en {{wins}}.",
+    "battleReport": "Fuiste asignado a {{assigned}} batallas. Obtuviste un récord de {{wins}}-{{losses}}.",
     "battles": "Batallas",
     "channel": "Archivo de carrera // transmisión segura",
     "close": "Continúa tu carrera",

@@ -12,7 +12,7 @@ describe("rank insignias", () => {
       (
         [
           "cadet",
-          "soldier",
+          "private",
           "corporal",
           "sergeant",
           "lieutenant",
@@ -40,7 +40,7 @@ describe("military rank levels", () => {
   test("orders every rank independently from its name", () => {
     const ranks = [
       "cadet",
-      "soldier",
+      "private",
       "corporal",
       "sergeant",
       "lieutenant",
@@ -52,8 +52,8 @@ describe("military rank levels", () => {
     expect(ranks.map((rank) => militaryRankLevels[rank])).toEqual([
       0, 10, 20, 30, 40, 50, 60, 70, 80,
     ]);
-    expect(hasMinimumRank("cadet", "soldier")).toBe(false);
-    expect(hasMinimumRank("soldier", "soldier")).toBe(true);
-    expect(hasMinimumRank("general", "soldier")).toBe(true);
+    expect(hasMinimumRank("cadet", "private")).toBe(false);
+    expect(hasMinimumRank("private", "private")).toBe(true);
+    expect(hasMinimumRank("general", "private")).toBe(true);
   });
 });
