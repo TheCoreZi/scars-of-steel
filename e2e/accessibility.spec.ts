@@ -37,6 +37,25 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
     )
     .toBe(true);
   await auditCurrentScreen(page, "decision selection");
+  await page.locator(".core-pulse__toggle").click();
+  await auditCurrentScreen(page, "tactical profile");
+  const panelLayout = await page.locator(".detail-panel").evaluate((panel) => {
+    const container = panel.closest(".decision-screen__panel")!;
+    const decisions = container.querySelector(".decision-screen__content")!;
+    return {
+      bottom: panel.getBoundingClientRect().bottom,
+      containerBottom: container.getBoundingClientRect().bottom,
+      decisionTop: decisions.getBoundingClientRect().top,
+      overflow: getComputedStyle(panel).overflowY,
+      top: panel.getBoundingClientRect().top,
+    };
+  });
+  expect(panelLayout.overflow).toBe("visible");
+  expect(panelLayout.containerBottom).toBeGreaterThanOrEqual(
+    panelLayout.bottom,
+  );
+  expect(panelLayout.top).toBeCloseTo(panelLayout.decisionTop, 0);
+  await page.locator(".core-pulse__toggle").click();
 
   const chanceDecision = page
     .locator(".decision-option")
@@ -55,6 +74,13 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
 
   await expect(page.locator(".outcome-screen h1")).toBeFocused();
   await auditCurrentScreen(page, "decision outcome");
+  const actionButtons = page.locator(".outcome-screen__actions .button");
+  const [abandonBox, continueBox] = await Promise.all([
+    actionButtons.first().boundingBox(),
+    actionButtons.last().boundingBox(),
+  ]);
+  expect(abandonBox?.y).toBe(continueBox?.y);
+  expect(abandonBox!.x + abandonBox!.width).toBeLessThanOrEqual(continueBox!.x);
   await page.getByRole("button", { name: "Continue career" }).click();
 
   for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
@@ -68,7 +94,9 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
     await expect(page.locator(".outcome-screen h1")).toBeFocused();
     await auditCurrentScreen(page, `career outcome ${age}`);
     if (age === 14)
-      await expect(page.locator(".career-status__rank")).toHaveText("Private");
+      await expect(page.locator(".status-identity__rank")).toHaveText(
+        "Private",
+      );
     if (age === 14)
       await page.screenshot({
         animations: "disabled",
@@ -134,7 +162,9 @@ test("completes the full flow with the keyboard", async ({
   await page.keyboard.press("Enter");
 
   for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
-    await expect(page.getByText(`Age ${age}`, { exact: true })).toBeVisible();
+    await expect(page.locator(".status-identity__meta")).toContainText(
+      `Age ${age}`,
+    );
     await expect(page.locator(".decision-screen__choices")).toBeVisible();
     const safe = page
       .locator(".decision-option")

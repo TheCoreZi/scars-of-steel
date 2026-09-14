@@ -76,6 +76,49 @@ function createFinalState(
 }
 
 describe("game reducer", () => {
+  test("swaps the signature Zoid with an owned reserve without losing damage or progress", () => {
+    const state: AppState = {
+      ...createChoosingState(),
+      gameState: {
+        screen: "event",
+        phase: "choosing",
+        eventId: eventCatalog.firstExercises.id,
+        history,
+        pilot: {
+          ...pilot,
+          zoids: {
+            signatureId: "zoid:shield-liger",
+            reserveIds: ["zoid:command-wolf"],
+            damagedIds: ["zoid:command-wolf"],
+          },
+        },
+      },
+    };
+    const next = gameReducer(state, {
+      type: GameActionType.ChangeSignatureZoid,
+      zoidId: "zoid:command-wolf",
+    });
+    expect(
+      next.gameState.screen === "event" && next.gameState.pilot.zoids,
+    ).toEqual({
+      signatureId: "zoid:command-wolf",
+      reserveIds: ["zoid:shield-liger"],
+      damagedIds: ["zoid:command-wolf"],
+    });
+    expect(
+      gameReducer(state, {
+        type: GameActionType.ChangeSignatureZoid,
+        zoidId: "zoid:saber-tiger",
+      }),
+    ).toBe(state);
+    const outcome = createOutcomeState();
+    expect(
+      gameReducer(outcome, {
+        type: GameActionType.ChangeSignatureZoid,
+        zoidId: "zoid:command-wolf",
+      }),
+    ).toBe(outcome);
+  });
   test("starts the game and changes the pilot draft", () => {
     const started = gameReducer(welcomeState, {
       type: GameActionType.StartGame,

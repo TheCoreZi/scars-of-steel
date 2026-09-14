@@ -555,19 +555,21 @@ p {
   content: "";
 }
 
+.animation-controls {
+  position: fixed;
+  z-index: 10;
+  top: var(--space-4);
+  left: var(--space-4);
+}
+
 .animation-toggle {
-  position: absolute;
-  z-index: 20;
-  top: 0;
-  right: var(--space-4);
   min-height: 3rem;
-  padding: 0 var(--space-2);
+  padding: 0 var(--space-3);
   border: 1px solid var(--color-border-strong);
-  border-top: 0;
-  border-radius: 0 0 var(--radius-small) var(--radius-small);
+  border-radius: var(--radius-pill);
   color: var(--color-text-muted);
-  background: color-mix(in srgb, var(--color-panel-raised) 90%, black);
-  box-shadow: 0 0.35rem 0.8rem rgb(0 0 0 / 25%);
+  background: color-mix(in srgb, var(--color-panel) 84%, var(--color-accent));
+  box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 22%);
   cursor: pointer;
   font-family: var(--font-console);
   font-size: 0.6rem;

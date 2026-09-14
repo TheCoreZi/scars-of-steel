@@ -1,7 +1,12 @@
 import { useId } from "react";
-import type { Decision, DecisionEvent, EventGameState } from "../domain/types";
-import { AnimationToggle } from "./AppControls";
-import { CareerStatusBar } from "./CareerStatusBar";
+import type {
+  Decision,
+  DecisionEvent,
+  EventGameState,
+  ZoidId,
+} from "../domain/types";
+import { TacticalCareerPanel } from "./TacticalCareerPanel";
+import { recordResolvedYear } from "../domain/career";
 import { DecisionOutcomeScreen } from "./DecisionOutcomeScreen";
 import { DecisionResolutionScreen } from "./DecisionResolutionScreen";
 import { DecisionSelectionScreen } from "./DecisionSelectionScreen";
@@ -13,8 +18,8 @@ interface DecisionScreenProps {
   onAbandon: () => void;
   onCloseYear: () => void;
   onDecision: (decision: Decision) => void;
-  onReducedMotionChange: (reducedMotion: boolean) => void;
   onRevealOutcome: () => void;
+  onSelectZoid?: (id: ZoidId) => void;
   reducedMotion: boolean;
   state: EventGameState;
 }
@@ -24,8 +29,8 @@ export function DecisionScreen({
   onAbandon,
   onCloseYear,
   onDecision,
-  onReducedMotionChange,
   onRevealOutcome,
+  onSelectZoid,
   reducedMotion,
   state,
 }: DecisionScreenProps) {
@@ -37,12 +42,16 @@ export function DecisionScreen({
   return (
     <main className="decision-screen screen">
       <Panel className="decision-screen__panel" labelledBy={phaseTitleId}>
-        <CareerStatusBar pilot={displayedPilot} />
+        <TacticalCareerPanel
+          pilot={displayedPilot}
+          history={
+            state.phase === "outcome"
+              ? recordResolvedYear(state.history, state.eventId, state.result)
+              : state.history
+          }
+          onSelectZoid={state.phase === "choosing" ? onSelectZoid : undefined}
+        />
         <div className="decision-screen__content">
-          <AnimationToggle
-            onReducedMotionChange={onReducedMotionChange}
-            reducedMotion={reducedMotion}
-          />
           <ScreenTransition
             reducedMotion={reducedMotion}
             transitionKey={state.phase}

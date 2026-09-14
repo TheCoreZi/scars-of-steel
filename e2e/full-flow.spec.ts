@@ -182,6 +182,40 @@ test("restores the exact failed result after the roll", async ({
   await finishCareer(page);
 });
 
+test("persists the signature Zoid selected from the tactical hangar", async ({
+  page,
+}, testInfo) => {
+  skipOutsideDesktop(testInfo);
+  await beginCareer(page, "Helic Republic");
+  await page.evaluate((key) => {
+    const data = JSON.parse(localStorage.getItem(key)!);
+    data.activeGame.pilot.zoids = {
+      damagedIds: ["zoid:command-wolf"],
+      reserveIds: ["zoid:command-wolf"],
+      signatureId: "zoid:shield-liger",
+    };
+    localStorage.setItem(key, JSON.stringify(data));
+  }, gameStorageKey);
+  await page.reload();
+  await page.locator(".core-pulse__toggle").click();
+  await page.getByRole("button", { name: "Command Wolf", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Command Wolf", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await page.reload();
+  await expect(page.locator(".core-pulse__zoid")).toContainText("Command Wolf");
+  expect(
+    await page.evaluate(
+      (key) => JSON.parse(localStorage.getItem(key)!).activeGame.pilot.zoids,
+      gameStorageKey,
+    ),
+  ).toEqual({
+    damagedIds: ["zoid:command-wolf"],
+    reserveIds: ["zoid:shield-liger"],
+    signatureId: "zoid:command-wolf",
+  });
+});
+
 async function beginCareer(page: Page, faction: string) {
   await page.goto("/");
   await page.getByRole("button", { name: "Begin your career" }).click();
@@ -210,7 +244,9 @@ async function finishCareer(page: Page) {
   await page.getByRole("button", { name: "Continue career" }).click();
   for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
     await expect(page.locator(".decision-screen__choices")).toBeVisible();
-    await expect(page.getByText(`Age ${age}`, { exact: true })).toBeVisible();
+    await expect(page.locator(".status-identity__meta")).toContainText(
+      `Age ${age}`,
+    );
     const before = await readGameSnapshot(page);
     await page.reload();
     await expect(page.locator(".decision-screen__choices")).toBeVisible();

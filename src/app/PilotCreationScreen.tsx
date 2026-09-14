@@ -13,7 +13,6 @@ import type {
   PilotDraft,
   StatName,
 } from "../domain/types";
-import { AnimationToggle } from "./AppControls";
 import { Badge, Button, Meter, Panel } from "./UiPrimitives";
 
 const aspirations = Object.keys(aspirationNameKeys) as Aspiration[];
@@ -50,16 +49,12 @@ interface PilotCreationScreenProps {
   draft: PilotDraft;
   onConfirm: (configuration: PilotConfiguration) => void;
   onDraftChange: (draft: PilotDraft) => void;
-  onReducedMotionChange: (reducedMotion: boolean) => void;
-  reducedMotion: boolean;
 }
 
 export function PilotCreationScreen({
   draft,
   onConfirm,
   onDraftChange,
-  onReducedMotionChange,
-  reducedMotion,
 }: PilotCreationScreenProps) {
   const [submitted, setSubmitted] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -99,10 +94,6 @@ export function PilotCreationScreen({
   return (
     <main className="pilot-creation screen">
       <Panel className="pilot-creation__panel" labelledBy={titleId}>
-        <AnimationToggle
-          onReducedMotionChange={onReducedMotionChange}
-          reducedMotion={reducedMotion}
-        />
         <form className="pilot-creation__form" onSubmit={submitPilot}>
           <header className="pilot-creation__heading">
             <Badge>{t("pilotCreation.badge")}</Badge>

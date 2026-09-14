@@ -23,7 +23,7 @@ import type {
 import { translate } from "../i18n";
 import { selectTitle } from "../domain/titles";
 import { resolveYear } from "../domain/year";
-import { AppControls } from "./AppControls";
+import { AnimationToggle, AppControls } from "./AppControls";
 import {
   loadColorModePreference,
   saveColorModePreference,
@@ -229,6 +229,10 @@ export function App() {
       data-reduced-motion={reducedMotion || undefined}
     >
       <BackgroundDamage />
+      <AnimationToggle
+        onReducedMotionChange={setReducedMotion}
+        reducedMotion={reducedMotion}
+      />
       <AppControls colorMode={colorMode} onColorModeChange={setColorMode} />
       <ScreenTransition
         reducedMotion={reducedMotion}
@@ -237,18 +241,14 @@ export function App() {
         {gameState.screen === "welcome" ? (
           <WelcomeScreen
             completedGames={appState.completedGames}
-            onReducedMotionChange={setReducedMotion}
             onSelectGame={openCompletedGame}
             onStart={startGame}
-            reducedMotion={reducedMotion}
           />
         ) : gameState.screen === "pilot-creation" ? (
           <PilotCreationScreen
             draft={gameState.draft}
             onDraftChange={changePilotDraft}
             onConfirm={confirmPilot}
-            onReducedMotionChange={setReducedMotion}
-            reducedMotion={reducedMotion}
           />
         ) : gameState.screen === "event" ? (
           <DecisionScreen
@@ -256,8 +256,10 @@ export function App() {
             onAbandon={restartGame}
             onCloseYear={closeYear}
             onDecision={chooseDecision}
-            onReducedMotionChange={setReducedMotion}
             onRevealOutcome={revealOutcome}
+            onSelectZoid={(zoidId) =>
+              dispatch({ type: GameActionType.ChangeSignatureZoid, zoidId })
+            }
             reducedMotion={reducedMotion}
             state={gameState}
           />

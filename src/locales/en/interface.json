@@ -4,6 +4,7 @@
     "title": "Scars of Steel"
   },
   "appControls": {
+    "animationLabel": "Animation controls",
     "label": "Application controls"
   },
   "aspirations": {
@@ -198,6 +199,23 @@
     "indicatorSuccess": "Success",
     "probabilityLabel": "Resolution target. Success {{success}}%, failure {{failure}}%.",
     "selected": "Selected order"
+  },
+  "tacticalPanel": {
+    "activeZoid": "Active Zoid",
+    "battleRecord": "Battle record",
+    "collapseDetails": "Hide pilot details",
+    "combatProfile": "Combat profile",
+    "damaged": "Damaged",
+    "expandDetails": "Show pilot details",
+    "factionTrust": "Faction trust",
+    "fame": "Fame",
+    "noZoid": "No Zoid assigned",
+    "none": "None yet",
+    "ownedZoids": "Hangar",
+    "potential": "Potential",
+    "radarLabel": "Radar chart of all six pilot aptitudes",
+    "title": "Pilot information",
+    "zoidPower": "Power"
   },
   "welcome": {
     "animations": {

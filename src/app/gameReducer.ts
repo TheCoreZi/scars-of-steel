@@ -6,6 +6,7 @@ import type {
   Pilot,
   PilotDraft,
   ResolvedYear,
+  ZoidId,
 } from "../domain/types";
 import type { CompletedGame } from "./gameStorage";
 
@@ -17,6 +18,7 @@ export interface AppState {
 export const GameActionType = {
   AdvanceYear: "advance-year",
   ChangePilotDraft: "change-pilot-draft",
+  ChangeSignatureZoid: "change-signature-zoid",
   ChooseDecision: "choose-decision",
   CompleteCareer: "complete-career",
   ConfirmPilot: "confirm-pilot",
@@ -73,6 +75,7 @@ interface StartGameAction {
 }
 
 export type GameAction =
+  | { type: typeof GameActionType.ChangeSignatureZoid; zoidId: ZoidId }
   | AdvanceYearAction
   | ChangePilotDraftAction
   | ChooseDecisionAction
@@ -85,6 +88,33 @@ export type GameAction =
 
 export function gameReducer(state: AppState, action: GameAction): AppState {
   switch (action.type) {
+    case GameActionType.ChangeSignatureZoid: {
+      const game = state.gameState;
+      if (
+        game.screen !== "event" ||
+        game.phase !== "choosing" ||
+        !game.pilot.zoids ||
+        !game.pilot.zoids.reserveIds.includes(action.zoidId)
+      )
+        return state;
+      const zoids = game.pilot.zoids;
+      return {
+        ...state,
+        gameState: {
+          ...game,
+          pilot: {
+            ...game.pilot,
+            zoids: {
+              ...zoids,
+              signatureId: action.zoidId,
+              reserveIds: zoids.reserveIds.map((id) =>
+                id === action.zoidId ? zoids.signatureId : id,
+              ),
+            },
+          },
+        },
+      };
+    }
     case GameActionType.AdvanceYear:
       return state.gameState.screen === "event" &&
         state.gameState.phase === "outcome" &&
