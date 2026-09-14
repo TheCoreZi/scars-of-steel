@@ -29,6 +29,7 @@ const careerEndReasons = [
   "war-lost",
   "war-won",
 ] as const satisfies readonly CareerEndReason[];
+const careerFlags = ["command", "engineering", "rebel"] as const;
 const factions = ["guylos", "helic"] as const;
 const militaryRanks = [
   "cadet",
@@ -38,8 +39,8 @@ const militaryRanks = [
   "general",
   "lieutenant",
   "major",
+  "private",
   "sergeant",
-  "soldier",
 ] as const;
 const specialRanks = [
   "blitz-orbit",
@@ -297,6 +298,8 @@ function isPilot(value: unknown): value is Pilot {
     (value.bonusIds === undefined ||
       (Array.isArray(value.bonusIds) &&
         value.bonusIds.every((id) => id === "organoid"))) &&
+    Array.isArray(value.careerFlags) &&
+    value.careerFlags.every((flag) => isMember(flag, careerFlags)) &&
     (value.zoidProgress === undefined ||
       (isRecord(value.zoidProgress) &&
         Object.entries(value.zoidProgress).every(

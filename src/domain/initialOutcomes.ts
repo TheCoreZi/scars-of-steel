@@ -1,220 +1,522 @@
-import type { Outcome, OutcomeId } from "./types";
-export const initialOutcomeCatalog = {
-  "outcome:firstExercisesAcceptStandard": {
-    effects: [
-      { amount: 2, kind: "change-stat", stat: "piloting" },
-      { amount: 3, kind: "change-stat", stat: "synchrony" },
-      { kind: "grant-zoid", poolId: "standard" },
+import { createOutcomeFactory } from "./outcomeDefinitions";
+
+const { catalog, outcome } = createOutcomeFactory();
+
+export const initialOutcomeCatalog = catalog([
+  outcome(
+    "outcome:firstExercisesAcceptStandard",
+    "outcomes:academy.firstExercisesAcceptStandard",
+    [
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: 3,
+        kind: "change-stat",
+        stat: "synchrony",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "standard",
+      },
     ],
-    id: "outcome:firstExercisesAcceptStandard",
-    narrativeKey: "outcomes:academy.firstExercisesAcceptStandard",
-  },
-  "outcome:firstExercisesControlRareFailure": {
-    effects: [
-      { amount: -3, kind: "change-stat", stat: "charisma" },
-      { amount: -1, kind: "change-stat", stat: "piloting" },
-      { kind: "grant-zoid", poolId: "weak" },
+  ),
+  outcome(
+    "outcome:firstExercisesControlRareFailure",
+    "outcomes:academy.firstExercisesControlRareFailure",
+    [
+      {
+        amount: -3,
+        kind: "change-stat",
+        stat: "charisma",
+      },
+      {
+        amount: -1,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "weak",
+      },
     ],
-    id: "outcome:firstExercisesControlRareFailure",
-    narrativeKey: "outcomes:academy.firstExercisesControlRareFailure",
-  },
-  "outcome:firstExercisesControlRareSuccess": {
-    effects: [
-      { amount: 2, kind: "change-stat", stat: "charisma" },
-      { amount: 2, kind: "change-stat", stat: "piloting" },
-      { amount: 2, kind: "change-stat", stat: "synchrony" },
-      { kind: "grant-zoid", poolId: "rare" },
+  ),
+  outcome(
+    "outcome:firstExercisesControlRareSuccess",
+    "outcomes:academy.firstExercisesControlRareSuccess",
+    [
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "charisma",
+      },
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "synchrony",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "rare",
+      },
     ],
-    id: "outcome:firstExercisesControlRareSuccess",
-    narrativeKey: "outcomes:academy.firstExercisesControlRareSuccess",
-  },
-  "outcome:firstExercisesRequestStandard": {
-    effects: [
-      { amount: -2, kind: "change-stat", stat: "charisma" },
-      { amount: 3, kind: "change-stat", stat: "synchrony" },
-      { kind: "grant-zoid", poolId: "standard" },
+  ),
+  outcome(
+    "outcome:firstExercisesRequestStandard",
+    "outcomes:academy.firstExercisesRequestStandard",
+    [
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "charisma",
+      },
+      {
+        amount: 3,
+        kind: "change-stat",
+        stat: "synchrony",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "standard",
+      },
     ],
-    id: "outcome:firstExercisesRequestStandard",
-    narrativeKey: "outcomes:academy.firstExercisesRequestStandard",
-  },
-  "outcome:strayZoidCaptureFailure": {
-    effects: [
-      { amount: -2, kind: "change-stat", stat: "piloting" },
-      { amount: -2, kind: "change-stat", stat: "strength" },
-      { kind: "grant-zoid", poolId: "weak" },
+  ),
+  outcome(
+    "outcome:strayZoidCaptureFailure",
+    "outcomes:academy.strayZoidCaptureFailure",
+    [
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "strength",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "weak",
+      },
     ],
-    id: "outcome:strayZoidCaptureFailure",
-    narrativeKey: "outcomes:academy.strayZoidCaptureFailure",
-  },
-  "outcome:strayZoidCaptureSuccess": {
-    effects: [
-      { amount: 2, kind: "change-stat", stat: "charisma" },
-      { amount: 2, kind: "change-stat", stat: "piloting" },
-      { amount: 3, kind: "change-stat", stat: "synchrony" },
-      { kind: "grant-zoid", poolId: "rare" },
+  ),
+  outcome(
+    "outcome:strayZoidCaptureSuccess",
+    "outcomes:academy.strayZoidCaptureSuccess",
+    [
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "charisma",
+      },
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: 3,
+        kind: "change-stat",
+        stat: "synchrony",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "rare",
+      },
     ],
-    id: "outcome:strayZoidCaptureSuccess",
-    narrativeKey: "outcomes:academy.strayZoidCaptureSuccess",
-  },
-  "outcome:strayZoidDestroyFailure": {
-    effects: [
-      { amount: -3, kind: "change-stat", stat: "piloting" },
-      { amount: -1, kind: "change-stat", stat: "strength" },
-      { amount: -1, kind: "change-stat", stat: "synchrony" },
-      { kind: "grant-zoid", poolId: "weak" },
+  ),
+  outcome(
+    "outcome:strayZoidDestroyFailure",
+    "outcomes:academy.strayZoidDestroyFailure",
+    [
+      {
+        amount: -3,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: -1,
+        kind: "change-stat",
+        stat: "strength",
+      },
+      {
+        amount: -1,
+        kind: "change-stat",
+        stat: "synchrony",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "weak",
+      },
     ],
-    id: "outcome:strayZoidDestroyFailure",
-    narrativeKey: "outcomes:academy.strayZoidDestroyFailure",
-  },
-  "outcome:strayZoidDestroySuccess": {
-    effects: [
-      { amount: 3, kind: "change-stat", stat: "piloting" },
-      { amount: 2, kind: "change-stat", stat: "strength" },
-      { kind: "grant-zoid", poolId: "standard" },
+  ),
+  outcome(
+    "outcome:strayZoidDestroySuccess",
+    "outcomes:academy.strayZoidDestroySuccess",
+    [
+      {
+        amount: 3,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "strength",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "standard",
+      },
     ],
-    id: "outcome:strayZoidDestroySuccess",
-    narrativeKey: "outcomes:academy.strayZoidDestroySuccess",
-  },
-  "outcome:strayZoidProtect": {
-    effects: [
-      { amount: 1, kind: "change-stat", stat: "tactics" },
-      { amount: 1, kind: "change-stat", stat: "technique" },
-      { amount: 2, kind: "change-stat", stat: "charisma" },
-      { kind: "grant-zoid", poolId: "standard" },
-    ],
-    id: "outcome:strayZoidProtect",
-    narrativeKey: "outcomes:academy.strayZoidProtect",
-  },
-  "outcome:mechanicsProgramJoin": {
-    effects: [
-      { amount: -2, kind: "change-stat", stat: "piloting" },
-      { amount: 2, kind: "change-stat", stat: "synchrony" },
-      { amount: 4, kind: "change-stat", stat: "technique" },
-      { kind: "grant-zoid", poolId: "rare" },
+  ),
+  outcome("outcome:strayZoidProtect", "outcomes:academy.strayZoidProtect", [
+    {
+      amount: 1,
+      kind: "change-stat",
+      stat: "tactics",
+    },
+    {
+      amount: 1,
+      kind: "change-stat",
+      stat: "technique",
+    },
+    {
+      amount: 2,
+      kind: "change-stat",
+      stat: "charisma",
+    },
+    {
+      kind: "grant-zoid",
+      poolId: "standard",
+    },
+  ]),
+  outcome(
+    "outcome:mechanicsProgramJoin",
+    "outcomes:academy.mechanicsProgramJoin",
+    [
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "synchrony",
+      },
+      {
+        amount: 4,
+        kind: "change-stat",
+        stat: "technique",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "rare",
+      },
       {
         achievementId: "achievement:born-in-workshop",
         kind: "grant-achievement",
       },
     ],
-    id: "outcome:mechanicsProgramJoin",
-    narrativeKey: "outcomes:academy.mechanicsProgramJoin",
-  },
-  "outcome:mechanicsProgramReject": {
-    effects: [
-      { amount: 3, kind: "change-stat", stat: "piloting" },
-      { amount: 2, kind: "change-stat", stat: "strength" },
-      { kind: "grant-zoid", poolId: "standard" },
+  ),
+  outcome(
+    "outcome:mechanicsProgramReject",
+    "outcomes:academy.mechanicsProgramReject",
+    [
+      {
+        amount: 3,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "strength",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "standard",
+      },
     ],
-    id: "outcome:mechanicsProgramReject",
-    narrativeKey: "outcomes:academy.mechanicsProgramReject",
-  },
-  "outcome:mechanicsProgramHelpFailure": {
-    effects: [
-      { amount: -2, kind: "change-stat", stat: "piloting" },
-      { amount: -3, kind: "change-stat", stat: "strength" },
-      { amount: -2, kind: "change-stat", stat: "technique" },
-      { kind: "grant-zoid", poolId: "weak" },
+  ),
+  outcome(
+    "outcome:mechanicsProgramHelpFailure",
+    "outcomes:academy.mechanicsProgramHelpFailure",
+    [
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: -3,
+        kind: "change-stat",
+        stat: "strength",
+      },
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "technique",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "weak",
+      },
     ],
-    id: "outcome:mechanicsProgramHelpFailure",
-    narrativeKey: "outcomes:academy.mechanicsProgramHelpFailure",
-  },
-  "outcome:mechanicsProgramHelpSuccess": {
-    effects: [
-      { amount: 2, kind: "change-stat", stat: "piloting" },
-      { amount: 2, kind: "change-stat", stat: "synchrony" },
-      { amount: 4, kind: "change-stat", stat: "technique" },
-      { kind: "grant-zoid", poolId: "rare" },
+  ),
+  outcome(
+    "outcome:mechanicsProgramHelpSuccess",
+    "outcomes:academy.mechanicsProgramHelpSuccess",
+    [
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "synchrony",
+      },
+      {
+        amount: 4,
+        kind: "change-stat",
+        stat: "technique",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "rare",
+      },
     ],
-    id: "outcome:mechanicsProgramHelpSuccess",
-    narrativeKey: "outcomes:academy.mechanicsProgramHelpSuccess",
-  },
-  "outcome:veteranOfferAccept": {
-    effects: [
-      { amount: 2, indicator: "fame", kind: "change-career-indicator" },
-      { amount: 2, kind: "change-stat", stat: "tactics" },
-      { amount: -2, kind: "change-stat", stat: "strength" },
-      { kind: "grant-zoid", poolId: "super-rare" },
+  ),
+  outcome("outcome:veteranOfferAccept", "outcomes:academy.veteranOfferAccept", [
+    {
+      amount: 2,
+      indicator: "fame",
+      kind: "change-career-indicator",
+    },
+    {
+      amount: 2,
+      kind: "change-stat",
+      stat: "tactics",
+    },
+    {
+      amount: -2,
+      kind: "change-stat",
+      stat: "strength",
+    },
+    {
+      kind: "grant-zoid",
+      poolId: "super-rare",
+    },
+  ]),
+  outcome(
+    "outcome:veteranOfferReportFailure",
+    "outcomes:academy.veteranOfferReportFailure",
+    [
+      {
+        amount: -3,
+        indicator: "fame",
+        kind: "change-career-indicator",
+      },
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "charisma",
+      },
+      {
+        amount: -1,
+        kind: "change-stat",
+        stat: "tactics",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "weak",
+      },
     ],
-    id: "outcome:veteranOfferAccept",
-    narrativeKey: "outcomes:academy.veteranOfferAccept",
-  },
-  "outcome:veteranOfferReportFailure": {
-    effects: [
-      { amount: -3, indicator: "fame", kind: "change-career-indicator" },
-      { amount: -2, kind: "change-stat", stat: "charisma" },
-      { amount: -1, kind: "change-stat", stat: "tactics" },
-      { kind: "grant-zoid", poolId: "weak" },
-    ],
-    id: "outcome:veteranOfferReportFailure",
-    narrativeKey: "outcomes:academy.veteranOfferReportFailure",
-  },
-  "outcome:veteranOfferReportSuccess": {
-    effects: [
-      { amount: 3, indicator: "fame", kind: "change-career-indicator" },
-      { amount: 2, kind: "change-stat", stat: "charisma" },
-      { amount: 1, kind: "change-stat", stat: "tactics" },
-      { kind: "grant-zoid", poolId: "standard" },
+  ),
+  outcome(
+    "outcome:veteranOfferReportSuccess",
+    "outcomes:academy.veteranOfferReportSuccess",
+    [
+      {
+        amount: 3,
+        indicator: "fame",
+        kind: "change-career-indicator",
+      },
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "charisma",
+      },
+      {
+        amount: 1,
+        kind: "change-stat",
+        stat: "tactics",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "standard",
+      },
       {
         achievementId: "achievement:not-on-my-watch",
         kind: "grant-achievement",
       },
     ],
-    id: "outcome:veteranOfferReportSuccess",
-    narrativeKey: "outcomes:academy.veteranOfferReportSuccess",
-  },
-  "outcome:veteranOfferSilence": {
-    effects: [
-      { amount: 2, kind: "change-stat", stat: "tactics" },
-      { amount: 3, kind: "change-stat", stat: "synchrony" },
-      { kind: "grant-zoid", poolId: "standard" },
+  ),
+  outcome(
+    "outcome:veteranOfferSilence",
+    "outcomes:academy.veteranOfferSilence",
+    [
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "tactics",
+      },
+      {
+        amount: 3,
+        kind: "change-stat",
+        stat: "synchrony",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "standard",
+      },
     ],
-    id: "outcome:veteranOfferSilence",
-    narrativeKey: "outcomes:academy.veteranOfferSilence",
-  },
-  "outcome:humanitarianMissionVolunteerFailure": {
-    effects: [
-      { amount: 1, indicator: "fame", kind: "change-career-indicator" },
-      { amount: 1, kind: "change-stat", stat: "charisma" },
-      { amount: -2, kind: "change-stat", stat: "piloting" },
-      { amount: -4, kind: "change-stat", stat: "strength" },
-      { kind: "grant-zoid", poolId: "weak" },
-      { kind: "injure-pilot" },
-      { achievementId: "achievement:true-soldier", kind: "grant-achievement" },
+  ),
+  outcome(
+    "outcome:humanitarianMissionVolunteerFailure",
+    "outcomes:academy.humanitarianMissionVolunteerFailure",
+    [
+      {
+        amount: 1,
+        indicator: "fame",
+        kind: "change-career-indicator",
+      },
+      {
+        amount: 1,
+        kind: "change-stat",
+        stat: "charisma",
+      },
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: -4,
+        kind: "change-stat",
+        stat: "strength",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "weak",
+      },
+      {
+        kind: "injure-pilot",
+      },
+      {
+        achievementId: "achievement:true-soldier",
+        kind: "grant-achievement",
+      },
     ],
-    id: "outcome:humanitarianMissionVolunteerFailure",
-    narrativeKey: "outcomes:academy.humanitarianMissionVolunteerFailure",
-  },
-  "outcome:humanitarianMissionVolunteerSuccess": {
-    effects: [
-      { amount: 2, indicator: "fame", kind: "change-career-indicator" },
-      { amount: 3, kind: "change-stat", stat: "charisma" },
-      { amount: -2, kind: "change-stat", stat: "piloting" },
-      { amount: -2, kind: "change-stat", stat: "strength" },
-      { amount: 2, kind: "change-stat", stat: "synchrony" },
-      { kind: "grant-zoid", poolId: "rare" },
-      { achievementId: "achievement:true-soldier", kind: "grant-achievement" },
+  ),
+  outcome(
+    "outcome:humanitarianMissionVolunteerSuccess",
+    "outcomes:academy.humanitarianMissionVolunteerSuccess",
+    [
+      {
+        amount: 2,
+        indicator: "fame",
+        kind: "change-career-indicator",
+      },
+      {
+        amount: 3,
+        kind: "change-stat",
+        stat: "charisma",
+      },
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "strength",
+      },
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "synchrony",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "rare",
+      },
+      {
+        achievementId: "achievement:true-soldier",
+        kind: "grant-achievement",
+      },
     ],
-    id: "outcome:humanitarianMissionVolunteerSuccess",
-    narrativeKey: "outcomes:academy.humanitarianMissionVolunteerSuccess",
-  },
-  "outcome:humanitarianMissionIgnore": {
-    effects: [
-      { amount: -2, kind: "change-stat", stat: "charisma" },
-      { amount: 3, kind: "change-stat", stat: "piloting" },
-      { amount: 3, kind: "change-stat", stat: "strength" },
-      { kind: "grant-zoid", poolId: "standard" },
+  ),
+  outcome(
+    "outcome:humanitarianMissionIgnore",
+    "outcomes:academy.humanitarianMissionIgnore",
+    [
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "charisma",
+      },
+      {
+        amount: 3,
+        kind: "change-stat",
+        stat: "piloting",
+      },
+      {
+        amount: 3,
+        kind: "change-stat",
+        stat: "strength",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "standard",
+      },
     ],
-    id: "outcome:humanitarianMissionIgnore",
-    narrativeKey: "outcomes:academy.humanitarianMissionIgnore",
-  },
-  "outcome:humanitarianMissionOrganize": {
-    effects: [
-      { amount: 3, kind: "change-stat", stat: "tactics" },
-      { amount: 2, kind: "change-stat", stat: "strength" },
-      { amount: -2, kind: "change-stat", stat: "synchrony" },
-      { kind: "grant-zoid", poolId: "standard" },
+  ),
+  outcome(
+    "outcome:humanitarianMissionOrganize",
+    "outcomes:academy.humanitarianMissionOrganize",
+    [
+      {
+        amount: 3,
+        kind: "change-stat",
+        stat: "tactics",
+      },
+      {
+        amount: 2,
+        kind: "change-stat",
+        stat: "strength",
+      },
+      {
+        amount: -2,
+        kind: "change-stat",
+        stat: "synchrony",
+      },
+      {
+        kind: "grant-zoid",
+        poolId: "standard",
+      },
     ],
-    id: "outcome:humanitarianMissionOrganize",
-    narrativeKey: "outcomes:academy.humanitarianMissionOrganize",
-  },
-} as const satisfies Record<OutcomeId, Outcome>;
+  ),
+]);

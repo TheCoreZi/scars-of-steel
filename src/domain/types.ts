@@ -19,6 +19,7 @@ export type CareerEndReason =
   | "retired"
   | "war-lost"
   | "war-won";
+export type CareerFlag = "command" | "engineering" | "rebel";
 export type DecisionId = `decision:${string}`;
 export type EventId = `event:${string}`;
 export type Faction = "guylos" | "helic";
@@ -37,8 +38,8 @@ export type MilitaryRank =
   | "general"
   | "lieutenant"
   | "major"
-  | "sergeant"
-  | "soldier";
+  | "private"
+  | "sergeant";
 export type NicknameId = `nickname:${string}`;
 export type OutcomeId = `outcome:${string}`;
 export type PilotCondition = "active" | "dead" | "injured";
@@ -141,6 +142,7 @@ interface PilotData {
   basePotential: BoundedValue;
   bonusIds?: readonly BonusId[];
   career: StoredCareerData;
+  careerFlags: readonly CareerFlag[];
   condition: PilotCondition;
   faction: Faction;
   id: PilotId;
@@ -177,6 +179,9 @@ export interface Zoid {
 
 export type OutcomeEffect =
   | {
+      kind: "change-military-rank";
+    }
+  | {
       amount: number;
       kind: "change-stat";
       stat: StatName;
@@ -210,6 +215,10 @@ export type OutcomeEffect =
   | {
       bonusId: BonusId;
       kind: "grant-bonus";
+    }
+  | {
+      careerFlag: CareerFlag;
+      kind: "grant-career-flag";
     }
   | {
       kind: "grant-zoid";
@@ -278,9 +287,10 @@ export type Decision = ChanceDecision | SafeDecision;
 
 export interface DecisionEvent {
   ages?: readonly number[];
-  decisions: readonly [Decision, Decision, Decision];
+  decisions: readonly Decision[];
   id: EventId;
   factions?: readonly Faction[];
+  requiredCareerFlags?: readonly CareerFlag[];
   requiresZoid?: boolean;
   introductionKey: TranslationKey<"narrative">;
   titleKey: TranslationKey<"narrative">;

@@ -7,7 +7,6 @@ import {
 } from "../domain/achievements";
 import { getRankInsignia } from "../domain/ranks";
 import {
-  battleFactionNameKeys,
   factionNameKeys,
   militaryRankNameKeys,
   statNameKeys,
@@ -57,9 +56,6 @@ export function DecisionOutcomeScreen({
   const { t } = useTranslation("interface");
   const decision = event.decisions.find(
     ({ id }) => id === result.resolution.decisionId,
-  );
-  const battleFaction = translate(
-    battleFactionNameKeys[result.pilotAfter.faction],
   );
   const growthMessageKey = getGrowthMessageKey(result.changes);
   const promotedRank = result.pilotAfter.career.militaryRank;
@@ -143,11 +139,12 @@ export function DecisionOutcomeScreen({
             </TerminalLine>
             <TerminalLine>
               <p className="outcome-screen__record">
-                {result.battleRecord.participated === 0
+                {result.battleRecord.assigned === 0
                   ? t("outcomeScreen.noBattles")
                   : t("outcomeScreen.battleReport", {
-                      ...result.battleRecord,
-                      faction: battleFaction,
+                      assigned: result.battleRecord.assigned,
+                      losses: result.battleRecord.losses,
+                      wins: result.battleRecord.wins,
                     })}
               </p>
             </TerminalLine>

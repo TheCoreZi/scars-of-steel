@@ -2,6 +2,7 @@ import { getEvent } from "./events";
 import type { RandomGenerator } from "./random";
 import type { DecisionEvent, EventId, Pilot } from "./types";
 import { academyEvents } from "./academyEvents";
+import { earlyServiceEvents } from "./earlyServiceEvents";
 
 export const initialEventPool = [
   "event:first-exercises",
@@ -22,11 +23,15 @@ export function getEligibleEventIds(
   const pool =
     pilot.age === 12
       ? initialEventPool
-      : academyEvents
+      : [...academyEvents, ...earlyServiceEvents]
           .filter(
             (event) =>
               event.ages?.includes(pilot.age) &&
               (!event.requiresZoid || pilot.zoids !== null) &&
+              (!event.requiredCareerFlags ||
+                event.requiredCareerFlags.every((flag) =>
+                  pilot.careerFlags.includes(flag),
+                )) &&
               (!event.factions || event.factions.includes(pilot.faction)),
           )
           .map(({ id }) => id);

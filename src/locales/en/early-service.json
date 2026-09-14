@@ -1,0 +1,324 @@
+{
+  "decisions": {
+    "early-service": {
+      "barracks-duty": {
+        "1": {
+          "description": "Deploy with the other pilots and take a perimeter position before the enemy arrives.",
+          "label": "Defend the perimeter"
+        },
+        "2": {
+          "description": "Go to the electrical room and help the mechanics restore power to the defenses.",
+          "label": "Help with the generator"
+        },
+        "3": {
+          "description": "Suggest leaving one entrance apparently open and hiding Zoids on both sides to trap the enemy.",
+          "label": "Propose an ambush"
+        }
+      },
+      "red-river": {
+        "1": {
+          "description": "Take your Zoid to the defensive line and cover the units stationed near the bridge.",
+          "label": "Deploy as reinforcement"
+        },
+        "2": {
+          "description": "Take an observation post and record enemy movements to detect arriving reinforcements.",
+          "label": "Watch the enemy"
+        },
+        "3": {
+          "description": "Remain in a reserve position in case the river line fails.",
+          "label": "Defend another post"
+        }
+      },
+      "mount-olympus": {
+        "1": {
+          "description": "Occupy the trail and face the column without waiting for support.",
+          "label": "Block them alone"
+        },
+        "2": {
+          "description": "Fire a missile into the rock wall, even though the collapse will isolate the unit on the other side.",
+          "label": "Collapse the trail"
+        },
+        "3": {
+          "description": "Report the column's position and remain hidden until you receive orders.",
+          "label": "Alert command"
+        }
+      },
+      "under-our-fire": {
+        "1": {
+          "description": "Guide the families to the transports and help them board before the enemy arrives.",
+          "label": "Help with the evacuation"
+        },
+        "2": {
+          "description": "Move the civilians into the buildings farthest from the defensive positions.",
+          "label": "Find shelter"
+        },
+        "3": {
+          "description": "Leave the settlement in your Zoid and draw the column toward terrain where it cannot fire on the houses.",
+          "label": "Draw the enemy away"
+        }
+      },
+      "enemy-informant": {
+        "1": {
+          "description": "Tell the operator that the route changed and give them a false waypoint.",
+          "label": "Mislead the operator"
+        },
+        "2": {
+          "description": "You notice that the mechanic adjusted the cockpit and decide to inspect the work before departure.",
+          "label": "Inspect the cockpit"
+        },
+        "3": {
+          "description": "Give the sealed route to the escort officer after the convoy is already moving.",
+          "label": "Limit the officer"
+        }
+      },
+      "line-collapses": {
+        "1": {
+          "description": "Ignore the order and convince your companions to move the damaged Zoids through the only open route.",
+          "label": "Convince them to withdraw"
+        },
+        "2": {
+          "description": "Stay on the line and face the next attack. This is what you enlisted to do, and you refuse to yield the position.",
+          "label": "Hold to the end"
+        },
+        "3": {
+          "description": "Cover the wounded and the immobilized Zoids while they withdraw to the rear.",
+          "label": "Protect the wounded"
+        }
+      },
+      "no-one-left-behind": {
+        "1": {
+          "description": "Hide your trail, locate the enemy camp, and attack at night to rescue your companions.",
+          "label": "Follow the captors"
+        },
+        "2": {
+          "description": "Offer the captured pilot in exchange for your companions before you withdraw.",
+          "label": "Propose an exchange"
+        },
+        "3": {
+          "description": "Hide a transmitter in the prisoners' transport and withdraw with your unit.",
+          "label": "Obey the withdrawal"
+        }
+      },
+      "moonbay-contract": {
+        "1": {
+          "description": "Compare the seals with the manifest and sign for the delivery without opening the crates.",
+          "label": "Accept the shipment"
+        },
+        "2": {
+          "description": "Detain Moonbay and ask security to investigate the seals before letting her leave.",
+          "label": "Reject the shipment"
+        },
+        "3": {
+          "description": "Open crates from different parts of the trailer and inspect the weapons before signing.",
+          "label": "Inspect the weapons"
+        }
+      },
+      "impossible-part": {
+        "1": {
+          "description": "Reprogram the limiter to distribute the weight across the other legs and keep the actuator from locking.",
+          "label": "Improvise a repair"
+        },
+        "2": {
+          "description": "Explain that the Zoid could fail during the mission and ask command to remove it from the deployment.",
+          "label": "Report to command"
+        },
+        "3": {
+          "description": "Convince the pilot to remove the heaviest weapon and limit power during the mission.",
+          "label": "Convince the pilot"
+        }
+      },
+      "two-orders": {
+        "1": {
+          "description": "Contact headquarters on a secondary channel before moving your group.",
+          "label": "Verify the order"
+        },
+        "2": {
+          "description": "Convince your group to obey the headquarters order even though it contradicts your direct superior.",
+          "label": "Carry out the withdrawal"
+        },
+        "3": {
+          "description": "Hold the position and trust that your superior was right to reject the message.",
+          "label": "Follow your superior"
+        }
+      }
+    }
+  },
+  "narrative": {
+    "early-service": {
+      "barracks-duty": {
+        "introduction": "An explosion cuts power to the base at midnight. The perimeter sensors and hangar doors stop working. A nearby post reports enemy Zoids in the area, and the garrison prepares to defend the approaches.",
+        "title": "Alarm in the dark"
+      },
+      "red-river": {
+        "introduction": "Both armies have spent days placing troops across from each other at Red River. The ceasefire still holds, but every new Zoid raises the tension. Command asks for volunteers to reinforce the flanks before the situation worsens.",
+        "title": "Fire at Red River"
+      },
+      "mount-olympus": {
+        "introduction": "Your group falls behind during a patrol on Mount Olympus. Before you can rejoin the others, you spot an enemy column climbing an unguarded trail. You cannot let it reach the ruins at the summit, but an allied unit remains on the other side of the pass.",
+        "title": "The ruins of Mount Olympus"
+      },
+      "under-our-fire": {
+        "introduction": "Your unit must defend a crossroads used to carry supplies to the front. A settlement surrounds the crossroads, and many families remain in their homes. An enemy column is approaching. Reinforcements are at least an hour away.",
+        "title": "Under our fire"
+      },
+      "enemy-informant": {
+        "introduction": "Two convoys were ambushed even though their routes were secret and changed shortly before departure. You will travel with the third convoy. Before it leaves, you must discover how the enemy learns the route or find a way to prevent another ambush.",
+        "title": "Someone is informing the enemy"
+      },
+      "line-collapses": {
+        "introduction": "The enemy has broken through the defenses on both sides and is surrounding your position. Ammunition is low, and several Zoids can barely move. Command orders the unit to keep fighting, but you know many of your companions will not escape if everyone stays.",
+        "title": "The line collapses"
+      },
+      "no-one-left-behind": {
+        "introduction": "The attack on an enemy post fails, and several companions are captured during the withdrawal. Your group captures an enemy pilot after their Zoid is immobilized. Command orders you to withdraw. You know that obeying means leaving your companions in enemy hands.",
+        "title": "No one left behind"
+      },
+      "moonbay-contract": {
+        "introduction": "Your unit is waiting for a shipment of weapons at a forward post. A transporter calling herself Moonbay arrives without an escort and with several replaced seals. Her papers look authentic, but no one at the post knows her.",
+        "title": "Moonbay's contract"
+      },
+      "impossible-part": {
+        "introduction": "A Zoid from your unit returns with a destroyed leg actuator. It must join a mission at dawn, and the workshop does not have the correct replacement. If the Zoid fails during deployment, it will endanger the units fighting beside it.",
+        "title": "The impossible part"
+      },
+      "two-orders": {
+        "introduction": "During the battle, headquarters transmits an order to withdraw. Your direct superior argues that the message, sent without the full code, could be an enemy transmission and orders the unit to hold its position. The enemy keeps advancing while the two orders conflict.",
+        "title": "Two orders"
+      }
+    }
+  },
+  "outcomes": {
+    "early-service": {
+      "barracks-duty": {
+        "1": {
+          "success": "Your group holds the perimeter until the automated defenses return. Your Zoid detects each new attack before the sensors and helps you close the gaps in time.",
+          "failure": "There are more attackers than you expected. Your Zoid is damaged and you are wounded, but you hold the perimeter until the defenses return."
+        },
+        "2": {
+          "success": "You temporarily connect the hangar Zoids to the emergency grid. Their power keeps the defenses active while the mechanics replace the damaged regulator."
+        },
+        "3": {
+          "success": "The watch officer accepts the risk. The patrol enters through the open access and is trapped in the defenders' crossfire.",
+          "failure": "The enemy recognizes the trap and uses another route to enter the base. The defenders contain the attack between the hangars, but your plan leaves several facilities damaged."
+        }
+      },
+      "red-river": {
+        "1": {
+          "success": "The fighting starts while you hold the riverbank. You fight until an explosion destroys the Fire Bridge and forces both armies to withdraw from the crossing.",
+          "failure": "The fighting starts as you advance toward the bridge. The explosion that destroys it hits your Zoid and forces you to withdraw wounded with the rest of your unit."
+        },
+        "2": {
+          "success": "You identify the movement of several units before combat begins. Your reports reinforce the positions the enemy tries to attack before the bridge falls.",
+          "failure": "You mistake a relief maneuver for the start of an attack. Command moves troops to the wrong place, leaving other positions exposed when combat begins."
+        },
+        "3": {
+          "success": "When the bridge explosion causes casualties, your unit leaves the reserve to reinforce the line and prevents the enemy from exploiting the confusion."
+        }
+      },
+      "mount-olympus": {
+        "1": {
+          "success": "You fight at a clear disadvantage and force the column to advance along the trail one Zoid at a time. Your Zoid answers every maneuver, and you hold them until reinforcements arrive.",
+          "failure": "Their numbers overwhelm you. You are wounded and your Zoid is damaged without delaying the enemy advance for long."
+        },
+        "2": {
+          "success": "The shot collapses the trail and stops the column. The isolated allied unit holds until reinforcements open a new route.",
+          "failure": "The missile hits too high. The rocks do not close the trail, and fragments strike the allied unit while the enemy continues toward the summit."
+        },
+        "3": {
+          "success": "Command sends reinforcements along a nearby route. They arrive in time, close the trail, and stop the column before it reaches the summit."
+        }
+      },
+      "under-our-fire": {
+        "1": {
+          "success": "The transports evacuate the civilians while part of your unit covers the crossroads. The final vehicle leaves the settlement before the fighting reaches the streets.",
+          "failure": "The enemy column reaches you during the evacuation. You fight among civilians with no room to maneuver. Most escape, but the fighting separates several families."
+        },
+        "2": {
+          "success": "The residents shelter at the far end of the settlement while your unit prepares the crossroads. The fighting does not reach their buildings."
+        },
+        "3": {
+          "success": "The column follows you away from the settlement and loses time trying to surround you. The civilians escape while the enemy fights far from their homes.",
+          "failure": "The enemy ignores the maneuver. Part of the column fires on your Zoid while the rest advances toward the crossroads. Several families are trapped when the fighting reaches the streets."
+        }
+      },
+      "enemy-informant": {
+        "1": {
+          "success": "An enemy patrol appears at the false waypoint. Security detains the operator and finds the codes used to transmit the routes.",
+          "failure": "No one appears at the false waypoint. During the journey, the convoy falls into another ambush: the operator was innocent, and the real informant received the route through another channel."
+        },
+        "2": {
+          "success": "You find a hidden transmitter among the controls and hand it to command. The mechanic is detained while investigators determine who supplied the device.",
+          "failure": "There is no transmitter. While dismantling the controls, you ruin improvements the mechanic installed to keep the convoy from being tracked."
+        },
+        "3": {
+          "success": "The officer has no time to transmit the route before departure. The convoy arrives without being attacked, although you cannot prove who leaked the earlier routes."
+        }
+      },
+      "line-collapses": {
+        "1": {
+          "success": "Your companions agree that the position is lost. They withdraw in groups and recover the damaged Zoids, although everyone must answer for disobeying the order.",
+          "failure": "Your companions withdraw with you, but the movement starts too late. The enemy occupies a supply base before another unit can defend it."
+        },
+        "2": {
+          "success": "Your Zoid understands your determination and pushes its instincts to the limit. Its power rises during combat, and together you stop the attack until the withdrawal order arrives.",
+          "failure": "Ammunition runs out during the attack. An explosion wounds you, and the enemy enters the position before you can withdraw."
+        },
+        "3": {
+          "success": "You keep the enemy away from the evacuation route. The position falls, but the wounded and the immobilized units escape."
+        }
+      },
+      "no-one-left-behind": {
+        "1": {
+          "success": "You follow the transport without being discovered and wait for the camp to fall silent. You rescue your companions, and everyone returns safely. The officers recognize your work with a promotion.",
+          "failure": "A patrol discovers your trail, and you must withdraw before reaching the prisoners. When you return, command punishes you for disobeying the withdrawal order."
+        },
+        "2": {
+          "success": "The captured pilot carried information the enemy could not leave in your hands. The officer releases your companions to recover the pilot.",
+          "failure": "The enemy uses the exchange to recover its pilot without releasing your companions. You return without the prisoner or the information they carried."
+        },
+        "3": {
+          "success": "The transmitter reveals the route and the camp's location. You give the data to command so it can prepare a rescue, although your companions remain prisoners that night."
+        }
+      },
+      "moonbay-contract": {
+        "1": {
+          "success": "The numbers and weights match. Moonbay counts the payment before allowing the weapons to be unloaded and leaves as soon as she receives the final coin.",
+          "failure": "After you accept the weapons, command discovers that no one ordered the shipment. You are disciplined for signing the delivery without confirming the purchase order."
+        },
+        "2": {
+          "success": "The weapons and documents are legal. Command recognizes your caution and authorizes the delivery, although Moonbay remembers that you detained her.",
+          "failure": "The shipment belonged to a secret high-command operation. You are reprimanded for detaining a transporter whose cooperation was needed, although the report acknowledges that you protected the post."
+        },
+        "3": {
+          "success": "The inspection confirms that the weapons match the manifest. The delivery is delayed, but the record leaves no doubt about its contents."
+        }
+      },
+      "impossible-part": {
+        "1": {
+          "success": "During the mission, the Zoid moves better than expected and responds with more power because of your change. When it returns, the mechanics recognize the value of the repair.",
+          "failure": "The actuator locks during the mission and forces the entire unit to stop under fire. Command disciplines you for modifying a Zoid without workshop authorization."
+        },
+        "2": {
+          "success": "Command removes the Zoid from the formation and reorganizes the mission before departure. The pilot protests, but no one will have to protect a unit that can barely walk."
+        },
+        "3": {
+          "success": "The pilot accepts the change. The Zoid completes the mission with fewer weapons and without straining the actuator.",
+          "failure": "The pilot insists on keeping the full armament. The actuator locks during the march, and the Zoid cannot join the mission."
+        }
+      },
+      "two-orders": {
+        "1": {
+          "success": "Headquarters confirms the withdrawal. Your superior accepts the authentication, and the unit leaves the position before the enemy closes the exit."
+        },
+        "2": {
+          "success": "Your group withdraws before the enemy closes the exit. The order was authentic, but your superior demands that you answer for acting without authorization.",
+          "failure": "Part of the group withdraws with you while the rest remains with your superior. The split weakens both positions. The enemy takes control of the area, and several companions are wounded."
+        },
+        "3": {
+          "success": "The message was an enemy transmission. Your unit holds the position and prevents the enemy from exploiting a false withdrawal.",
+          "failure": "The order was authentic. The enemy surrounds the position during the delay and fires on your Zoid when the unit tries to break out."
+        }
+      }
+    }
+  }
+}

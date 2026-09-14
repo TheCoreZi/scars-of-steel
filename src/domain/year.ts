@@ -6,7 +6,7 @@ import { hasMinimumRank } from "./ranks";
 import type { Decision, DecisionEvent, Pilot, ResolvedYear } from "./types";
 import { advanceWarState, getWarBattleCount } from "./war";
 import { applyAnnualGrowth, resolveAnnualRecovery } from "./annualRecovery";
-import { advanceCareerYear } from "./career";
+import { advanceCareerYear, resolveAnnualPromotion } from "./career";
 
 export function resolveYear(
   decision: Decision,
@@ -19,7 +19,7 @@ export function resolveYear(
   const appliedOutcome = applyOutcome(pilot, outcome, random);
   const canFight =
     appliedOutcome.pilotAfter.condition !== "dead" &&
-    hasMinimumRank(pilot.career.militaryRank, "soldier");
+    hasMinimumRank(pilot.career.militaryRank, "private");
   const battles =
     appliedOutcome.pilotAfter.condition === "dead"
       ? 0
@@ -49,10 +49,18 @@ export function resolveYear(
     random,
     battleYear.record.injured,
   );
-  const nextCareer = advanceCareerYear(recovered.pilot, outcome).career;
-  const promoted =
-    nextCareer.militaryRank !== recovered.pilot.career.militaryRank;
-  const pilotAfter = { ...recovered.pilot, career: nextCareer };
+  const narrativePromotion =
+    recovered.pilot.career.militaryRank !== pilot.career.militaryRank;
+  const afterPromotion = resolveAnnualPromotion(
+    recovered.pilot,
+    battleYear.record,
+    random,
+    !narrativePromotion &&
+      (resolution.kind === "safe" || resolution.result === "success"),
+  );
+  const nextCareer = advanceCareerYear(afterPromotion, outcome).career;
+  const promoted = nextCareer.militaryRank !== pilot.career.militaryRank;
+  const pilotAfter = { ...afterPromotion, career: nextCareer };
   const changes = [
     ...appliedOutcome.changes,
     ...growth.changes,

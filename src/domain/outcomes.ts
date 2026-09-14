@@ -12,6 +12,7 @@ import {
   type ZoidId,
 } from "./types";
 import { getFactionControl, updateWarControl } from "./war";
+import { promotePilot } from "./ranks";
 import { selectRewardZoid } from "./zoidPools";
 import { getZoidPowerBeforeUpgrades } from "./zoids";
 
@@ -117,6 +118,8 @@ function applyEffect(
   effect: OutcomeEffect,
 ): OutcomeContext {
   switch (effect.kind) {
+    case "change-military-rank":
+      return changeMilitaryRankOutcome.apply(context, effect);
     case "change-career-indicator":
     case "change-potential":
     case "change-stat":
@@ -132,6 +135,8 @@ function applyEffect(
       return grantAchievementOutcome.apply(context, effect);
     case "grant-bonus":
       return grantBonusOutcome.apply(context, effect);
+    case "grant-career-flag":
+      return grantCareerFlagOutcome.apply(context, effect);
     case "grant-zoid":
     case "replace-signature-zoid":
       return grantZoidOutcome.apply(context, effect);
@@ -141,6 +146,21 @@ function applyEffect(
       return killPilotOutcome.apply(context, effect);
     case "remove-zoid":
       return removeZoidOutcome.apply(context, effect);
+  }
+}
+
+class ChangeMilitaryRankOutcome implements OutcomeHandler<
+  Extract<OutcomeEffect, { kind: "change-military-rank" }>
+> {
+  apply(
+    context: OutcomeContext,
+    effect: Extract<OutcomeEffect, { kind: "change-military-rank" }>,
+  ): OutcomeContext {
+    void effect;
+    return {
+      ...context,
+      pilot: promotePilot(context.pilot),
+    };
   }
 }
 
@@ -250,6 +270,26 @@ class GrantBonusOutcome implements OutcomeHandler<
   }
 }
 
+class GrantCareerFlagOutcome implements OutcomeHandler<
+  Extract<OutcomeEffect, { kind: "grant-career-flag" }>
+> {
+  apply(
+    context: OutcomeContext,
+    effect: Extract<OutcomeEffect, { kind: "grant-career-flag" }>,
+  ): OutcomeContext {
+    const careerFlags = context.pilot.careerFlags;
+    return careerFlags.includes(effect.careerFlag)
+      ? context
+      : {
+          ...context,
+          pilot: {
+            ...context.pilot,
+            careerFlags: [...careerFlags, effect.careerFlag],
+          },
+        };
+  }
+}
+
 type GrantZoidEffect = Extract<
   OutcomeEffect,
   { kind: "grant-zoid" | "replace-signature-zoid" }
@@ -324,10 +364,12 @@ class RemoveZoidOutcome implements OutcomeHandler<
 }
 
 const changeValueOutcome = new ChangeValueOutcome();
+const changeMilitaryRankOutcome = new ChangeMilitaryRankOutcome();
 const damageSignatureZoidOutcome = new DamageSignatureZoidOutcome();
 const endCareerOutcome = new EndCareerOutcome();
 const grantAchievementOutcome = new GrantAchievementOutcome();
 const grantBonusOutcome = new GrantBonusOutcome();
+const grantCareerFlagOutcome = new GrantCareerFlagOutcome();
 const grantZoidOutcome = new GrantZoidOutcome();
 const injurePilotOutcome = new InjurePilotOutcome();
 const killPilotOutcome = new KillPilotOutcome();

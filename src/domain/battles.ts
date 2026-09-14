@@ -25,7 +25,7 @@ const militaryRankBattleFactors = {
   lieutenant: 0.55,
   major: 0.9,
   sergeant: 0.4,
-  soldier: 0.15,
+  private: 0.15,
 } as const satisfies Record<MilitaryRank, number>;
 const specialRankBattleFactors = {
   "blitz-orbit": 1.3,
@@ -92,7 +92,7 @@ export function simulateBattleYear(
     firstFactionWins,
     pilot: currentPilot,
     record: {
-      assigned,
+      assigned: participated,
       available: battles,
       injured,
       killed,
@@ -115,20 +115,15 @@ export function getAssignedBattles(
     return 0;
   }
 
-  const trustedBattles = Math.round(
-    battles * (pilot.career.factionTrust / 100),
-  );
   const rankFactor = pilot.career.specialRank
     ? specialRankBattleFactors[pilot.career.specialRank]
     : militaryRankBattleFactors[pilot.career.militaryRank];
-  const assigned = Math.round(trustedBattles * rankFactor);
+  const rankBattles = Math.round(battles * rankFactor);
+  const trustModifier = 0.35 + (pilot.career.factionTrust / 100) * 0.65;
+  const trustedBattles = Math.round(rankBattles * trustModifier);
+  const variance = 0.9 + random.probability() * 0.2;
 
-  return assigned === 0
-    ? 0
-    : Math.min(
-        battles,
-        Math.round(assigned * (0.9 + random.probability() * 0.1)),
-      );
+  return Math.max(0, Math.min(battles, Math.round(trustedBattles * variance)));
 }
 
 function simulatePilotBattle(
