@@ -39,12 +39,6 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
   await auditCurrentScreen(page, "decision selection");
   await page.locator(".core-pulse__toggle").click();
   await auditCurrentScreen(page, "tactical profile");
-  if (testInfo.project.name === "mobile-320") {
-    await page.screenshot({
-      fullPage: true,
-      path: "/tmp/scars-of-steel-mobile-status-final.png",
-    });
-  }
   await expect(page.locator(".detail-primary-summary")).toHaveCSS(
     "display",
     "contents",
@@ -70,7 +64,7 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
       .locator(".core-pulse__toggle")
       .evaluate((toggle) => toggle.getBoundingClientRect().bottom);
     const headingTop = await page
-      .locator(".detail-panel__heading")
+      .locator(".detail-panel__heading h2")
       .evaluate((heading) => heading.getBoundingClientRect().top);
     const primaryLayout = await page
       .locator(".detail-primary-summary")
