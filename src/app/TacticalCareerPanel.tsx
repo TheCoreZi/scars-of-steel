@@ -119,7 +119,13 @@ export function TacticalCareerPanel({ history, onSelectZoid, pilot }: Props) {
           {visual}
           <span>
             <strong>{zoidName}</strong>
-            <small>{zoid ? getEffectiveZoidPower(pilot, zoid.id) : "—"}</small>
+            <small>
+              {zoid
+                ? t("tacticalPanel.powerValue", {
+                    value: getEffectiveZoidPower(pilot, zoid.id),
+                  })
+                : "—"}
+            </small>
           </span>
         </div>
         <WarStatus pilot={pilot} />

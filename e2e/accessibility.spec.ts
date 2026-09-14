@@ -39,6 +39,16 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
   await auditCurrentScreen(page, "decision selection");
   await page.locator(".core-pulse__toggle").click();
   await auditCurrentScreen(page, "tactical profile");
+  if (testInfo.project.name === "mobile-320") {
+    await page.screenshot({
+      fullPage: true,
+      path: "/tmp/scars-of-steel-mobile-status-final.png",
+    });
+  }
+  await expect(page.locator(".detail-primary-summary")).toHaveCSS(
+    "display",
+    "contents",
+  );
   const panelLayout = await page.locator(".detail-panel").evaluate((panel) => {
     const container = panel.closest(".decision-screen__panel")!;
     const decisions = container.querySelector(".decision-screen__content")!;
@@ -55,6 +65,73 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
     panelLayout.bottom,
   );
   expect(panelLayout.top).toBeCloseTo(panelLayout.decisionTop, 0);
+  if (testInfo.project.name === "mobile-320") {
+    const toggleBottom = await page
+      .locator(".core-pulse__toggle")
+      .evaluate((toggle) => toggle.getBoundingClientRect().bottom);
+    const headingTop = await page
+      .locator(".detail-panel__heading")
+      .evaluate((heading) => heading.getBoundingClientRect().top);
+    const primaryLayout = await page
+      .locator(".detail-primary-summary")
+      .evaluate((summary) => {
+        const getBounds = (selector: string) =>
+          summary.querySelector(selector)!.getBoundingClientRect();
+        const battleRecord = getBounds(".detail-battle-record");
+        const pilot = getBounds(".detail-pilot-primary");
+        const potential = getBounds(".detail-potential");
+        const zoid = getBounds(".detail-zoid-primary");
+        return {
+          battleRecordLeft: battleRecord.left,
+          battleRecordTop: battleRecord.top,
+          pilotLeft: pilot.left,
+          pilotTop: pilot.top,
+          potentialLeft: potential.left,
+          potentialTop: potential.top,
+          zoidLeft: zoid.left,
+          zoidTop: zoid.top,
+        };
+      });
+    expect(headingTop).toBeGreaterThanOrEqual(toggleBottom);
+    expect(primaryLayout.pilotTop).toBeCloseTo(primaryLayout.potentialTop, 0);
+    expect(primaryLayout.zoidTop).toBeCloseTo(primaryLayout.battleRecordTop, 0);
+    expect(primaryLayout.pilotLeft).toBeLessThan(primaryLayout.potentialLeft);
+    expect(primaryLayout.zoidLeft).toBeLessThan(primaryLayout.battleRecordLeft);
+    expect(primaryLayout.pilotTop).toBeLessThan(primaryLayout.zoidTop);
+  }
+  if (testInfo.project.name === "desktop-1280") {
+    const primaryLayout = await page
+      .locator(".detail-primary-summary")
+      .evaluate((summary) => {
+        const getBounds = (selector: string) =>
+          summary.querySelector(selector)!.getBoundingClientRect();
+        const battleRecord = getBounds(".detail-battle-record");
+        const pilot = getBounds(".detail-pilot-primary");
+        const potential = getBounds(".detail-potential");
+        const zoid = getBounds(".detail-zoid-primary");
+        return {
+          battleRecordLeft: battleRecord.left,
+          battleRecordTop: battleRecord.top,
+          pilotLeft: pilot.left,
+          pilotTop: pilot.top,
+          potentialLeft: potential.left,
+          potentialTop: potential.top,
+          zoidLeft: zoid.left,
+          zoidTop: zoid.top,
+        };
+      });
+    expect(primaryLayout.pilotTop).toBeCloseTo(primaryLayout.zoidTop, 0);
+    expect(primaryLayout.zoidTop).toBeCloseTo(primaryLayout.potentialTop, 0);
+    expect(primaryLayout.potentialTop).toBeCloseTo(
+      primaryLayout.battleRecordTop,
+      0,
+    );
+    expect(primaryLayout.pilotLeft).toBeLessThan(primaryLayout.zoidLeft);
+    expect(primaryLayout.zoidLeft).toBeLessThan(primaryLayout.potentialLeft);
+    expect(primaryLayout.potentialLeft).toBeLessThan(
+      primaryLayout.battleRecordLeft,
+    );
+  }
   await page.locator(".core-pulse__toggle").click();
 
   const chanceDecision = page

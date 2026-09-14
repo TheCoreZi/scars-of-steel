@@ -198,12 +198,22 @@ test("persists the signature Zoid selected from the tactical hangar", async ({
   }, gameStorageKey);
   await page.reload();
   await page.locator(".core-pulse__toggle").click();
+  await expect(page.locator(".detail-hangar-image").first()).toHaveCSS(
+    "overflow",
+    "hidden",
+  );
+  await expect(page.locator(".detail-hangar-image").first()).toHaveCSS(
+    "position",
+    "relative",
+  );
   await page.getByRole("button", { name: "Command Wolf", exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Command Wolf", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
   await page.reload();
-  await expect(page.locator(".core-pulse__zoid")).toContainText("Command Wolf");
+  await expect(page.locator(".core-pulse__zoid")).toContainText(
+    /Command Wolf.*Power \d+/u,
+  );
   expect(
     await page.evaluate(
       (key) => JSON.parse(localStorage.getItem(key)!).activeGame.pilot.zoids,

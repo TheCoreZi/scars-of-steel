@@ -1197,6 +1197,34 @@
   margin: 0;
 }
 
+.tactical-career .detail-primary-summary[data-variant="tacticalProfile"] {
+  display: contents;
+}
+
+.tactical-career
+  .detail-primary-summary[data-variant="tacticalProfile"]
+  > .detail-pilot-primary {
+  grid-area: pilot !important;
+}
+
+.tactical-career
+  .detail-primary-summary[data-variant="tacticalProfile"]
+  > .detail-zoid-primary {
+  grid-area: zoid !important;
+}
+
+.tactical-career
+  .detail-primary-summary[data-variant="tacticalProfile"]
+  > .detail-potential {
+  grid-area: potential !important;
+}
+
+.tactical-career
+  .detail-primary-summary[data-variant="tacticalProfile"]
+  > .detail-battle-record {
+  grid-area: record !important;
+}
+
 .tactical-career .detail-panel__heading {
   grid-area: heading;
 }
@@ -1357,15 +1385,16 @@
 }
 
 .tactical-career .detail-panel--tactical {
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 0.8fr);
+  grid-template-columns:
+    minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 0.75fr)
+    minmax(0, 0.65fr);
   grid-template-areas:
-    "heading heading heading"
-    "war war war"
-    "pilot pilot potential"
-    "zoid stats stats"
-    "hangar stats stats"
-    "record signals signals"
-    "rewards rewards rewards";
+    "heading heading heading heading"
+    "war war war war"
+    "pilot zoid potential record"
+    "hangar hangar hangar hangar"
+    "stats stats stats signals"
+    "rewards rewards rewards rewards";
 }
 .tactical-career
   .detail-panel--tactical
@@ -1392,13 +1421,6 @@
 }
 .tactical-career .detail-panel--tactical .detail-radar {
   width: min(13rem, 100%);
-}
-
-.tactical-career .detail-panel--tactical {
-  grid-template-areas:
-    "heading heading heading" "war war war"
-    "pilot zoid potential" "hangar hangar record"
-    "stats stats signals" "rewards rewards rewards";
 }
 
 .tactical-career .detail-panel--tactical .detail-career-indicators {
@@ -1444,6 +1466,15 @@
   outline-offset: -2px;
 }
 
+.tactical-career .detail-hangar-image {
+  position: relative;
+  display: block;
+  width: 2rem;
+  height: 1.6rem;
+  flex: 0 0 2rem;
+  overflow: hidden;
+}
+
 .tactical-career .status-zoid-visual {
   overflow: hidden;
 }
@@ -1479,12 +1510,29 @@
     gap: 0.65rem;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:
-      "heading heading" "war war" "pilot pilot" "zoid potential"
-      "hangar hangar" "stats stats" "record record"
+      "heading heading" "war war" "pilot potential" "zoid record"
+      "hangar hangar" "stats stats"
       "signals signals" "rewards rewards";
   }
+  .tactical-career .detail-panel__heading {
+    padding-top: 1.25rem;
+  }
+  .tactical-career .detail-pilot-primary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .tactical-career .detail-pilot-primary > span {
+    width: 100%;
+  }
   .tactical-career .detail-pilot-primary strong {
-    font-size: 1.6rem;
+    overflow: visible;
+    font-size: 1rem;
+    text-overflow: clip;
+  }
+  .tactical-career .detail-pilot-primary .status-faction-mark {
+    width: 2.3rem;
+    height: 2.3rem;
   }
   .tactical-career .detail-potential {
     min-height: 6.5rem;
@@ -1492,6 +1540,13 @@
   .tactical-career .detail-zoid-primary strong {
     white-space: normal;
     font-size: 0.9rem;
+  }
+  .tactical-career
+    .detail-panel--tactical
+    .detail-zoid-primary
+    .status-zoid-visual {
+    width: 4rem;
+    height: 3rem;
   }
   .tactical-career .detail-war-status {
     font-size: 0.42rem;
@@ -1510,13 +1565,13 @@
     gap: 0.4rem;
   }
   .tactical-career .detail-battle-record {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.2rem;
   }
   .tactical-career .detail-panel--tactical {
-    grid-template-areas: "heading heading" "war war" "pilot pilot" "zoid potential" "hangar hangar" "stats stats" "record record" "signals signals" "rewards rewards";
+    grid-template-areas: "heading heading" "war war" "pilot potential" "zoid record" "hangar hangar" "stats stats" "signals signals" "rewards rewards";
   }
   .tactical-career .detail-panel--tactical .detail-owned-zoids > div {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1581,6 +1636,10 @@
 }
 .tactical-career .core-pulse > .detail-war-status > span {
   flex-wrap: wrap;
+}
+.tactical-career .core-pulse > .detail-war-status > span:last-child {
+  justify-content: flex-end;
+  text-align: right;
 }
 .tactical-career .detail-panel {
   max-height: none;

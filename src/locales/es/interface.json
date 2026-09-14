@@ -213,6 +213,7 @@
     "none": "Ninguno todavía",
     "ownedZoids": "Hangar",
     "potential": "Potencial",
+    "powerValue": "Poder {{value}}",
     "radarLabel": "Gráfica radial de las seis aptitudes del piloto",
     "title": "Información del piloto",
     "zoidPower": "Poder"
