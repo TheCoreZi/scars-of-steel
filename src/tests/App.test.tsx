@@ -107,10 +107,8 @@ describe("welcome screen", () => {
     render(
       <WelcomeScreen
         completedGames={[]}
-        onReducedMotionChange={() => undefined}
         onSelectGame={() => undefined}
         onStart={() => undefined}
-        reducedMotion={false}
       />,
     );
 
@@ -174,10 +172,8 @@ describe("welcome screen", () => {
     render(
       <WelcomeScreen
         completedGames={[completedGame]}
-        onReducedMotionChange={() => undefined}
         onSelectGame={onSelectGame}
         onStart={() => undefined}
-        reducedMotion={false}
       />,
     );
 
@@ -244,10 +240,8 @@ describe("welcome screen", () => {
     render(
       <WelcomeScreen
         completedGames={[]}
-        onReducedMotionChange={() => undefined}
         onSelectGame={() => undefined}
         onStart={onStart}
-        reducedMotion={false}
       />,
     );
 
@@ -799,8 +793,8 @@ test("turns animations on and off", () => {
     .closest(".app-shell");
 
   expect(animationSwitch).toBeChecked();
-  expect(animationSwitch.parentElement).toHaveClass("welcome__topbar");
-  expect(animationSwitch.closest(".welcome__panel")).toBeInTheDocument();
+  expect(animationSwitch.closest(".app-shell")).toBe(app);
+  expect(animationSwitch.closest(".welcome__panel")).not.toBeInTheDocument();
   expect(
     animationSwitch.querySelector(".animation-toggle__icon"),
   ).toBeInTheDocument();
@@ -845,8 +839,6 @@ function PilotCreationTestScreen({ onConfirm }: PilotCreationTestScreenProps) {
       draft={draft}
       onConfirm={onConfirm}
       onDraftChange={setDraft}
-      onReducedMotionChange={() => undefined}
-      reducedMotion={false}
     />
   );
 }

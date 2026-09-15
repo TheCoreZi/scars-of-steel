@@ -106,14 +106,9 @@ describe("general decision screen", () => {
       "decision-option__risk-compact",
     );
     expect(
-      container.querySelector(".decision-screen__panel > .career-status"),
+      container.querySelector(".decision-screen__panel > .tactical-career"),
     ).toBeInTheDocument();
-    expect(
-      container.querySelector(".decision-screen__content > .animation-toggle"),
-    ).toBeInTheDocument();
-    expect(
-      container.querySelector(".career-status .animation-toggle"),
-    ).toBeNull();
+    expect(container.querySelector(".animation-toggle")).toBeNull();
   });
 
   test("reports the selected decision", () => {
@@ -224,7 +219,6 @@ describe("decision resolution", () => {
         onAbandon={() => undefined}
         onCloseYear={() => undefined}
         onDecision={() => undefined}
-        onReducedMotionChange={() => undefined}
         onRevealOutcome={() => undefined}
         reducedMotion={false}
         state={outcomeState}
@@ -319,9 +313,9 @@ describe("decision resolution", () => {
     expect(
       screen.getByText("You improved significantly as a pilot this year."),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Continue career" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Continue career" })).toHaveClass(
+      "button--primary",
+    );
     expect(document.querySelectorAll(".decision-screen__prompt")).toHaveLength(
       8,
     );
@@ -740,7 +734,6 @@ describe("decision resolution", () => {
         onAbandon={() => undefined}
         onCloseYear={() => undefined}
         onDecision={() => undefined}
-        onReducedMotionChange={() => undefined}
         onRevealOutcome={() => undefined}
         reducedMotion={false}
         state={{
@@ -758,7 +751,6 @@ interface RenderOverrides {
   onAbandon?: () => void;
   onCloseYear?: () => void;
   onDecision?: (decision: Decision) => void;
-  onReducedMotionChange?: (reducedMotion: boolean) => void;
   onRevealOutcome?: () => void;
   reducedMotion?: boolean;
 }
@@ -770,9 +762,6 @@ function renderScreen(state: EventGameState, overrides: RenderOverrides = {}) {
       onAbandon={overrides.onAbandon ?? (() => undefined)}
       onCloseYear={overrides.onCloseYear ?? (() => undefined)}
       onDecision={overrides.onDecision ?? (() => undefined)}
-      onReducedMotionChange={
-        overrides.onReducedMotionChange ?? (() => undefined)
-      }
       onRevealOutcome={overrides.onRevealOutcome ?? (() => undefined)}
       reducedMotion={overrides.reducedMotion ?? false}
       state={state}

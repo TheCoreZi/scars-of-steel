@@ -4,6 +4,7 @@
     "title": "Cicatrices de Acero"
   },
   "appControls": {
+    "animationLabel": "Controles de animación",
     "label": "Controles de la aplicación"
   },
   "aspirations": {
@@ -198,6 +199,24 @@
     "indicatorSuccess": "Éxito",
     "probabilityLabel": "Diana de resolución. Éxito {{success}}%, fallo {{failure}}%.",
     "selected": "Orden seleccionada"
+  },
+  "tacticalPanel": {
+    "activeZoid": "Zoid activo",
+    "battleRecord": "Récord de combate",
+    "collapseDetails": "Ocultar detalles del piloto",
+    "combatProfile": "Perfil de combate",
+    "damaged": "Dañado",
+    "expandDetails": "Mostrar detalles del piloto",
+    "factionTrust": "Confianza de la facción",
+    "fame": "Fama",
+    "noZoid": "Sin Zoid asignado",
+    "none": "Ninguno todavía",
+    "ownedZoids": "Hangar",
+    "potential": "Potencial",
+    "powerValue": "Poder {{value}}",
+    "radarLabel": "Gráfica radial de las seis aptitudes del piloto",
+    "title": "Información del piloto",
+    "zoidPower": "Poder"
   },
   "welcome": {
     "animations": {

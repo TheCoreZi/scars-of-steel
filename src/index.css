@@ -921,12 +921,16 @@
 }
 
 .outcome-screen__actions {
-  display: flex;
+  display: grid;
   width: 100%;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
   justify-self: stretch;
+}
+
+.outcome-screen__actions .button {
+  min-width: 0;
+  width: 100%;
 }
 
 .abandon-dialog::backdrop {
@@ -1663,6 +1667,11 @@
   .app-controls {
     top: var(--space-3);
     right: var(--space-3);
+  }
+
+  .animation-controls {
+    top: var(--space-3);
+    left: var(--space-3);
   }
 
   .welcome__panel {
@@ -2476,8 +2485,8 @@
     height: 3rem;
   }
 
-  .animation-toggle {
-    right: var(--space-2);
+  .animation-controls {
+    left: var(--space-2);
   }
 
   .language-selector button {
@@ -2766,9 +2775,9 @@
   }
 
   .welcome__facts {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-2);
-    overflow: visible;
+    overflow: hidden;
     border: 0;
     background: none;
   }
@@ -2789,6 +2798,11 @@
 
   .welcome__facts dd {
     font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .welcome__facts div:nth-child(3) dd {
+    font-size: clamp(1.15rem, 6vw, 1.5rem);
+    white-space: nowrap;
   }
 
   .welcome__facts dt {

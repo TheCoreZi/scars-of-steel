@@ -80,24 +80,31 @@ export function AnimationToggle({
   const animationsEnabled = !reducedMotion;
 
   return (
-    <button
-      aria-checked={animationsEnabled}
-      aria-label={t(
-        animationsEnabled ? "welcome.animations.on" : "welcome.animations.off",
-      )}
-      className="animation-toggle"
-      onClick={() => onReducedMotionChange(animationsEnabled)}
-      role="switch"
-      type="button"
+    <nav
+      aria-label={t("appControls.animationLabel")}
+      className="animation-controls"
     >
-      <span className="animation-toggle__text">
-        {t(
+      <button
+        aria-checked={animationsEnabled}
+        aria-label={t(
           animationsEnabled
             ? "welcome.animations.on"
             : "welcome.animations.off",
         )}
-      </span>
-      <span aria-hidden="true" className="animation-toggle__icon" />
-    </button>
+        className="animation-toggle"
+        onClick={() => onReducedMotionChange(animationsEnabled)}
+        role="switch"
+        type="button"
+      >
+        <span className="animation-toggle__text">
+          {t(
+            animationsEnabled
+              ? "welcome.animations.on"
+              : "welcome.animations.off",
+          )}
+        </span>
+        <span aria-hidden="true" className="animation-toggle__icon" />
+      </button>
+    </nav>
   );
 }

@@ -1,0 +1,1699 @@
+.status-faction-mark {
+  display: block;
+  width: 3.2rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.status-zoid-visual {
+  position: relative;
+  display: grid;
+  width: 5rem;
+  height: 3.5rem;
+  flex: 0 0 auto;
+  place-items: center;
+}
+
+.status-zoid-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.status-damage-mark {
+  position: absolute;
+  top: 0.25rem;
+  right: 0;
+  width: 0.8rem;
+  aspect-ratio: 1;
+  background: #ef4c54;
+  clip-path: polygon(
+    35% 0,
+    65% 0,
+    65% 35%,
+    100% 35%,
+    100% 65%,
+    65% 65%,
+    65% 100%,
+    35% 100%,
+    35% 65%,
+    0 65%,
+    0 35%,
+    35% 35%
+  );
+  filter: drop-shadow(0 0 0.25rem rgb(239 76 84 / 70%));
+}
+
+.status-identity {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.status-identity__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.65rem;
+}
+
+.status-identity__rank,
+.status-identity__condition {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font: 700 0.58rem var(--font-console);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.status-identity__rank {
+  color: var(--color-accent);
+}
+
+.status-identity__condition {
+  color: var(--color-probability-failure);
+}
+
+.status-identity__condition i {
+  width: 0.62rem;
+  aspect-ratio: 1;
+  background: currentcolor;
+  clip-path: polygon(
+    35% 0,
+    65% 0,
+    65% 35%,
+    100% 35%,
+    100% 65%,
+    65% 65%,
+    65% 100%,
+    35% 100%,
+    35% 65%,
+    0 65%,
+    0 35%,
+    35% 35%
+  );
+  content: "";
+}
+
+.status-identity__rank .rank-insignia {
+  width: 1.35rem;
+  height: 0.9rem;
+}
+
+.status-identity > strong {
+  overflow: hidden;
+  color: var(--color-heading);
+  font: 700 1.35rem var(--font-display);
+  letter-spacing: 0.035em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-identity__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--color-text-muted);
+  font-size: 0.66rem;
+}
+
+.status-identity__meta i {
+  width: 0.18rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-border-strong);
+}
+
+.status-identity__mobile-age {
+  display: none;
+}
+
+.core-pulse {
+  --core-surface: color-mix(
+    in srgb,
+    var(--color-console) 78%,
+    var(--color-panel-raised)
+  );
+  z-index: 3;
+  display: grid;
+  overflow: visible;
+  min-height: 6.5rem;
+  grid-template-columns:
+    minmax(13rem, 1fr) 5.5rem minmax(11rem, 0.8fr)
+    minmax(7rem, 0.55fr);
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.6rem 1rem 0.6rem 1.4rem;
+  border: 1px solid
+    color-mix(in srgb, var(--color-accent) 65%, var(--color-border));
+  border-radius: 4.5rem 0.8rem 0 0;
+  background:
+    radial-gradient(
+      circle at 35% 50%,
+      var(--color-accent-soft),
+      transparent 28%
+    ),
+    var(--core-surface);
+  box-shadow:
+    inset 0 0 2rem rgb(0 0 0 / 25%),
+    0 1.2rem 3rem rgb(0 0 0 / 30%);
+}
+
+.core-pulse::before,
+.core-pulse::after {
+  position: absolute;
+  right: 8%;
+  left: 8%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent),
+    transparent
+  );
+  content: "";
+}
+
+.core-pulse::before {
+  top: 0.35rem;
+}
+
+.core-pulse::after {
+  bottom: 0.35rem;
+}
+
+.core-pulse__pilot,
+.core-pulse__zoid {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.core-pulse__core {
+  position: relative;
+  display: grid;
+  width: 5rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--color-accent) var(--status-value),
+    var(--color-border) 0
+  );
+  box-shadow: 0 0 1.7rem var(--color-accent-soft);
+}
+
+.core-pulse__core::before {
+  position: absolute;
+  inset: 0.38rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: inherit;
+  background: var(--color-console);
+  content: "";
+}
+
+.core-pulse__core > span {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.core-pulse__core small {
+  color: var(--color-accent);
+  font: 700 0.55rem var(--font-console);
+}
+
+.core-pulse__core strong {
+  color: var(--color-heading);
+  font: 700 1.6rem var(--font-display);
+}
+
+.core-pulse__zoid > span:last-child {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.core-pulse__zoid strong {
+  overflow: hidden;
+  color: var(--color-heading);
+  font: 700 0.85rem var(--font-display);
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.core-pulse__zoid small {
+  color: var(--color-probability-success);
+  font: 700 0.52rem var(--font-console);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.core-pulse__toggle {
+  position: absolute;
+  z-index: 1;
+  top: calc(100% - 4px);
+  left: 50%;
+  display: grid;
+  min-width: 4.5rem;
+  min-height: 1.65rem;
+  place-items: center;
+  gap: 0.2rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid
+    color-mix(in srgb, var(--color-accent) 65%, var(--color-border));
+  border-top: 0;
+  border-radius: 0 0 1.2rem 1.2rem;
+  color: var(--color-accent);
+  background: var(--core-surface);
+  cursor: pointer;
+  transform: translateX(-50%);
+  box-shadow: none;
+}
+
+.core-pulse__toggle:hover,
+.core-pulse__toggle:focus-visible {
+  color: var(--color-heading);
+  background: var(--core-surface);
+}
+
+.core-pulse__toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.core-pulse__toggle span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.core-pulse__toggle i {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-right: 0.15rem solid currentcolor;
+  border-bottom: 0.15rem solid currentcolor;
+  transform: translateY(-0.12rem) rotate(45deg);
+  transition: transform var(--motion-standard) ease;
+}
+
+.core-pulse__toggle[aria-expanded="true"] i {
+  transform: translateY(0.12rem) rotate(225deg);
+}
+
+.status-detail-drawer {
+  position: absolute;
+  z-index: 2;
+  top: 6.5rem;
+  right: 0;
+  left: 0;
+  display: grid;
+  min-width: 0;
+  grid-template-rows: 0fr;
+  pointer-events: none;
+  transition: grid-template-rows var(--motion-standard) ease;
+}
+
+.status-detail-drawer[data-expanded="true"] {
+  grid-template-rows: 1fr;
+  pointer-events: auto;
+}
+
+.status-detail-drawer > div {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: scaleY(0.82);
+  transform-origin: top;
+  transition:
+    opacity var(--motion-fast) ease,
+    transform var(--motion-standard) ease;
+}
+
+.status-detail-drawer[data-expanded="true"] > div {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.detail-panel {
+  position: relative;
+  min-width: 0;
+  max-height: min(68vh, 42rem);
+  overflow-y: auto;
+  padding: clamp(1rem, 3vw, 1.8rem);
+  border: 1px solid var(--color-border-strong);
+  border-top: 0;
+  color: var(--color-text);
+  background: var(--color-panel-raised);
+  box-shadow:
+    0 1.5rem 3rem rgb(0 0 0 / 48%),
+    inset 0 -1.5rem 3rem rgb(0 0 0 / 12%);
+}
+
+.detail-panel h3 {
+  color: var(--color-text-muted);
+  font: 700 0.58rem var(--font-console);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.detail-panel__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.detail-panel__heading > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.detail-panel__heading small,
+.detail-panel__heading > span {
+  color: var(--color-accent);
+  font: 700 0.52rem var(--font-console);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.detail-panel__heading h2 {
+  font-size: 1.05rem;
+}
+
+.detail-war-status {
+  display: grid;
+  grid-template-columns: auto auto minmax(8rem, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.25rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font: 700 0.48rem var(--font-console);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.detail-war-status > small {
+  color: var(--color-accent);
+}
+
+.detail-war-status > span {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.detail-war-status > span strong {
+  color: var(--color-heading);
+}
+
+.detail-war-status > i {
+  height: 0.18rem;
+  overflow: hidden;
+  background: #e05567;
+}
+
+.detail-war-status > i > b {
+  display: block;
+  height: 100%;
+  background: #5f8ee8;
+}
+
+.detail-primary-summary {
+  display: grid;
+  grid-template-columns:
+    minmax(14rem, 1.35fr) minmax(12rem, 1.1fr) minmax(9rem, 0.75fr)
+    minmax(8rem, 0.65fr);
+  align-items: stretch;
+  gap: 0;
+  padding-top: 0.65rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.detail-primary-summary[data-variant="tacticalProfile"] {
+  grid-template-areas:
+    "pilot potential"
+    "zoid record";
+  grid-template-columns: minmax(20rem, 1.5fr) minmax(10rem, 0.65fr);
+  background: linear-gradient(
+    105deg,
+    var(--color-faction-surface),
+    transparent 55%
+  );
+}
+
+.detail-primary-summary[data-variant="tacticalProfile"] .detail-pilot-primary {
+  grid-area: pilot;
+}
+
+.detail-primary-summary[data-variant="tacticalProfile"] .detail-zoid-primary {
+  grid-area: zoid;
+}
+
+.detail-primary-summary[data-variant="tacticalProfile"] .detail-potential {
+  grid-area: potential;
+}
+
+.detail-primary-summary[data-variant="tacticalProfile"] .detail-battle-record {
+  grid-area: record;
+}
+
+.detail-pilot-primary,
+.detail-zoid-primary,
+.detail-potential,
+.detail-battle-record,
+.detail-trust,
+.detail-fame-panel {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.detail-pilot-primary,
+.detail-zoid-primary,
+.detail-potential,
+.detail-battle-record {
+  min-height: 8.5rem;
+}
+
+.detail-pilot-primary,
+.detail-zoid-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-right: 1px solid var(--color-border);
+  background: linear-gradient(
+    135deg,
+    var(--color-faction-surface),
+    transparent 70%
+  );
+}
+
+.detail-pilot-primary > span,
+.detail-zoid-primary > span {
+  display: grid;
+  min-width: 0;
+  gap: 0.15rem;
+}
+
+.detail-pilot-primary small,
+.detail-zoid-primary small,
+.detail-battle-record small {
+  color: var(--color-text-muted);
+  font: 700 0.5rem var(--font-console);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-pilot-primary strong,
+.detail-zoid-primary strong {
+  overflow: hidden;
+  color: var(--color-heading);
+  font: 700 1.1rem var(--font-display);
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.detail-pilot-primary > span > span,
+.detail-zoid-primary > span > span,
+.detail-battle-record > span {
+  color: var(--color-text-muted);
+  font: 600 0.52rem/1.35 var(--font-console);
+}
+
+.detail-pilot-rank {
+  display: flex !important;
+  align-items: center;
+  gap: 0.35rem !important;
+  color: var(--color-accent) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+}
+
+.detail-pilot-rank .rank-insignia {
+  width: 1.2rem;
+  height: 0.85rem;
+}
+
+.detail-zoid-primary .detail-zoid-power {
+  display: flex;
+  width: max-content;
+  align-items: baseline;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+  padding: 0.18rem 0.35rem;
+  border-left: 0.15rem solid var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.detail-zoid-power b {
+  color: var(--color-accent);
+  font: 700 1.1rem var(--font-display);
+}
+
+.detail-pilot-primary em {
+  width: max-content;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid currentcolor;
+  color: var(--color-probability-failure);
+  font: normal 700 0.46rem var(--font-console);
+  text-transform: uppercase;
+}
+
+.detail-zoid-primary .status-zoid-visual {
+  width: 6rem;
+  height: 4rem;
+}
+
+.detail-battle-record {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.15rem;
+  padding: 0.75rem;
+  border-left: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.detail-battle-record strong {
+  color: var(--color-accent);
+  font: 700 2.5rem var(--font-display);
+  line-height: 1;
+}
+
+.detail-potential {
+  display: grid;
+  place-content: center;
+  place-items: center;
+  background: radial-gradient(
+    circle,
+    var(--color-accent-soft),
+    transparent 62%
+  );
+}
+
+.detail-potential::before {
+  position: absolute;
+  width: 6.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--color-accent) var(--detail-value),
+    var(--color-border) 0
+  );
+  content: "";
+  mask: radial-gradient(circle, transparent 56%, black 58%);
+}
+
+.detail-potential > span {
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+}
+
+.detail-potential small {
+  color: var(--color-accent);
+  font: 700 0.58rem var(--font-console);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.detail-potential strong {
+  color: var(--color-heading);
+  font: 700 3rem var(--font-display);
+  line-height: 1;
+}
+
+.detail-potential > i {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 0.18rem;
+  background: linear-gradient(
+    90deg,
+    var(--color-accent) var(--detail-value),
+    var(--color-border) 0
+  );
+}
+
+.detail-career-indicators {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.7fr) minmax(14rem, 1.3fr);
+  gap: 0.5rem;
+  width: min(26rem, 100%);
+  padding-top: 0.75rem;
+  margin-left: auto;
+}
+
+.detail-trust,
+.detail-fame-panel {
+  min-height: 3rem;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  background: transparent;
+}
+
+.detail-trust {
+  display: grid;
+  align-content: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.65rem;
+}
+
+.detail-trust > span {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.detail-trust small {
+  color: var(--color-text-muted);
+  font: 700 0.5rem var(--font-console);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-trust > small {
+  display: none;
+}
+
+.detail-trust > span strong {
+  color: var(--color-heading);
+  font: 700 1.25rem var(--font-display);
+}
+
+.detail-trust > div {
+  display: flex;
+  gap: 0.12rem;
+}
+
+.detail-trust i {
+  display: block;
+  height: 0.45rem;
+  flex: 1;
+  background: var(--color-border);
+}
+
+.detail-trust i[data-active="true"] {
+  background: var(--color-faction);
+  box-shadow: 0 0 0.3rem var(--color-faction-surface);
+}
+
+.detail-trust[data-variant="tacticalProfile"] {
+  border-radius: 0 2.5rem;
+  background:
+    linear-gradient(135deg, var(--color-faction-surface), transparent 55%),
+    var(--color-console);
+}
+
+.detail-trust[data-variant="tacticalProfile"] i {
+  height: 0.7rem;
+  clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
+}
+
+.detail-fame-panel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: 1fr;
+  gap: 0.6rem;
+  padding: 0.45rem 0.65rem;
+}
+
+.detail-fame-panel__heading {
+  z-index: 2;
+  display: grid;
+  align-content: center;
+  gap: 0;
+}
+
+.detail-fame-panel__heading small {
+  color: var(--color-text-muted);
+  font: 700 0.55rem var(--font-console);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.detail-fame-panel__heading strong {
+  color: var(--color-secondary);
+  font: 700 1.25rem var(--font-display);
+}
+
+.detail-fame-panel .career-status__crowd {
+  position: relative;
+  inset: auto;
+  display: flex;
+  height: 100%;
+  align-items: end;
+  justify-content: space-around;
+  gap: 0.05rem;
+}
+
+.detail-fame-panel .career-status__fan {
+  width: 0.48rem;
+  height: 1.5rem;
+  flex: 0 1 0.48rem;
+}
+
+.detail-fame-panel .career-status__fan-sprite {
+  width: 1.25rem;
+  height: 1.25rem;
+  opacity: 0.8;
+}
+
+.detail-owned-zoids,
+.detail-rewards > section {
+  min-width: 0;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.detail-owned-zoids,
+.detail-rewards,
+.detail-rewards > section {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+}
+
+.detail-owned-zoids,
+.detail-rewards,
+.tactical-layout {
+  margin-top: 1rem;
+}
+
+.detail-owned-zoids > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.detail-owned-zoids article,
+.detail-rewards article {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail-owned-zoids article {
+  padding: 0.3rem 0.55rem;
+  border-left: 1px solid var(--color-border);
+}
+
+.detail-panel--tactical .detail-owned-zoids > div {
+  grid-template-columns: 1.5fr 1fr 1fr;
+}
+
+.detail-panel--tactical .detail-owned-zoids article:first-child img {
+  width: 5rem;
+}
+
+.detail-owned-zoids img {
+  width: 3.6rem;
+  height: 2.7rem;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.detail-owned-zoids article > span,
+.detail-rewards article > span {
+  display: grid;
+  min-width: 0;
+  gap: 0.1rem;
+}
+
+.detail-owned-zoids strong,
+.detail-rewards strong {
+  overflow: hidden;
+  color: var(--color-heading);
+  font: 700 0.58rem var(--font-console);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-owned-zoids small,
+.detail-rewards small {
+  color: var(--color-text-muted);
+  font: 600 0.46rem/1.3 var(--font-console);
+}
+
+.detail-rewards {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1rem;
+  opacity: 0.62;
+}
+
+.detail-rewards > section:first-child article {
+  min-height: 3.75rem;
+}
+
+.detail-rewards > section:first-child img {
+  width: 2.8rem;
+  height: 2.8rem;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.detail-achievements {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.detail-achievements article {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.detail-achievements img {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+}
+
+.detail-achievements strong {
+  max-width: 100%;
+  font-size: 0.45rem;
+}
+
+.detail-panel--tactical {
+  background:
+    linear-gradient(var(--color-console-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-console-line) 1px, transparent 1px),
+    var(--color-console);
+  background-size: 1.5rem 1.5rem;
+}
+
+.tactical-layout {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.9fr) minmax(16rem, 1.1fr);
+  align-items: center;
+  gap: 1rem;
+}
+
+.detail-stat-legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.detail-stat-legend > span {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.detail-stat-legend i {
+  width: 0.35rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0.4rem var(--color-accent);
+}
+
+.detail-stat-legend small {
+  overflow: hidden;
+  color: var(--color-console-muted);
+  font: 700 0.48rem var(--font-console);
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+
+.detail-stat-legend strong {
+  color: var(--color-console-text);
+  font: 700 0.65rem var(--font-console);
+}
+
+@media (max-width: 68rem) {
+  .core-pulse {
+    grid-template-columns:
+      minmax(10rem, 1fr) 4.8rem minmax(9rem, 0.8fr)
+      minmax(6rem, 0.55fr);
+  }
+}
+
+@media (max-width: 44rem) {
+  .status-detail-drawer {
+    top: 4.25rem;
+  }
+
+  .core-pulse {
+    grid-template-columns:
+      minmax(0, 1fr) 2.75rem auto
+      minmax(2.75rem, 0.5fr);
+    gap: 0.25rem;
+    padding: 0.25rem 0.4rem;
+    border-radius: 2rem 0.6rem 0 0;
+  }
+
+  .core-pulse .status-faction-mark,
+  .status-identity__meta,
+  .core-pulse__zoid > span:last-child {
+    display: none;
+  }
+
+  .core-pulse__pilot {
+    gap: 0;
+  }
+
+  .status-identity {
+    gap: 0.1rem;
+  }
+
+  .status-identity__heading {
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+  }
+
+  .status-identity__rank,
+  .status-identity__condition {
+    overflow: hidden;
+    font-size: 0;
+  }
+
+  .status-identity__rank .rank-insignia {
+    width: 1rem;
+    height: 0.7rem;
+  }
+
+  .status-identity__condition i {
+    width: 0.5rem;
+  }
+
+  .status-identity__mobile-age {
+    display: inline;
+    color: var(--color-text-muted);
+    font: 700 0.46rem var(--font-console);
+    white-space: nowrap;
+  }
+
+  .status-identity > strong {
+    font-size: clamp(0.65rem, 3.4vw, 0.9rem);
+  }
+
+  .core-pulse__core {
+    width: 2.65rem;
+  }
+
+  .core-pulse__core::before {
+    inset: 0.25rem;
+  }
+
+  .core-pulse__core small {
+    font-size: 0.38rem;
+  }
+
+  .core-pulse__core strong {
+    font-size: 0.9rem;
+  }
+
+  .status-zoid-visual {
+    width: 2.6rem;
+    height: 2.2rem;
+  }
+
+  .status-damage-mark {
+    top: 0;
+    width: 0.55rem;
+  }
+
+  .core-pulse__toggle {
+    min-width: 4rem;
+    min-height: 1.65rem;
+    padding: 0;
+  }
+
+  .core-pulse__toggle i {
+    width: 0.55rem;
+    height: 0.55rem;
+  }
+
+  .detail-panel {
+    padding: 0.85rem;
+  }
+
+  .detail-panel__heading h2 {
+    font-size: 0.85rem;
+  }
+
+  .detail-panel__heading > span {
+    display: none;
+  }
+
+  .detail-war-status {
+    grid-template-columns: auto minmax(5rem, 1fr) auto;
+    gap: 0.35rem;
+  }
+
+  .detail-war-status > small {
+    display: none;
+  }
+
+  .detail-pilot-primary .status-faction-mark {
+    width: 2.8rem;
+  }
+
+  .detail-zoid-primary .status-zoid-visual {
+    width: 4.5rem;
+    height: 3rem;
+  }
+
+  .detail-potential {
+    min-height: 7.5rem;
+  }
+
+  .detail-potential::before {
+    width: 5.5rem;
+  }
+
+  .detail-potential strong {
+    font-size: 2.5rem;
+  }
+
+  .detail-battle-record {
+    min-height: 7.5rem;
+  }
+
+  .detail-career-indicators {
+    grid-template-columns: minmax(7rem, 0.85fr) minmax(0, 1.15fr);
+    gap: 0.45rem;
+  }
+
+  .detail-trust,
+  .detail-fame-panel {
+    min-height: 3rem;
+  }
+
+  .detail-trust {
+    gap: 0.3rem;
+    padding: 0.55rem;
+  }
+
+  .detail-trust > span strong,
+  .detail-fame-panel__heading strong {
+    font-size: 1.2rem;
+  }
+
+  .detail-trust > small {
+    display: none;
+  }
+
+  .detail-fame-panel {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: 1fr;
+    gap: 0.4rem;
+    padding: 0.45rem;
+  }
+
+  .detail-fame-panel__heading {
+    display: grid;
+    align-content: center;
+    gap: 0;
+  }
+
+  .detail-fame-panel .career-status__fan {
+    width: 0.45rem;
+    height: 1.45rem;
+    flex-basis: 0.45rem;
+  }
+
+  .detail-fame-panel .career-status__fan-sprite {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .detail-owned-zoids > div {
+    gap: 0.3rem;
+  }
+
+  .detail-owned-zoids article {
+    display: grid;
+    justify-items: center;
+    padding: 0.35rem 0.2rem;
+    border-left: 0;
+    border-bottom: 0.14rem solid var(--color-faction);
+    text-align: center;
+  }
+
+  .detail-owned-zoids img {
+    width: min(4.5rem, 100%);
+    height: 2.5rem;
+  }
+
+  .detail-owned-zoids article > span {
+    justify-items: center;
+  }
+
+  .detail-owned-zoids strong {
+    max-width: 100%;
+    font-size: 0.48rem;
+  }
+
+  .detail-rewards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.tactical-career .detail-panel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-areas:
+    "heading heading heading heading"
+    "war war war war"
+    "pilot pilot zoid potential"
+    "hangar hangar hangar record"
+    "stats stats signals signals"
+    "rewards rewards rewards rewards";
+  gap: 1rem 1.5rem;
+  padding: 1.4rem;
+  max-height: min(76vh, 46rem);
+  align-content: start;
+}
+
+.tactical-career .detail-panel > *,
+.tactical-career .detail-primary-summary > * {
+  min-width: 0;
+  margin: 0;
+}
+
+.tactical-career .detail-primary-summary[data-variant="tacticalProfile"] {
+  display: contents;
+}
+
+.tactical-career
+  .detail-primary-summary[data-variant="tacticalProfile"]
+  > .detail-pilot-primary {
+  grid-area: pilot !important;
+}
+
+.tactical-career
+  .detail-primary-summary[data-variant="tacticalProfile"]
+  > .detail-zoid-primary {
+  grid-area: zoid !important;
+}
+
+.tactical-career
+  .detail-primary-summary[data-variant="tacticalProfile"]
+  > .detail-potential {
+  grid-area: potential !important;
+}
+
+.tactical-career
+  .detail-primary-summary[data-variant="tacticalProfile"]
+  > .detail-battle-record {
+  grid-area: record !important;
+}
+
+.tactical-career .detail-panel__heading {
+  grid-area: heading;
+}
+.tactical-career .detail-war-status {
+  grid-area: war;
+}
+.tactical-career .detail-owned-zoids {
+  grid-area: hangar;
+}
+.tactical-career .tactical-layout {
+  grid-area: stats;
+}
+.tactical-career .detail-career-indicators {
+  grid-area: signals;
+}
+.tactical-career .detail-rewards {
+  grid-area: rewards;
+}
+
+.tactical-career .detail-pilot-primary,
+.tactical-career .detail-zoid-primary,
+.tactical-career .detail-battle-record {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  justify-content: start;
+}
+
+.tactical-career .detail-pilot-primary strong {
+  font-size: clamp(1.35rem, 2.3vw, 2.1rem);
+  white-space: normal;
+}
+
+.tactical-career .detail-pilot-primary .status-faction-mark {
+  width: 3.7rem;
+  height: 3.7rem;
+}
+.tactical-career .detail-zoid-primary {
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.tactical-career .detail-zoid-primary .status-zoid-visual {
+  width: 7rem;
+  height: 4.2rem;
+}
+.tactical-career .detail-potential {
+  min-height: 7.5rem;
+  background: none;
+}
+.tactical-career .detail-potential > i {
+  display: none;
+}
+.tactical-career .detail-battle-record {
+  justify-items: start;
+  align-content: center;
+  gap: 0.2rem;
+}
+.tactical-career .detail-battle-record strong {
+  font-size: 1.75rem;
+}
+.tactical-career .detail-owned-zoids {
+  padding: 0.5rem 0;
+  align-self: center;
+}
+.tactical-career .detail-owned-zoids article {
+  padding: 0.2rem;
+  border: 0;
+}
+.tactical-career .detail-owned-zoids img {
+  width: 3rem;
+  height: 2.1rem;
+}
+.tactical-career .detail-owned-zoids > div {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.tactical-career .detail-career-indicators {
+  width: 100%;
+  padding: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-self: center;
+  gap: 0.75rem;
+}
+.tactical-career .detail-trust,
+.tactical-career .detail-fame-panel {
+  min-height: 3.4rem;
+  padding: 0.4rem;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  transform: none;
+}
+.tactical-career .detail-fame-panel {
+  background: var(--color-accent-soft);
+  border-radius: 0.35rem;
+}
+
+.tactical-career .detail-fame-panel__heading {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.1rem 0.35rem;
+}
+
+.tactical-career .detail-fame-panel__heading > small {
+  grid-column: 1 / -1;
+}
+
+.tactical-career .detail-fame-panel .career-status__crowd {
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+}
+
+.tactical-career .detail-fame-panel[data-audience="tacticalProfile"] {
+  background: linear-gradient(
+    110deg,
+    var(--color-faction-surface),
+    transparent
+  );
+  border-radius: 0;
+  border-bottom: 2px solid var(--color-faction);
+}
+
+.tactical-career
+  .detail-fame-panel[data-audience="tacticalProfile"]
+  .career-status__crowd {
+  background: repeating-radial-gradient(
+    circle,
+    transparent 0 0.6rem,
+    var(--color-border) 0.65rem 0.68rem
+  );
+  border-radius: 50%;
+}
+.tactical-career .detail-rewards {
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.5rem;
+  opacity: 1;
+}
+.tactical-career .detail-rewards > section {
+  border: 0;
+  padding: 0;
+  gap: 0.25rem;
+}
+.tactical-career .detail-rewards > section:first-child article {
+  min-height: 0;
+}
+.tactical-career .detail-rewards img,
+.tactical-career .detail-rewards > section:first-child img {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+.tactical-career .detail-achievements article {
+  display: flex;
+  text-align: left;
+}
+.tactical-career .detail-achievements strong {
+  white-space: normal;
+}
+
+.tactical-career .detail-panel--tactical {
+  grid-template-columns:
+    minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 0.75fr)
+    minmax(0, 0.65fr);
+  grid-template-areas:
+    "heading heading heading heading"
+    "war war war war"
+    "pilot zoid potential record"
+    "hangar hangar hangar hangar"
+    "stats stats stats signals"
+    "rewards rewards rewards rewards";
+}
+.tactical-career
+  .detail-panel--tactical
+  .detail-zoid-primary
+  .status-zoid-visual {
+  width: 10rem;
+  height: 5rem;
+}
+.tactical-career .detail-panel--tactical .tactical-layout {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-self: center;
+}
+.tactical-career .detail-panel--tactical .detail-owned-zoids > div {
+  grid-template-columns: 1fr;
+  gap: 0.2rem;
+}
+.tactical-career
+  .detail-panel--tactical
+  .detail-owned-zoids
+  article:first-child
+  img {
+  width: 3rem;
+}
+.tactical-career .detail-panel--tactical .detail-radar {
+  width: min(13rem, 100%);
+}
+
+.tactical-career .detail-panel--tactical .detail-career-indicators {
+  grid-template-columns: 1fr;
+}
+
+.tactical-career .detail-panel .detail-owned-zoids > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+  max-height: 8rem;
+  gap: 0.25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.tactical-career .detail-panel .detail-owned-zoids article {
+  display: block;
+  padding: 0;
+}
+
+.tactical-career .detail-owned-zoids button {
+  display: flex;
+  width: 100%;
+  min-height: 2.6rem;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.tactical-career .detail-owned-zoids button:hover,
+.tactical-career .detail-owned-zoids button[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.tactical-career .detail-owned-zoids button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.tactical-career .detail-hangar-image {
+  position: relative;
+  display: block;
+  width: 2rem;
+  height: 1.6rem;
+  flex: 0 0 2rem;
+  overflow: hidden;
+}
+
+.tactical-career .status-zoid-visual {
+  overflow: hidden;
+}
+
+.tactical-career .status-zoid-visual > img,
+.tactical-career
+  .detail-panel
+  .detail-owned-zoids
+  article
+  .detail-hangar-image
+  > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.tactical-career .detail-owned-zoids button strong {
+  white-space: normal;
+  font-size: 0.5rem;
+}
+
+@media (max-width: 44rem) {
+  .tactical-career .detail-panel {
+    padding: 0.85rem;
+    gap: 0.65rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "heading heading" "war war" "pilot potential" "zoid record"
+      "hangar hangar" "stats stats"
+      "signals signals" "rewards rewards";
+  }
+  .tactical-career .detail-panel__heading {
+    padding-top: 1.25rem;
+  }
+  .tactical-career .detail-pilot-primary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .tactical-career .detail-pilot-primary > span {
+    width: 100%;
+  }
+  .tactical-career .detail-pilot-primary strong {
+    overflow: visible;
+    font-size: 1rem;
+    text-overflow: clip;
+  }
+  .tactical-career .detail-pilot-primary .status-faction-mark {
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+  .tactical-career .detail-potential {
+    min-height: 6.5rem;
+  }
+  .tactical-career .detail-zoid-primary strong {
+    white-space: normal;
+    font-size: 0.9rem;
+  }
+  .tactical-career
+    .detail-panel--tactical
+    .detail-zoid-primary
+    .status-zoid-visual {
+    width: 4rem;
+    height: 3rem;
+  }
+  .tactical-career .detail-war-status {
+    font-size: 0.42rem;
+    grid-template-columns: auto minmax(2rem, 1fr) auto;
+  }
+  .tactical-career .detail-owned-zoids article {
+    display: grid;
+    justify-items: start;
+    text-align: left;
+  }
+  .tactical-career .detail-owned-zoids article > span {
+    justify-items: start;
+  }
+  .tactical-career .detail-rewards {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+  .tactical-career .detail-battle-record {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.2rem;
+  }
+  .tactical-career .detail-panel--tactical {
+    grid-template-areas: "heading heading" "war war" "pilot potential" "zoid record" "hangar hangar" "stats stats" "signals signals" "rewards rewards";
+  }
+  .tactical-career .detail-panel--tactical .detail-owned-zoids > div {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .tactical-career .detail-panel--tactical .tactical-layout {
+    gap: 0.5rem;
+  }
+  .tactical-career .detail-panel--tactical .detail-radar {
+    width: 100%;
+  }
+}
+
+.tactical-career {
+  position: relative;
+  align-self: start;
+  min-height: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+.tactical-career .core-pulse {
+  position: relative;
+  height: 6.5rem;
+  pointer-events: auto;
+}
+.tactical-career .core-pulse__toggle {
+  top: calc(100% - 1.5rem);
+  min-height: 3rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.tactical-career .core-pulse__toggle::before {
+  position: absolute;
+  inset: 50% 0 0;
+  border: 1px solid
+    color-mix(in srgb, var(--color-accent) 65%, var(--color-border));
+  border-top: 0;
+  border-radius: 0 0 0.65rem 0.65rem;
+  background: var(--core-surface);
+  content: "";
+}
+.tactical-career .core-pulse__toggle i {
+  position: relative;
+  align-self: end;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-bottom: 0.55rem;
+}
+.tactical-career .core-pulse > .detail-war-status {
+  grid-area: auto;
+  grid-template-columns: 1fr 1fr;
+  font-size: 0.45rem;
+  gap: 0.2rem;
+  border: 0;
+}
+.tactical-career .core-pulse > .detail-war-status > small {
+  display: none;
+}
+.tactical-career .core-pulse > .detail-war-status > i {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.tactical-career .core-pulse > .detail-war-status > span {
+  flex-wrap: wrap;
+}
+.tactical-career .core-pulse > .detail-war-status > span:last-child {
+  justify-content: flex-end;
+  text-align: right;
+}
+.tactical-career .detail-panel {
+  max-height: none;
+  overflow: visible;
+}
+.tactical-career .status-detail-drawer {
+  position: relative;
+  top: auto;
+}
+.tactical-career .detail-panel .detail-owned-zoids > div {
+  max-height: none;
+  overflow: visible;
+}
+.tactical-radar {
+  width: 100%;
+  max-width: 14rem;
+  justify-self: center;
+}
+.tactical-radar__grid {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 0.5;
+}
+.tactical-radar__value {
+  fill: var(--color-accent-soft);
+  stroke: var(--color-accent);
+  stroke-width: 1;
+}
+.tactical-career .detail-owned-zoids button:disabled {
+  cursor: default;
+}
+.decision-screen__panel:has(.tactical-career) {
+  display: grid;
+  overflow: visible;
+  padding: 0;
+  border-top: 0;
+}
+.decision-screen__panel:has(.tactical-career) > * {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+.decision-screen__panel:has(.tactical-career) > .decision-screen__content {
+  align-self: start;
+  margin-top: 6.5rem;
+}
+@media (max-width: 44rem) {
+  .decision-screen__panel:has(.tactical-career) > .decision-screen__content {
+    margin-top: 4.25rem;
+  }
+  .tactical-career .core-pulse {
+    height: 4.25rem;
+    min-height: 4.25rem;
+  }
+  .tactical-career .core-pulse > .detail-war-status {
+    font-size: 0.35rem;
+  }
+}

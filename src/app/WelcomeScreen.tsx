@@ -8,7 +8,6 @@ import { getRankInsignia } from "../domain/ranks";
 import { getTitleDefinition } from "../domain/titles";
 import { getZoid } from "../domain/zoids";
 import { translate } from "../i18n";
-import { AnimationToggle } from "./AppControls";
 import type { CompletedGame } from "./gameStorage";
 import { RankInsignia } from "./RankInsignia";
 import { Badge, Button, Panel } from "./UiPrimitives";
@@ -23,18 +22,14 @@ const zoidFallbackIcon = "◇";
 
 interface WelcomeScreenProps {
   completedGames: readonly CompletedGame[];
-  onReducedMotionChange: (reducedMotion: boolean) => void;
   onSelectGame: (game: CompletedGame) => void;
   onStart: () => void;
-  reducedMotion: boolean;
 }
 
 export function WelcomeScreen({
   completedGames,
-  onReducedMotionChange,
   onSelectGame,
   onStart,
-  reducedMotion,
 }: WelcomeScreenProps) {
   const [started, setStarted] = useState(false);
   const startedRef = useRef(false);
@@ -69,10 +64,6 @@ export function WelcomeScreen({
       >
         <div className="welcome__topbar">
           <Badge>{t("welcome.badge")}</Badge>
-          <AnimationToggle
-            onReducedMotionChange={onReducedMotionChange}
-            reducedMotion={reducedMotion}
-          />
         </div>
         <div className="welcome__heading">
           <div className="welcome__brand">

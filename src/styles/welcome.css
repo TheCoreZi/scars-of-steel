@@ -274,19 +274,6 @@
   letter-spacing: 0.1em;
 }
 
-.welcome__topbar .animation-toggle {
-  position: static;
-  flex: none;
-  min-width: 3rem;
-  min-height: 3rem;
-  justify-content: center;
-  padding: var(--space-2);
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
 .welcome__heading {
   z-index: 1;
   display: grid;
@@ -386,6 +373,7 @@
 .welcome__facts div {
   position: relative;
   display: grid;
+  min-width: 0;
   min-height: 6rem;
   align-content: start;
   gap: var(--space-1);
@@ -408,7 +396,9 @@
 
 .welcome__facts dd {
   order: -1;
+  max-width: 100%;
   margin: 0;
+  overflow-wrap: anywhere;
   color: var(--color-accent);
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 3vw, 2.75rem);
