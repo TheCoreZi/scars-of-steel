@@ -1,0 +1,80 @@
+.zoid-review-shell {
+  padding-top: 5rem;
+}
+.zoid-review {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 2rem, 80rem);
+  margin: auto;
+  padding-bottom: 3rem;
+}
+.zoid-review__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.zoid-review h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  margin: 0;
+}
+.zoid-review p {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+.zoid-review select {
+  display: block;
+  margin-top: 0.5rem;
+  padding: 0.65rem;
+  background: var(--color-panel);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+.zoid-review__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+}
+.zoid-review__card {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-panel);
+}
+.zoid-review__image {
+  display: grid;
+  place-items: center;
+  height: 10rem;
+  font-size: 4rem;
+}
+.zoid-review__image img {
+  max-width: 100%;
+  max-height: 100%;
+  image-rendering: pixelated;
+  object-fit: contain;
+}
+.zoid-review h2 {
+  font-size: 1rem;
+  margin: 1rem 0 0;
+}
+.zoid-review__card label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.85rem;
+}
+.zoid-review output {
+  font-family: var(--font-console);
+  font-weight: 700;
+}
+.zoid-review input {
+  width: 100%;
+  min-height: 2.75rem;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}

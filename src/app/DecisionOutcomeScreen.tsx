@@ -7,6 +7,10 @@ import {
 } from "../domain/achievements";
 import { getRankInsignia } from "../domain/ranks";
 import {
+  getResolvedOutcomeNarrativeKey,
+  hasOutcomeEffect,
+} from "../domain/outcomes";
+import {
   factionNameKeys,
   militaryRankNameKeys,
   statNameKeys,
@@ -109,7 +113,7 @@ export function DecisionOutcomeScreen({
               </strong>
             </TerminalLine>
             <TerminalLine>
-              <p>{translate(result.outcome.narrativeKey)}</p>
+              <p>{translate(getResolvedOutcomeNarrativeKey(result))}</p>
             </TerminalLine>
 
             {result.zoidIds.length > 0 ? (
@@ -430,7 +434,11 @@ function getBattleStatusKeys(result: ResolvedYear) {
     keys.push("interface:outcomeScreen.battleInjured");
   }
 
-  if (result.battleRecord.zoidDestroyed) {
+  if (
+    result.battleRecord.zoidDestroyed ||
+    (result.pilotBefore.zoids &&
+      hasOutcomeEffect(result.outcome, "destroy-signature-zoid"))
+  ) {
     keys.push("interface:outcomeScreen.zoidDestroyed");
   } else if (result.annualReport?.zoidDamaged) {
     keys.push("interface:annualReport.damaged");

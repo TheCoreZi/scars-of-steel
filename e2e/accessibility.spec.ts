@@ -1,10 +1,11 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { stabilizeCareer } from "./careerFixture";
 
 test("keeps every screen accessible and free of horizontal overflow", async ({
   page,
 }, testInfo) => {
-  testInfo.setTimeout(60_000);
+  testInfo.setTimeout(120_000);
   await page.goto("/");
   await auditCurrentScreen(page, "welcome");
   await expect(
@@ -152,9 +153,10 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
   ]);
   expect(abandonBox?.y).toBe(continueBox?.y);
   expect(abandonBox!.x + abandonBox!.width).toBeLessThanOrEqual(continueBox!.x);
+  await stabilizeCareer(page);
   await page.getByRole("button", { name: "Continue career" }).click();
 
-  for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
+  for (const age of [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]) {
     await expect(page.locator(".decision-screen__choices")).toBeVisible();
     await auditCurrentScreen(page, `career age ${age}`);
     const safe = page
@@ -174,6 +176,7 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
         path: testInfo.outputPath("academy-outcome.png"),
         fullPage: true,
       });
+    await stabilizeCareer(page);
     await page.getByRole("button", { name: "Continue career" }).click();
   }
 
@@ -181,7 +184,7 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
   await auditCurrentScreen(page, "final screen");
   await page.screenshot({
     animations: "disabled",
-    path: testInfo.outputPath("early-service-final.png"),
+    path: testInfo.outputPath("military-life-final.png"),
     fullPage: true,
   });
 
@@ -226,13 +229,14 @@ test("completes the full flow with the keyboard", async ({
   await page.keyboard.press("Enter");
 
   await expect(page.locator(".outcome-screen h1")).toBeFocused();
+  await stabilizeCareer(page);
   const continueButton = page.getByRole("button", {
     name: "Continue career",
   });
   await focusWithTab(page, continueButton);
   await page.keyboard.press("Enter");
 
-  for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
+  for (const age of [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]) {
     await expect(page.locator(".status-identity__meta")).toContainText(
       `Age ${age}`,
     );
@@ -246,6 +250,7 @@ test("completes the full flow with the keyboard", async ({
     await focusWithTab(page, option);
     await page.keyboard.press("Enter");
     await expect(page.locator(".outcome-screen h1")).toBeFocused();
+    await stabilizeCareer(page);
     await focusWithTab(
       page,
       page.getByRole("button", { name: "Continue career" }),

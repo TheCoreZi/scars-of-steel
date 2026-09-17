@@ -1,0 +1,330 @@
+{
+  "decisions": {
+    "military-life": {
+      "abandoned-hangar": {
+        "1": {
+          "label": "Reparar los controles",
+          "description": "Entra en la cabina y trabaja para reactivar los controles mientras tu unidad detiene al enemigo."
+        },
+        "2": {
+          "label": "Defender el laboratorio",
+          "description": "Defiende la entrada hasta que los científicos reparen el prototipo."
+        },
+        "3": {
+          "label": "Destruir el laboratorio",
+          "description": "Evacúa el laboratorio y destruye el prototipo y los datos antes de que el enemigo los obtenga."
+        }
+      },
+      "empty-bunks": {
+        "1": {
+          "label": "Rendir homenaje a los caídos",
+          "description": "Reúne a tus compañeros para recordar a los caídos e invita a los novatos a participar."
+        },
+        "2": {
+          "label": "Prepararlos para la salida",
+          "description": "Propón que cada veterano repase con un novato las maniobras y señales que usarán en combate."
+        },
+        "3": {
+          "label": "Ayudar a un novato",
+          "description": "Ayúdalo a preparar su equipo y a revisar el Zoid antes de salir."
+        }
+      },
+      "field-trials": {
+        "1": {
+          "label": "Probarlo en la vanguardia",
+          "description": "Usa un Zoid del lote para reconocer el camino antes de que pase el convoy."
+        },
+        "2": {
+          "label": "Evaluarlo junto al convoy",
+          "description": "Mantén el Zoid de prueba junto a los transportes y comprueba sus controles mientras proteges la carga."
+        },
+        "3": {
+          "label": "Usar tu propio Zoid",
+          "description": "Apoya la misión cubriendo la retaguardia con tu compañero."
+        }
+      },
+      "forward-workshop": {
+        "1": {
+          "label": "Aceptar la mejora",
+          "description": "Úsala durante el ataque, aunque no haya tiempo para completar las pruebas."
+        },
+        "2": {
+          "label": "Pedir una prueba completa",
+          "description": "Explica los riesgos y pide tiempo para probar la mejora con los científicos."
+        },
+        "3": {
+          "label": "Rechazar el experimento",
+          "description": "Participa sin la mejora y confía en la forma de combatir que ya conoces con tu Zoid."
+        }
+      },
+      "leave-letter": {
+        "1": {
+          "label": "Pedir un relevo",
+          "description": "Presenta la carta y pide que un refuerzo cubra tu puesto. Ofrece asumir sus siguientes guardias."
+        },
+        "2": {
+          "label": "Solicitar una misión cerca de casa",
+          "description": "Pide incorporarte a la unidad que protegerá un hospital cerca de tu pueblo."
+        },
+        "3": {
+          "label": "Quedarte",
+          "description": "Explica a tu familia que debes participar en la operación y sigue con los preparativos."
+        }
+      },
+      "relief-column": {
+        "1": {
+          "label": "Defender el acceso",
+          "description": "Mantén tu Zoid frente a la brecha para cubrir la evacuación."
+        },
+        "2": {
+          "label": "Sacar a los heridos",
+          "description": "Baja de tu Zoid y ayuda a evacuar a los heridos."
+        },
+        "3": {
+          "label": "Destruir la información",
+          "description": "Activa las cargas antes de retirarte."
+        }
+      },
+      "retiring-pilot": {
+        "1": {
+          "label": "Aprender del piloto",
+          "description": "Estudia sus registros y habla con el piloto para aprender cómo manejar el Zoid."
+        },
+        "2": {
+          "label": "Ganarte su confianza",
+          "description": "Visita al Zoid y aprende a reconocer sus reacciones antes de entrar en la cabina."
+        },
+        "3": {
+          "label": "Proponer a otro piloto",
+          "description": "Recomienda a un compañero de tu unidad cuya forma de pilotar parece encajar con el prototipo."
+        }
+      },
+      "silent-ridge": {
+        "1": {
+          "label": "Cubrir a los rezagados",
+          "description": "Aprovecha las pausas entre las descargas para ayudar a tus compañeros a cruzar el puente."
+        },
+        "2": {
+          "label": "Hacer frente al Death Stinger",
+          "description": "Debes detenerlo. Ataca por el flanco y aleja al Death Stinger del puente para que tus compañeros crucen."
+        },
+        "3": {
+          "label": "Cumplir la retirada",
+          "description": "Cruza con quienes todavía pueden avanzar e informa al mando de lo sucedido."
+        }
+      },
+      "squadron-friction": {
+        "1": {
+          "label": "Romper el cerco por el flanco",
+          "description": "Desobedece la orden y concentra el fuego en el punto débil de la emboscada para rescatar a tus compañeros."
+        },
+        "2": {
+          "label": "Convencer al oficial",
+          "description": "Advierte que pueden perder a los pilotos y propón ir con dos compañeros a rescatarlos."
+        },
+        "3": {
+          "label": "Dar apoyo desde tu posición",
+          "description": "Explica la situación al oficial y pide apoyo de artillería para abrir un corredor sin abandonar el flanco."
+        }
+      },
+      "trapped-core": {
+        "1": {
+          "label": "Volver junto al Zoid",
+          "description": "Ayuda a rescatar a tu Zoid. Sabes que todavía puede salir, aunque el derrumbe también pueda atraparte."
+        },
+        "2": {
+          "label": "Salvar lo que se pueda",
+          "description": "Extrae el Core y el banco de memoria con los rescatistas para instalarlos en un cuerpo de reemplazo."
+        },
+        "3": {
+          "label": "Poner al equipo a salvo",
+          "description": "Acepta que no podrán sacarlo a tiempo y ayuda a que los rescatistas abandonen el edificio."
+        }
+      }
+    }
+  },
+  "narrative": {
+    "military-life": {
+      "abandoned-hangar": {
+        "title": "Todavía respira",
+        "introduction": "Tu unidad llega a un laboratorio para proteger un prototipo, pero el enemigo ya ha atacado. Encuentras al piloto muerto y al Zoid inmóvil, con el Core activo. Una segunda fuerza enemiga se acerca. Debes impedir que el enemigo se lleve el Zoid y los resultados de la investigación."
+      },
+      "empty-bunks": {
+        "title": "Las camas vacías",
+        "introduction": "Tu escuadrón regresa con varios pilotos muertos. Los reemplazos llegan antes de que se envíen las pertenencias de los caídos a sus familias. Algunos veteranos se niegan a hablarles. El mando pide que los ayuden a prepararse: saldrán juntos al frente al amanecer."
+      },
+      "field-trials": {
+        "title": "No viene con instrucciones",
+        "introduction": "El mando necesita evaluar un lote de Zoids de alta velocidad recién llegado. Deben escoltar munición hasta una base sitiada y las pruebas se harán durante la misión: no hay tiempo para esperar. Puedes usar uno de los nuevos o cubrir la retaguardia con el tuyo."
+      },
+      "forward-workshop": {
+        "title": "El precio de la mejora",
+        "introduction": "Los científicos proponen una mejora para tu Zoid. Quieren evaluarla durante la ofensiva que comienza al amanecer. Podría darte ventaja, pero todavía no saben cómo responderá en un combate prolongado."
+      },
+      "leave-letter": {
+        "title": "Antes de que sea tarde",
+        "introduction": "Tu familia escribe que tu abuelo está grave y pide que vayas a verlo. Tu unidad prepara un ataque y el mando ha suspendido los permisos. Hay pocos pilotos disponibles, pero llegarán refuerzos antes de la operación."
+      },
+      "relief-column": {
+        "title": "La base está perdida",
+        "introduction": "El enemigo ha abierto una brecha en la base. El mando ordena evacuarla, pero los heridos siguen en la enfermería. Tu unidad defiende el acceso mientras los ingenieros preparan la demolición del laboratorio y la sala de inteligencia. Debes elegir dónde ayudar antes de salir."
+      },
+      "retiring-pilot": {
+        "title": "Alguien tendrá que pilotarlo",
+        "introduction": "Un piloto de pruebas pierde una mano y no podrá volver a controlar su Zoid. Es un prototipo cuyas modificaciones lo vuelven difícil de manejar. Desde el hospital ofrece dejárselo a quien consiga dominarlo. Se acerca otra ofensiva y esa potencia podría marcar la diferencia."
+      },
+      "silent-ridge": {
+        "title": "Berserker",
+        "introduction": "Tu unidad protege una ruta de abastecimiento cuando el Death Stinger comienza a disparar contra ambos ejércitos. El mando ordena cruzar un puente de servicio antes de que las descargas lo destruyan. Varios compañeros siguen al otro lado con sus Zoids averiados y no hay tiempo para sacar a todos."
+      },
+      "squadron-friction": {
+        "title": "Que se arreglen solos",
+        "introduction": "Dos pilotos de tu unidad abandonan la formación para perseguir al mismo enemigo. Caen en una emboscada detrás de una loma y piden ayuda. El oficial ordena mantener la posición: ir por ellos dejaría una entrada libre al enemigo."
+      },
+      "trapped-core": {
+        "title": "Mientras siga latiendo",
+        "introduction": "Un bombardeo derrumba un edificio de mantenimiento sobre tu Zoid. Antes del impacto, expulsa la cabina y te pone a salvo. Su Core sigue activo bajo los escombros. Los rescatistas abren paso con maquinaria pesada, pero una pared amenaza con caer sobre ellos. El jefe del equipo ordena salir."
+      }
+    }
+  },
+  "outcomes": {
+    "military-life": {
+      "abandoned-hangar": {
+        "1": {
+          "success": "Logras reactivar los controles. Aprendes a interpretar las señales del prototipo mientras luchas por escapar. Vuelven a salvo y el equipo te confía el Zoid para continuar las pruebas.",
+          "success-reward-unavailable": "Restableces los controles y sacas el prototipo antes de que el enemigo entre. Los investigadores salvan sus datos, pero el ataque dejó inestable el Core. Se llevan el Zoid para someterlo a una reparación completa.",
+          "failure": "No consigues mantener los controles activos. El enemigo alcanza el laboratorio y una explosión te hiere al salir de la cabina. Tus compañeros te ayudan a retirarte, pero el prototipo queda atrás."
+        },
+        "2": {
+          "success": "Resistes el ataque sin ceder la entrada hasta que los científicos reactivan el prototipo. Tu actuación queda recogida en el informe de la misión. El mando reconoce tu valor con un ascenso.",
+          "success-rank-unchanged": "Resistes el ataque sin ceder la entrada hasta que los científicos reactivan el prototipo. Tu actuación queda recogida en el informe de la misión. El mando reconoce tu valor con una condecoración y te encarga supervisar las próximas pruebas.",
+          "failure": "El enemigo concentra el fuego sobre la entrada y daña tu Zoid. Debes replegarte antes de que terminen la reparación. Los científicos consiguen salir, pero el prototipo y la información caen en manos del enemigo."
+        },
+        "3": {
+          "success": "Destruyes el laboratorio con el prototipo dentro. El enemigo no recupera el Zoid ni los resultados. Cumples la orden, aunque te cuesta aceptar que el Zoid seguía vivo."
+        }
+      },
+      "empty-bunks": {
+        "1": {
+          "success": "Cuentan las bromas y metidas de pata que compartieron con los caídos. Los novatos también se ríen y los veteranos empiezan a hablar con ellos. Tus compañeros agradecen que hayas organizado la despedida.",
+          "failure": "Un veterano se enfurece al ver a un novato ocupando la cama de su compañero. Intentas calmarlo, pero la despedida termina en una discusión."
+        },
+        "2": {
+          "success": "Cada pareja encuentra cómo cubrirse. Los veteranos comparten su experiencia y los novatos aportan lo aprendido en la Academia. Al repasar las maniobras, descubres nuevas formas de organizar al grupo.",
+          "failure": "Los veteranos menosprecian las preguntas de los novatos y no les dejan proponer nada. La preparación termina con ambos grupos molestos y sin acordar cómo organizarse."
+        },
+        "3": {
+          "success": "Cargas con él las herramientas y pasan la tarde revisando su Zoid. El trabajo es duro, pero terminan con el equipo listo y los fallos de mantenimiento corregidos."
+        }
+      },
+      "field-trials": {
+        "1": {
+          "success": "El Zoid responde a tus movimientos con una naturalidad inesperada. Detectas la emboscada y lo guías entre los disparos hasta despejar el paso. Tu adaptación convence al mando de dejarlo a tu cargo para continuar las pruebas.",
+          "success-reward-unavailable": "Detectas la emboscada y guías al Zoid de prueba entre los disparos hasta despejar el paso. El mando reconoce tu adaptación. Tras la misión, envían el Zoid a una unidad que perdió sus Zoids durante el asedio.",
+          "failure": "Los controles responden tarde y un disparo inmoviliza el Zoid de prueba. La escolta debe volver por ti. Durante el rescate, el enemigo destruye parte de la carga."
+        },
+        "2": {
+          "success": "Detectas un retraso en los controles y avisas antes del ataque. El convoy llega completo. Tu informe permite retirar el lote para corregir el fallo, y los pilotos agradecen que les hayas advertido.",
+          "failure": "Descubres el fallo durante el ataque. Varios Zoids quedan inmovilizados y la escolta pierde munición mientras los protege. Consiguen llevarlos hasta la base, pero llegan con retraso."
+        },
+        "3": {
+          "success": "Rechazas a una patrulla que intenta atacar la escolta. Tu Zoid responde sin los retrasos que sufren los del lote. Tras horas vigilando la retaguardia, compruebas que tu compañero resultó más fiable que el equipo nuevo."
+        }
+      },
+      "forward-workshop": {
+        "1": {
+          "success": "Tu Zoid supera todas las previsiones: derriba casi por sí solo a los enemigos que defendían la posición. Los científicos confirman el éxito de la mejora y el informe destaca tu actuación.",
+          "failure": "El Zoid deja de responder durante el ataque y el enemigo daña su blindaje. Tus compañeros cubren la retirada mientras recuperas el control. Los científicos retiran la mejora al volver a la base."
+        },
+        "2": {
+          "success": "Convences al mando y ayudas a detectar un fallo durante la prueba. Los científicos lo corrigen antes de tu salida. Te incorporas a la operación con la mejora comprobada.",
+          "failure": "El mando no concede más tiempo. Los científicos suspenden la mejora y buscan a otro piloto dispuesto a probarla. La discusión consume las horas que tenías para preparar la misión."
+        },
+        "3": {
+          "success": "Tu Zoid responde antes de que completes las órdenes. Coordinan los movimientos para esquivar el ataque y golpear al enemigo por el costado. La precisión entre ambos compensa la potencia que rechazaste."
+        }
+      },
+      "leave-letter": {
+        "1": {
+          "success": "El mando acepta el intercambio al comprobar que tu puesto quedará cubierto. Visitas a tu abuelo, acompañas a tu familia y consigues descansar. Regresas a tiempo para cumplir las guardias acordadas.",
+          "failure": "Los refuerzos llegan con menos pilotos de los previstos y no pueden sustituirte. Debes quedarte. La preocupación te impide descansar y te cuesta concentrarte durante los preparativos."
+        },
+        "2": {
+          "success": "Te asignan al hospital y cumples las guardias. El trabajo mejora tu resistencia y puedes visitar a tu abuelo durante un descanso. El responsable informa que cumpliste con lo acordado.",
+          "failure": "La unidad del hospital parte antes de que autoricen tu traslado. Pierdes horas de descanso preparando un viaje que no harás y tu familia se queda esperando la visita."
+        },
+        "3": {
+          "success": "Cubres las guardias y ayudas a preparar las posiciones. Te acostumbras a las jornadas largas y el mando reconoce tu compromiso. Tu familia, sin embargo, está molesta porque no fuiste a ver a tu abuelo."
+        }
+      },
+      "relief-column": {
+        "1": {
+          "success": "Resistes las oleadas hasta que la enfermería queda vacía. Sales con los últimos defensores. El informe reconoce que tu resistencia permitió completar la evacuación.",
+          "failure": "El enemigo te rodea y un impacto daña tu Zoid y te hiere. Tus compañeros abren un paso entre los hangares y te ayudan a salir. Deben retirarse antes de completar la evacuación."
+        },
+        "2": {
+          "success": "Cargas a quienes no pueden caminar y organizas relevos para llevar las camillas. Evacuan antes de que caiga la base. La semana siguiente, algunos heridos te buscan para agradecerte.",
+          "failure": "Un derrumbe bloquea el paso y te lesiona mientras cargas una camilla. El personal médico encuentra otra salida. Consiguen evacuar, pero dejan atrás buena parte del material médico."
+        },
+        "3": {
+          "success": "Destruyes los archivos, los equipos y los resultados de la investigación. El enemigo ocupa la base sin obtener esa información. El mando aprueba tu trabajo, aunque recuperar lo perdido exigirá meses."
+        }
+      },
+      "retiring-pilot": {
+        "1": {
+          "success": "Aplicas sus indicaciones y consigues manejar los controles durante toda la prueba. Terminas agotado, pero has demostrado que puedes hacerlo. El piloto te entrega el Zoid y te advierte que no lo fuerces o terminarás como él.",
+          "success-reward-unavailable": "Aplicas las indicaciones del piloto y completas la prueba. Reconoce que podrías cuidar del prototipo, pero un escuadrón cercano ha perdido su último Zoid operativo. El veterano decide enviarlo allí y te pide que prepares a su nuevo piloto.",
+          "failure": "No consigues mantener la concentración que exige el prototipo. Un fuerte dolor de cabeza te obliga a detener la prueba. El piloto decide esperar a alguien que pueda manejarlo durante más tiempo."
+        },
+        "2": {
+          "success": "El Zoid deja de tensarse cuando te acercas. Durante la prueba, anticipas sus movimientos y consigues guiarlo sin luchar contra él. Su piloto reconoce el vínculo que han formado y te lo entrega.",
+          "success-reward-unavailable": "Te ganas la confianza del Zoid y lo guías durante la prueba sin luchar contra él. Cuando un compañero regresa sin Zoid, ayudas a que el prototipo también lo acepte. El veterano decide confiárselo para que pueda volver al frente.",
+          "failure": "El Zoid rechaza tus indicaciones y cada intento lo pone más nervioso. Te alejas antes de provocar una reacción peligrosa. Dedicaste varios días a un vínculo que no consigues establecer."
+        },
+        "3": {
+          "success": "Presentas a un compañero de tu unidad que podría manejar el prototipo. Completa la prueba y se hace cargo del Zoid. Ambos pilotos te lo agradecen y tu unidad gana fuerza para la ofensiva."
+        }
+      },
+      "silent-ridge": {
+        "1": {
+          "success": "Reconoces el intervalo entre disparos y mantienes el paso abierto hasta que cruzan tus compañeros. Sales de la zona antes de que el Death Stinger desaparezca bajo tierra.",
+          "failure": "Una descarga alcanza el acceso al puente, daña tu Zoid y te hiere en la cabina. Cruzas con ayuda, pero otros compañeros quedan aislados hasta que el Death Stinger se entierra."
+        },
+        "2": {
+          "success": "Te interpones entre el Death Stinger y el puente. Tus disparos lo obligan a volverse y tu Zoid anticipa sus ataques. Resisten hasta que todos cruzan. Escapas cuando se entierra; la unidad no olvidará tu hazaña.",
+          "failure": "El Death Stinger se vuelve antes de que completes la maniobra. Sus pinzas atraviesan el blindaje y destruyen el Core. Te expulsas herido antes del golpe final. Tu Zoid muere sin que todos hayan cruzado."
+        },
+        "3": {
+          "success": "Llevas al grupo hasta una zona protegida e informas dónde quedaron los rezagados. El mando preparará su búsqueda cuando cese el ataque. Tus compañeros te reprochan haber cruzado sin ellos."
+        }
+      },
+      "squadron-friction": {
+        "1": {
+          "success": "Calculas dónde concentrar los disparos y avanzas cuando el enemigo pierde la cobertura. Los dos pilotos salen por el hueco y vuelven contigo. El oficial se enfurece por tu desobediencia, aunque hayas salvado a tus compañeros.",
+          "failure": "El enemigo cambia de posición antes de que llegues y alcanza tu Zoid por un costado. Debes volver sin abrir la salida. El oficial pide apoyo a otra unidad."
+        },
+        "2": {
+          "success": "Convences al oficial de reorganizar el ataque. Otra unidad cubre el flanco y el grupo de rescate saca a los pilotos. La ofensiva se retrasa, pero el mando reconoce que tu propuesta salvó vidas.",
+          "failure": "El oficial rechaza tu propuesta porque no hay tiempo para relevarlos. Insistes, pero las llamadas de tus compañeros se interrumpen antes de que llegue ayuda. Ambos mueren dentro del cerco."
+        },
+        "3": {
+          "success": "Explicas dónde están atrapados y el oficial autoriza el apoyo. Transmites las coordenadas y la artillería abre un corredor. Los pilotos salen heridos, pero vivos. Gastan munición reservada para continuar el ataque."
+        }
+      },
+      "trapped-core": {
+        "1": {
+          "success": "Reconoces en sus movimientos que todavía puede luchar por salir. Te quedas para ayudar al equipo y logran liberarlo antes de que caiga la pared. Tu compañero no se rindió y tú tampoco lo abandonaste.",
+          "failure": "El paso cede mientras intentas llegar al Zoid. Los rescatistas te sacan herido antes de que la pared caiga sobre el edificio. El impacto destruye el Core de tu compañero."
+        },
+        "2": {
+          "success": "Te cuesta abandonar el cuerpo que te protegió, pero es la única forma de salvarlo. Recuperan el Core y la memoria antes del derrumbe. El taller los instala en un cuerpo mejorado. Aunque su aspecto cambie, reconoces a tu compañero.",
+          "success-same-model": "Te cuesta abandonar el cuerpo que te protegió, pero es la única forma de salvarlo. Recuperan el Core y la memoria antes del derrumbe. El taller prepara un cuerpo del mismo modelo con una mejora. Tu compañero sigue contigo.",
+          "failure": "La extracción se atasca bajo un bloque desplazado. La pared cae antes de que puedan liberar el Core y lo destruye. Consigues salir con el equipo, pero tu Zoid queda enterrado."
+        },
+        "3": {
+          "success": "Tu Zoid vuelve la mirada hacia la salida. Quieres quedarte, pero entiendes lo que te pide. Sacas a los rescatistas antes de que caiga la pared y el Core deje de responder. Tu compañero te protegió hasta el final."
+        }
+      }
+    }
+  }
+}

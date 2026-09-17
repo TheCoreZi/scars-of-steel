@@ -19,6 +19,8 @@ import { academyOutcomeCatalog } from "./academyOutcomes";
 import { earlyServiceEvents } from "./earlyServiceEvents";
 import { earlyServiceOutcomeCatalog } from "./earlyServiceOutcomes";
 import { calculateSuccessChance } from "./probability";
+import { militaryLifeEvents } from "./militaryLifeEvents";
+import { militaryLifeOutcomeCatalog } from "./militaryLifeOutcomes";
 
 const {
   chance: initialChance,
@@ -169,11 +171,13 @@ export const events = [
   ...Object.values(eventCatalog),
   ...academyEvents,
   ...earlyServiceEvents,
+  ...militaryLifeEvents,
 ];
 export const outcomeCatalog = {
   ...initialOutcomeCatalog,
   ...academyOutcomeCatalog,
   ...earlyServiceOutcomeCatalog,
+  ...militaryLifeOutcomeCatalog,
 } as const satisfies Record<OutcomeId, Outcome>;
 const outcomeById: Readonly<Record<OutcomeId, Outcome>> = outcomeCatalog;
 
@@ -348,6 +352,15 @@ export function validateOutcomes(
     if (outcome.effects.length < 1)
       throw new TypeError(`Outcome ${id} must include at least one effect.`);
     for (const effect of outcome.effects) {
+      if (
+        effect.kind === "destroy-signature-zoid" &&
+        effect.replacementPoolId &&
+        (!isZoidRewardPoolAvailable(effect.replacementPoolId, "guylos") ||
+          !isZoidRewardPoolAvailable(effect.replacementPoolId, "helic"))
+      )
+        throw new TypeError(
+          `Outcome ${id} uses an unavailable replacement pool.`,
+        );
       if (
         "amount" in effect &&
         (!Number.isFinite(effect.amount) || effect.amount === 0)

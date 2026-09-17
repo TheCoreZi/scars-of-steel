@@ -61,7 +61,7 @@ const definitions: readonly ZoidDefinition[] = [
     name: "bearFighter",
   },
   {
-    basePower: 40,
+    basePower: 28,
     faction: "helic",
     id: "bigasaurus",
     image: "bigasaurus",
@@ -96,21 +96,28 @@ const definitions: readonly ZoidDefinition[] = [
     name: "commandWolf",
   },
   {
-    basePower: 42,
+    basePower: 37,
     faction: "helic",
     id: "command-wolf-ac",
     image: "command_wolf_ac",
     name: "commandWolfAc",
   },
   {
-    basePower: 45,
+    basePower: 35,
+    faction: "guylos",
+    id: "command-wolf-empire",
+    name: "commandWolfEmpire",
+    image: "command_wolf_empire",
+  },
+  {
+    basePower: 40,
     faction: "helic",
     id: "dibison",
     image: "dibison",
     name: "dibison",
   },
   {
-    basePower: 45,
+    basePower: 34,
     faction: "guylos",
     id: "dimetrodon",
     image: "dimetrodon",
@@ -122,6 +129,13 @@ const definitions: readonly ZoidDefinition[] = [
     id: "double-sworder",
     image: "double_sworder",
     name: "doubleSworder",
+  },
+  {
+    basePower: 45,
+    faction: "guylos",
+    id: "elephander",
+    image: "elephander",
+    name: "elephander",
   },
   {
     basePower: 20,
@@ -152,6 +166,13 @@ const definitions: readonly ZoidDefinition[] = [
     name: "gator",
   },
   {
+    basePower: 44,
+    faction: "guylos",
+    id: "geno-saurer",
+    image: "geno_saurer",
+    name: "genoSaurer",
+  },
+  {
     basePower: 19,
     faction: "guylos",
     id: "geruder",
@@ -173,18 +194,18 @@ const definitions: readonly ZoidDefinition[] = [
     name: "godos",
   },
   {
+    basePower: 41,
+    faction: "helic",
+    id: "gojulas",
+    image: "gojulas",
+    name: "gojulas",
+  },
+  {
     basePower: 28,
     faction: "helic",
     id: "gordos",
     image: "gordos",
     name: "gordos",
-  },
-  {
-    basePower: 30,
-    faction: "helic",
-    id: "gorhecks",
-    image: "gorhecks",
-    name: "gorhecks",
   },
   {
     basePower: 12,
@@ -194,7 +215,14 @@ const definitions: readonly ZoidDefinition[] = [
     name: "gorgodos",
   },
   {
-    basePower: 43,
+    basePower: 30,
+    faction: "helic",
+    id: "gorhecks",
+    image: "gorhecks",
+    name: "gorhecks",
+  },
+  {
+    basePower: 39,
     faction: "helic",
     id: "gun-sniper",
     image: "gun_sniper",
@@ -206,6 +234,13 @@ const definitions: readonly ZoidDefinition[] = [
     id: "gun-tiger",
     image: "gun_tiger",
     name: "gunTiger",
+  },
+  {
+    basePower: 48,
+    faction: "helic",
+    id: "gunbluster",
+    image: "gunbluster",
+    name: "gunbluster",
   },
   {
     basePower: 9,
@@ -257,11 +292,46 @@ const definitions: readonly ZoidDefinition[] = [
     name: "iguan",
   },
   {
+    basePower: 40,
+    faction: "guylos",
+    id: "iron-kong",
+    image: "iron_kong",
+    name: "ironKong",
+  },
+  {
     basePower: 26,
     faction: "guylos",
     id: "killer-dome",
     image: "killer_dome",
     name: "killerDome",
+  },
+  {
+    basePower: 47,
+    faction: "helic",
+    id: "konig-wolf",
+    image: "konig_wolf",
+    name: "konigWolf",
+  },
+  {
+    basePower: 50,
+    faction: "helic",
+    id: "liger-zero",
+    image: "liger_zero",
+    name: "ligerZero",
+  },
+  {
+    basePower: 50,
+    faction: "guylos",
+    id: "liger-zero-empire",
+    image: "liger_zero_empire",
+    name: "ligerZeroEmpire",
+  },
+  {
+    basePower: 42,
+    faction: "guylos",
+    id: "lightning-saix",
+    image: "lightning_saix",
+    name: "lightningSaix",
   },
   {
     basePower: 8,
@@ -285,7 +355,7 @@ const definitions: readonly ZoidDefinition[] = [
     name: "merda",
   },
   {
-    basePower: 42,
+    basePower: 39,
     faction: "guylos",
     id: "metal-rhymos",
     image: "metal_rhimos",
@@ -313,14 +383,14 @@ const definitions: readonly ZoidDefinition[] = [
     name: "pteras",
   },
   {
-    basePower: 46,
+    basePower: 39,
     faction: "helic",
     id: "raynos",
     image: "raynos",
     name: "raynos",
   },
   {
-    basePower: 48,
+    basePower: 39,
     faction: "guylos",
     id: "red-horn",
     image: "red_horn",
@@ -334,28 +404,28 @@ const definitions: readonly ZoidDefinition[] = [
     name: "redler",
   },
   {
-    basePower: 43,
+    basePower: 37,
     faction: "guylos",
     id: "redler-bc",
     image: "redler_bc",
     name: "redlerBc",
   },
   {
-    basePower: 28,
+    basePower: 37,
     faction: "guylos",
     id: "rev-raptor",
     image: "rev_raptor",
     name: "revRaptor",
   },
   {
-    basePower: 40,
+    basePower: 38,
     faction: "guylos",
     id: "rev-raptor-pb",
     image: "rev_raptor_pb",
     name: "revRaptorPb",
   },
   {
-    basePower: 46,
+    basePower: 38,
     faction: "guylos",
     id: "saber-tiger",
     image: "saber_tiger",
@@ -376,7 +446,14 @@ const definitions: readonly ZoidDefinition[] = [
     name: "seaPanther",
   },
   {
-    basePower: 47,
+    basePower: 43,
+    faction: "helic",
+    id: "shadow-fox",
+    image: "shadow_fox",
+    name: "shadowFox",
+  },
+  {
+    basePower: 38,
     faction: "helic",
     id: "shield-liger",
     image: "shield_liger",
@@ -418,7 +495,7 @@ const definitions: readonly ZoidDefinition[] = [
     name: "twinHorn",
   },
   {
-    basePower: 41,
+    basePower: 34,
     faction: "guylos",
     id: "wardick",
     image: "wardick",
@@ -474,7 +551,7 @@ export function validateZoids(catalog: readonly Zoid[]): void {
     if (
       !zoid.nameKey.startsWith("zoids:") ||
       !Number.isFinite(zoid.basePower) ||
-      zoid.basePower <= 0 ||
+      zoid.basePower < 0 ||
       zoid.basePower > 100
     ) {
       throw new TypeError(`Zoid ${zoid.id} has invalid catalog data.`);

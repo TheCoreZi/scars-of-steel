@@ -82,12 +82,12 @@ describe("welcome screen", () => {
     expect(screen.getByText("2").nextElementSibling).toHaveTextContent(
       "factions",
     );
-    expect(screen.getByText("49").nextElementSibling).toHaveTextContent(
+    expect(screen.getByText("59").nextElementSibling).toHaveTextContent(
       "decisions",
     );
     expect(
-      screen.getByText("possible stories").previousElementSibling,
-    ).toHaveTextContent(/^\+\d+ (Thousand|Million)$/u);
+      screen.getByText("of stories").previousElementSibling,
+    ).toHaveTextContent("Millions");
     expect(screen.getByText("1").nextElementSibling).toHaveTextContent(
       "war to decide",
     );
@@ -128,6 +128,12 @@ describe("welcome screen", () => {
     expect(
       screen.getByText("Conviértete en leyenda o queda en el olvido."),
     ).toBeInTheDocument();
+    expect(screen.getByText("59").nextElementSibling).toHaveTextContent(
+      "decisiones",
+    );
+    expect(
+      screen.getByText("de historias posibles").previousElementSibling,
+    ).toHaveTextContent("Millones");
     expect(screen.getByText("guerra por decidir")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Inicia tu carrera" }),
@@ -669,15 +675,29 @@ describe("pilot creation", () => {
   });
 
   test("ends the run when the next event pool is empty", async () => {
+    window.localStorage.setItem(
+      "scars-of-steel:game-data",
+      JSON.stringify({
+        activeGame: {
+          eventId: "event:military-life-empty-bunks",
+          history: createCareerHistory(),
+          phase: "choosing",
+          pilot: {
+            ...completedPilot,
+            age: 25,
+            name: "Lena",
+            zoids: {
+              damagedIds: [],
+              reserveIds: [],
+              signatureId: "zoid:command-wolf",
+            },
+          },
+          screen: "event",
+        },
+        completedGames: [],
+      }),
+    );
     render(<App />);
-    await startPilotCreation();
-    fireEvent.change(screen.getByRole("textbox", { name: "Recruit name" }), {
-      target: { value: "Lena" },
-    });
-    fireEvent.click(screen.getByRole("radio", { name: "Helic Republic" }));
-    fireEvent.click(screen.getByRole("radio", { name: "War hero" }));
-    fireEvent.click(screen.getByRole("button", { name: "Submit enlistment" }));
-
     await screen.findByText("Choose your response");
     const safeDecision = Array.from(
       document.querySelectorAll<HTMLButtonElement>(".decision-option"),
@@ -688,34 +708,11 @@ describe("pilot creation", () => {
       await screen.findByRole("button", { name: "Continue career" }),
     );
 
-    for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
-      await screen.findByText("Choose your response");
-      expect(screen.getByText(`Age ${age}`)).toBeInTheDocument();
-      const options = Array.from(
-        document.querySelectorAll<HTMLButtonElement>(".decision-option"),
-      );
-      const safe = options.find((option) =>
-        option.ariaLabel?.includes(". Safe."),
-      );
-      if (safe) fireEvent.click(safe);
-      else {
-        // The graduation board has three chance choices; the tactics exam cannot end the run early.
-        fireEvent.click(options[1]);
-      }
-      fireEvent.click(
-        await screen.findByRole(
-          "button",
-          { name: "Continue career" },
-          { timeout: 4000 },
-        ),
-      );
-    }
-
     expect(
       await screen.findByRole("button", { name: "Download PNG" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("You fought for 9 years. Your career ended at age 21."),
+      screen.getByText("You fought for 14 years. Your career ended at age 26."),
     ).toBeInTheDocument();
     expect(screen.getByText("Signature Zoid")).toBeInTheDocument();
 

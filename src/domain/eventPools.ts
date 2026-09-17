@@ -3,6 +3,7 @@ import type { RandomGenerator } from "./random";
 import type { DecisionEvent, EventId, Pilot } from "./types";
 import { academyEvents } from "./academyEvents";
 import { earlyServiceEvents } from "./earlyServiceEvents";
+import { militaryLifeEvents } from "./militaryLifeEvents";
 
 export const initialEventPool = [
   "event:first-exercises",
@@ -23,7 +24,7 @@ export function getEligibleEventIds(
   const pool =
     pilot.age === 12
       ? initialEventPool
-      : [...academyEvents, ...earlyServiceEvents]
+      : [...academyEvents, ...earlyServiceEvents, ...militaryLifeEvents]
           .filter(
             (event) =>
               event.ages?.includes(pilot.age) &&

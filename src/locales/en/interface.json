@@ -233,11 +233,8 @@
       "decisions": "decisions",
       "factions": "factions",
       "label": "Career scope",
-      "paths": "possible stories",
-      "runsCount": "+{{count}}",
-      "runsMillion_one": "+{{count}} Million",
-      "runsMillion_other": "+{{count}} Million",
-      "runsThousand": "+{{count}} Thousand",
+      "paths": "of stories",
+      "pathsValue": "Millions",
       "wars": "war to decide"
     },
     "journey": "In this world, every soldier starts at the bottom and makes the decisions that will forge their path to the top. This is your story.",
@@ -254,5 +251,20 @@
     },
     "start": "Begin your career",
     "title": "Scars of Steel"
+  },
+  "zoidReview": {
+    "error": "Could not save. Reload if the catalog changed, then try again.",
+    "factionSort": "Faction",
+    "nameSort": "Name",
+    "power": "Base power",
+    "powerSort": "Power: highest first",
+    "reorder": "Reorder",
+    "save": "Save to zoids.ts",
+    "saved": "Catalog saved.",
+    "saving": "Saving…",
+    "slider": "Base power of {{name}}",
+    "sort": "Sort by",
+    "temporary": "Save your adjustments to update the game catalog.",
+    "title": "Zoid catalog · DEV"
   }
 }
