@@ -9,20 +9,19 @@ import {
   zoids,
 } from "../domain/zoids";
 import {
-  zoidPoolHasEntries,
+  isZoidRewardPoolAvailable,
+  selectRewardZoid,
   zoidPools,
-  selectZoidByCategory,
-  selectZoidFromPool,
   validateZoidPools,
-  type ZoidPools,
 } from "../domain/zoidPools";
+import type { ZoidPoolCatalog } from "../domain/zoidPoolDefinitions";
 import { createSeededRandomGenerator } from "../domain/random";
 import { i18n, supportedLanguages } from "../i18n";
 
 describe("initial Zoid catalog", () => {
-  test("defines 57 unique Zoids including the herd reward", () => {
-    expect(zoids).toHaveLength(57);
-    expect(new Set(zoids.map((zoid) => zoid.id)).size).toBe(57);
+  test("defines 68 unique Zoids including military rewards", () => {
+    expect(zoids).toHaveLength(68);
+    expect(new Set(zoids.map((zoid) => zoid.id)).size).toBe(68);
   });
 
   test("keeps every initial pool separate from the catalog", () => {
@@ -33,7 +32,7 @@ describe("initial Zoid catalog", () => {
         "super-rare",
         "weak",
       ] as const) {
-        expect(zoidPoolHasEntries(category, faction)).toBe(true);
+        expect(isZoidRewardPoolAvailable(category, faction)).toBe(true);
       }
     }
   });
@@ -44,12 +43,15 @@ describe("initial Zoid catalog", () => {
     );
   });
 
-  test("associates all 57 sprites without substitutions", () => {
+  test("associates one exact sprite with every Zoid", () => {
     const illustratedZoids = zoids.filter((zoid) => zoid.imagePath);
 
-    expect(illustratedZoids).toHaveLength(57);
+    expect(illustratedZoids).toHaveLength(68);
+    expect(getZoid("zoid:command-wolf-empire").imagePath).toBe(
+      "/images/zoids/command_wolf_empire.png",
+    );
     expect(new Set(illustratedZoids.map((zoid) => zoid.imagePath)).size).toBe(
-      57,
+      68,
     );
     expect(
       illustratedZoids.every((zoid) =>
@@ -76,49 +78,60 @@ describe("initial Zoid catalog", () => {
   test("validates the initial pools against the catalog", () => {
     expect(() => validateZoidPools(zoidPools)).not.toThrow();
     expect(
-      Object.values(zoidPools).flatMap((categories) =>
-        Object.values(categories).flat(),
+      (["rare", "standard", "super-rare", "weak"] as const).flatMap((poolId) =>
+        Object.values(zoidPools[poolId]).flat(),
       ),
     ).toHaveLength(56);
   });
 
   test("selects a Zoid with default pool weights", () => {
-    const zoid = selectZoidByCategory(
+    const zoid = selectRewardZoid(
       "rare",
       "helic",
       createSeededRandomGenerator(42),
-    );
+    )!;
 
-    expect(zoidPools.helic.rare.map(({ id }) => id)).toContain(zoid.id);
+    expect(zoidPools.rare.helic.map(({ id }) => id)).toContain(zoid.id);
   });
 
   test("passes default and explicit weights to the random generator", () => {
     const random = createSeededRandomGenerator(42);
     const weighted = vi.spyOn(random, "weighted");
 
-    selectZoidFromPool(
-      [{ id: "zoid:command-wolf" }, { id: "zoid:gordos", weight: 3 }],
-      random,
-    );
+    selectRewardZoid("military-prototypes", "helic", random);
 
-    expect(weighted).toHaveBeenCalledWith([
-      { value: "zoid:command-wolf", weight: 1 },
-      { value: "zoid:gordos", weight: 3 },
-    ]);
+    expect(weighted).toHaveBeenCalledWith(
+      zoidPools["military-prototypes"].helic.map(({ id, weight = 1 }) => ({
+        value: id,
+        weight,
+      })),
+    );
   });
 
   test("rejects an invalid explicit pool weight", () => {
     const pools = {
       ...zoidPools,
-      helic: {
-        ...zoidPools.helic,
-        rare: zoidPools.helic.rare.map((entry, index) =>
+      rare: {
+        ...zoidPools.rare,
+        helic: zoidPools.rare.helic.map((entry, index) =>
           index === 0 ? { ...entry, weight: 0 } : entry,
         ),
       },
-    } satisfies ZoidPools;
+    } satisfies ZoidPoolCatalog;
 
     expect(() => validateZoidPools(pools)).toThrow("invalid pool weight");
+  });
+
+  test("rejects duplicate entries inside one pool", () => {
+    const pools = {
+      ...zoidPools,
+      rare: {
+        ...zoidPools.rare,
+        helic: [...zoidPools.rare.helic, zoidPools.rare.helic[0]],
+      },
+    } satisfies ZoidPoolCatalog;
+
+    expect(() => validateZoidPools(pools)).toThrow("Duplicate Zoid");
   });
 
   test("provides every Zoid name in each language", () => {

@@ -176,8 +176,13 @@ export function TacticalCareerPanel({ history, onSelectZoid, pilot }: Props) {
                   />
                   <span>
                     <small>{faction}</small>
-                    <strong>{pilot.name}</strong>
-                    <span className="detail-pilot-rank">{identity}</span>
+                    <span className="detail-pilot-name">
+                      <strong>{pilot.name}</strong>
+                      <RankInsignia
+                        insignia={getRankInsignia(pilot.career.militaryRank)}
+                      />
+                    </span>
+                    <span className="detail-pilot-rank">{rank}</span>
                     <span>
                       {t("careerStatus.ageCompact", { age: pilot.age })}
                     </span>
@@ -218,6 +223,8 @@ export function TacticalCareerPanel({ history, onSelectZoid, pilot }: Props) {
                   <div>
                     {owned.map((zoidId) => {
                       const entry = getZoid(zoidId);
+                      const upgrades =
+                        pilot.zoidProgress?.[zoidId]?.upgrades ?? 0;
                       return (
                         <article key={zoidId}>
                           <button
@@ -229,7 +236,14 @@ export function TacticalCareerPanel({ history, onSelectZoid, pilot }: Props) {
                             <span className="detail-hangar-image">
                               <img alt="" src={entry.imagePath} />
                             </span>
-                            <strong>{translate(entry.nameKey)}</strong>
+                            <span className="detail-hangar-label">
+                              <strong>{translate(entry.nameKey)}</strong>
+                              <small>
+                                {t("annualReport.upgradeCount", {
+                                  count: upgrades,
+                                })}
+                              </small>
+                            </span>
                           </button>
                         </article>
                       );

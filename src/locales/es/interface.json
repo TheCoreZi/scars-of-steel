@@ -233,11 +233,8 @@
       "decisions": "decisiones",
       "factions": "facciones",
       "label": "Alcance de la carrera",
-      "paths": "historias posibles",
-      "runsCount": "+{{count}}",
-      "runsMillion_one": "+{{count}} Millón",
-      "runsMillion_other": "+{{count}} Millones",
-      "runsThousand": "+{{count}} Mil",
+      "paths": "de historias posibles",
+      "pathsValue": "Millones",
       "wars": "guerra por decidir"
     },
     "journey": "En este mundo, cada soldado comienza desde abajo y toma las decisiones que forjarán su camino hasta la cima. Esta es tu historia.",
@@ -254,5 +251,20 @@
     },
     "start": "Inicia tu carrera",
     "title": "Cicatrices de Acero"
+  },
+  "zoidReview": {
+    "error": "No se pudo guardar. Recarga si el catálogo cambió e inténtalo de nuevo.",
+    "factionSort": "Facción",
+    "nameSort": "Nombre",
+    "power": "Poder base",
+    "powerSort": "Poder: mayor a menor",
+    "reorder": "Reordenar",
+    "save": "Guardar en zoids.ts",
+    "saved": "Catálogo guardado.",
+    "saving": "Guardando…",
+    "slider": "Poder base de {{name}}",
+    "sort": "Ordenar por",
+    "temporary": "Guarda los ajustes para actualizar el catálogo del juego.",
+    "title": "Catálogo de Zoids · DEV"
   }
 }

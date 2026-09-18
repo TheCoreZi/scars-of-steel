@@ -8,8 +8,10 @@ import type {
 
 interface GeneratedOutcomeDefinition {
   failure?: readonly OutcomeEffect[];
+  failureNarrativeVariants?: Outcome["narrativeVariants"];
   path: string;
   success: readonly OutcomeEffect[];
+  successNarrativeVariants?: Outcome["narrativeVariants"];
 }
 
 export type OutcomeDefinition = GeneratedOutcomeDefinition | Outcome;
@@ -44,13 +46,19 @@ export function createOutcomeFactory({
         definitions.flatMap((definition) =>
           "path" in definition
             ? [
-                createOutcome(definition.path, "success", definition.success),
+                createOutcome(
+                  definition.path,
+                  "success",
+                  definition.success,
+                  definition.successNarrativeVariants,
+                ),
                 ...(definition.failure
                   ? [
                       createOutcome(
                         definition.path,
                         "failure",
                         definition.failure,
+                        definition.failureNarrativeVariants,
                       ),
                     ]
                   : []),
@@ -72,6 +80,7 @@ export function createOutcomeFactory({
     path: string,
     result: "failure" | "success",
     effects: readonly OutcomeEffect[],
+    narrativeVariants?: Outcome["narrativeVariants"],
   ): readonly [OutcomeId, Outcome] {
     const [event, choice] = path.split(".");
     const id = `outcome:${idPrefix}${event}-${choice}-${result}` as OutcomeId;
@@ -80,6 +89,7 @@ export function createOutcomeFactory({
       {
         effects,
         id,
+        ...(narrativeVariants ? { narrativeVariants } : {}),
         narrativeKey:
           `outcomes:${translationPrefix}${path}.${result}` as Outcome["narrativeKey"],
       },

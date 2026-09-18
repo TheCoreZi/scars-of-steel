@@ -9,12 +9,13 @@ import {
   type Outcome,
   type OutcomeEffect,
   type Pilot,
+  type ResolvedYear,
   type ZoidId,
 } from "./types";
 import { getFactionControl, updateWarControl } from "./war";
 import { promotePilot } from "./ranks";
 import { selectRewardZoid } from "./zoidPools";
-import { getZoidPowerBeforeUpgrades } from "./zoids";
+import { getZoid, getZoidPowerBeforeUpgrades } from "./zoids";
 
 interface OutcomeContext {
   achievementIds: AchievementId[];
@@ -80,6 +81,31 @@ export function getOutcomeEndReason(outcome: Outcome): CareerEndReason | null {
   );
 }
 
+export function getResolvedOutcomeNarrativeKey({
+  outcome,
+  pilotBefore,
+  zoidIds,
+}: Pick<
+  ResolvedYear,
+  "outcome" | "pilotBefore" | "zoidIds"
+>): Outcome["narrativeKey"] {
+  const variants = outcome.narrativeVariants;
+  if (
+    variants?.["rank-unchanged"] &&
+    pilotBefore.career.militaryRank === "general"
+  )
+    return variants["rank-unchanged"];
+  if (variants?.["reward-unavailable"] && zoidIds.length === 0)
+    return variants["reward-unavailable"];
+  if (
+    variants?.["same-model"] &&
+    pilotBefore.zoids &&
+    zoidIds.includes(pilotBefore.zoids.signatureId)
+  )
+    return variants["same-model"];
+  return outcome.narrativeKey;
+}
+
 export function hasOutcomeEffect(
   outcome: Outcome,
   kind: OutcomeEffect["kind"],
@@ -129,6 +155,8 @@ function applyEffect(
       return changeValueOutcome.apply(context, effect);
     case "damage-signature-zoid":
       return damageSignatureZoidOutcome.apply(context, effect);
+    case "destroy-signature-zoid":
+      return destroySignatureZoidOutcome.apply(context, effect);
     case "end-career":
       return endCareerOutcome.apply(context, effect);
     case "grant-achievement":
@@ -221,6 +249,25 @@ class DamageSignatureZoidOutcome implements OutcomeHandler<
   }
 }
 
+class DestroySignatureZoidOutcome implements OutcomeHandler<
+  Extract<OutcomeEffect, { kind: "destroy-signature-zoid" }>
+> {
+  apply(
+    context: OutcomeContext,
+    effect: Extract<OutcomeEffect, { kind: "destroy-signature-zoid" }>,
+  ): OutcomeContext {
+    if (!context.pilot.zoids) return context;
+    const pilot = removeZoid(context.pilot, context.pilot.zoids.signatureId);
+    const updated = { ...context, pilot };
+    return !pilot.zoids && effect.replacementPoolId
+      ? grantZoidOutcome.apply(updated, {
+          kind: "grant-zoid",
+          poolId: effect.replacementPoolId,
+        })
+      : updated;
+  }
+}
+
 class EndCareerOutcome implements OutcomeHandler<
   Extract<OutcomeEffect, { kind: "end-career" }>
 > {
@@ -297,11 +344,19 @@ type GrantZoidEffect = Extract<
 
 class GrantZoidOutcome implements OutcomeHandler<GrantZoidEffect> {
   apply(context: OutcomeContext, effect: GrantZoidEffect): OutcomeContext {
-    const zoid = selectRewardZoid(
-      effect.poolId,
-      context.pilot.faction,
-      context.random,
-    );
+    const replace = effect.kind === "replace-signature-zoid";
+    const owned = context.pilot.zoids;
+    const excludedIds = owned
+      ? [...owned.reserveIds, ...(replace ? [] : [owned.signatureId])]
+      : [];
+    const zoid =
+      selectRewardZoid(
+        effect.poolId,
+        context.pilot.faction,
+        context.random,
+        excludedIds,
+      ) ?? (replace && owned ? getZoid(owned.signatureId) : null);
+    if (!zoid) return context;
     return {
       ...context,
       pilot: addZoid(
@@ -366,6 +421,7 @@ class RemoveZoidOutcome implements OutcomeHandler<
 const changeValueOutcome = new ChangeValueOutcome();
 const changeMilitaryRankOutcome = new ChangeMilitaryRankOutcome();
 const damageSignatureZoidOutcome = new DamageSignatureZoidOutcome();
+const destroySignatureZoidOutcome = new DestroySignatureZoidOutcome();
 const endCareerOutcome = new EndCareerOutcome();
 const grantAchievementOutcome = new GrantAchievementOutcome();
 const grantBonusOutcome = new GrantBonusOutcome();
@@ -532,7 +588,11 @@ function removeZoid(pilot: Pilot, zoidId: ZoidId): Pilot {
         reserveIds: pilot.zoids.reserveIds.filter((id) => id !== zoidId),
       },
     };
-  const [signatureId, ...reserveIds] = pilot.zoids.reserveIds;
+  const signatureId =
+    pilot.zoids.reserveIds.find(
+      (id) => !pilot.zoids?.damagedIds.includes(id),
+    ) ?? pilot.zoids.reserveIds[0];
+  const reserveIds = pilot.zoids.reserveIds.filter((id) => id !== signatureId);
   return signatureId
     ? {
         ...pilot,

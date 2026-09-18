@@ -28,6 +28,13 @@ async function renderApp() {
     const { EventReviewApp } = await import("./app/EventReviewApp");
     app = <EventReviewApp />;
   }
+  if (
+    import.meta.env.DEV &&
+    new URLSearchParams(window.location.search).has("review-zoids")
+  ) {
+    const { ZoidReviewApp } = await import("./app/ZoidReviewApp");
+    app = <ZoidReviewApp />;
+  }
   createRoot(document.getElementById("root")!).render(
     <StrictMode>{app}</StrictMode>,
   );

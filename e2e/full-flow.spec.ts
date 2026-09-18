@@ -1,4 +1,11 @@
-import { expect, test, type Page, type TestInfo } from "@playwright/test";
+import {
+  expect,
+  test,
+  type Locator,
+  type Page,
+  type TestInfo,
+} from "@playwright/test";
+import { stabilizeCareer } from "./careerFixture";
 
 const gameStorageKey = "scars-of-steel:game-data";
 const failureRandomValue = 4_294_967_225;
@@ -95,11 +102,11 @@ for (const eventCase of safeEventCases) {
     const completed = await readGameSnapshot(page);
     expect(completed).toMatchObject({
       active: false,
-      age: 21,
+      age: 26,
       faction: eventCase.factionId,
     });
     await expect(
-      page.getByText("You fought for 9 years. Your career ended at age 21."),
+      page.getByText("You fought for 14 years. Your career ended at age 26."),
     ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Continue career" }),
@@ -194,6 +201,10 @@ test("persists the signature Zoid selected from the tactical hangar", async ({
       reserveIds: ["zoid:command-wolf"],
       signatureId: "zoid:shield-liger",
     };
+    data.activeGame.pilot.zoidProgress = {
+      "zoid:command-wolf": { power: 35, upgrades: 3 },
+      "zoid:shield-liger": { power: 47, upgrades: 2 },
+    };
     localStorage.setItem(key, JSON.stringify(data));
   }, gameStorageKey);
   await page.reload();
@@ -206,9 +217,15 @@ test("persists the signature Zoid selected from the tactical hangar", async ({
     "position",
     "relative",
   );
-  await page.getByRole("button", { name: "Command Wolf", exact: true }).click();
   await expect(
-    page.getByRole("button", { name: "Command Wolf", exact: true }),
+    page.getByRole("button", { name: "Shield Liger 2 upgrades" }),
+  ).toBeVisible();
+  await expect(
+    page.locator(".detail-pilot-name > .rank-insignia"),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Command Wolf 3 upgrades" }).click();
+  await expect(
+    page.getByRole("button", { name: "Command Wolf 3 upgrades" }),
   ).toHaveAttribute("aria-pressed", "true");
   await page.reload();
   await expect(page.locator(".core-pulse__zoid")).toContainText(
@@ -225,6 +242,24 @@ test("persists the signature Zoid selected from the tactical hangar", async ({
     signatureId: "zoid:command-wolf",
   });
 });
+
+test("keeps war status labels readable", async ({ page }) => {
+  await beginCareer(page, "Helic Republic");
+  await expectWarStatusTextToBeReadable(
+    page.locator(".core-pulse > .detail-war-status"),
+  );
+  await page.locator(".core-pulse__toggle").click();
+  await expectWarStatusTextToBeReadable(
+    page.locator(".detail-panel > .detail-war-status"),
+  );
+});
+
+async function expectWarStatusTextToBeReadable(status: Locator) {
+  const fontSize = await status.evaluate((element) =>
+    Number.parseFloat(getComputedStyle(element).fontSize),
+  );
+  expect(fontSize).toBeGreaterThanOrEqual(11);
+}
 
 async function beginCareer(page: Page, faction: string) {
   await page.goto("/");
@@ -252,7 +287,7 @@ async function selectSafeDecision(page: Page) {
 async function finishCareer(page: Page) {
   await stabilizeCareer(page);
   await page.getByRole("button", { name: "Continue career" }).click();
-  for (const age of [13, 14, 15, 16, 17, 18, 19, 20]) {
+  for (const age of [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]) {
     await expect(page.locator(".decision-screen__choices")).toBeVisible();
     await expect(page.locator(".status-identity__meta")).toContainText(
       `Age ${age}`,
@@ -271,36 +306,6 @@ async function finishCareer(page: Page) {
   }
   await expect(page.locator(".final-screen h1")).toBeFocused();
   await expect(page.locator(".final-screen__rank strong")).toBeVisible();
-}
-
-async function stabilizeCareer(page: Page) {
-  await page.evaluate((storageKey) => {
-    const storedValue = window.localStorage.getItem(storageKey);
-    if (!storedValue) throw new Error("Expected persisted game data.");
-
-    const data = JSON.parse(storedValue);
-    const activeGame = data.activeGame;
-    if (!activeGame?.pilot) throw new Error("Expected an active pilot.");
-
-    const warState = {
-      intensity: "low",
-      sides: [
-        { control: 50, faction: "helic" },
-        { control: 50, faction: "guylos" },
-      ],
-    };
-    activeGame.pilot.career.warState = warState;
-    activeGame.pilot.condition = "active";
-    activeGame.pilot.injuryCount = 0;
-    if (activeGame.result?.pilotAfter) {
-      activeGame.result.pilotAfter.career.warState = warState;
-      activeGame.result.pilotAfter.condition = "active";
-      activeGame.result.pilotAfter.injuryCount = 0;
-    }
-    window.localStorage.setItem(storageKey, JSON.stringify(data));
-  }, gameStorageKey);
-  await page.reload();
-  await expect(page.locator(".outcome-screen h1")).toBeFocused();
 }
 
 async function selectChanceDecision(page: Page) {
@@ -363,5 +368,6 @@ function getEventId(eventIndex: number) {
 }
 
 function skipOutsideDesktop(testInfo: TestInfo) {
+  testInfo.setTimeout(120_000);
   test.skip(testInfo.project.name !== "desktop-1280");
 }

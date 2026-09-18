@@ -84,7 +84,13 @@ export type WarIntensity = "active" | "fierce" | "low";
 export type ZoidCategory = "rare" | "standard" | "super-rare" | "weak";
 export type ZoidId = `zoid:${string}`;
 export type ZoidPoolId =
-  ZoidCategory | "herd" | "aerial-academy" | "academy-replacement";
+  | ZoidCategory
+  | "herd"
+  | "aerial-academy"
+  | "academy-replacement"
+  | "military-prototypes"
+  | "military-trials"
+  | "military-veteran";
 export type BonusId = "organoid";
 
 export interface Stats {
@@ -232,6 +238,10 @@ export type OutcomeEffect =
       kind: "damage-signature-zoid";
     }
   | {
+      kind: "destroy-signature-zoid";
+      replacementPoolId?: ZoidPoolId;
+    }
+  | {
       kind: "injure-pilot";
     }
   | {
@@ -250,6 +260,12 @@ export interface Outcome {
   effects: readonly OutcomeEffect[];
   id: OutcomeId;
   narrativeKey: TranslationKey<"outcomes">;
+  narrativeVariants?: Partial<
+    Record<
+      "reward-unavailable" | "rank-unchanged" | "same-model",
+      TranslationKey<"outcomes">
+    >
+  >;
 }
 
 interface DecisionData {

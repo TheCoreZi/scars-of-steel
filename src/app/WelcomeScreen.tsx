@@ -35,16 +35,6 @@ export function WelcomeScreen({
   const startedRef = useRef(false);
   const titleId = useId();
   const { t } = useTranslation("interface");
-  const formattedPaths =
-    __ACADEMY_STORIES__ >= 1_000_000
-      ? t("welcome.facts.runsMillion", {
-          count: Math.floor(__ACADEMY_STORIES__ / 1_000_000),
-        })
-      : __ACADEMY_STORIES__ >= 1_000
-        ? t("welcome.facts.runsThousand", {
-            count: Math.floor(__ACADEMY_STORIES__ / 1_000),
-          })
-        : t("welcome.facts.runsCount", { count: __ACADEMY_STORIES__ });
 
   function handleStart() {
     if (startedRef.current) {
@@ -88,7 +78,7 @@ export function WelcomeScreen({
             <dt>{t("welcome.facts.decisions")}</dt>
           </div>
           <div>
-            <dd>{formattedPaths}</dd>
+            <dd>{t("welcome.facts.pathsValue")}</dd>
             <dt>{t("welcome.facts.paths")}</dt>
           </div>
           <div>

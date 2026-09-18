@@ -5,6 +5,7 @@ import type { TranslationKey } from "./domain/types";
 import achievementsEn from "./locales/en/achievements.json";
 import decisionsEn from "./locales/en/decisions.json";
 import earlyServiceEn from "./locales/en/early-service.json";
+import militaryLifeEn from "./locales/en/military-life.json";
 import interfaceEn from "./locales/en/interface.json";
 import narrativeEn from "./locales/en/narrative.json";
 import nicknamesEn from "./locales/en/nicknames.json";
@@ -14,6 +15,7 @@ import zoidsEn from "./locales/en/zoids.json";
 import achievements from "./locales/es/achievements.json";
 import decisions from "./locales/es/decisions.json";
 import earlyService from "./locales/es/early-service.json";
+import militaryLife from "./locales/es/military-life.json";
 import interfaceTranslations from "./locales/es/interface.json";
 import narrative from "./locales/es/narrative.json";
 import nicknames from "./locales/es/nicknames.json";
@@ -34,18 +36,21 @@ export const resources = {
       ...decisionsEn,
       ...academyEn.decisions,
       ...earlyServiceEn.decisions,
+      ...militaryLifeEn.decisions,
     },
     interface: { ...interfaceEn, ...academyUiEn },
     narrative: {
       ...narrativeEn,
       ...academyEn.narrative,
       ...earlyServiceEn.narrative,
+      ...militaryLifeEn.narrative,
     },
     nicknames: nicknamesEn,
     outcomes: {
       ...outcomesEn,
       ...academyEn.outcomes,
       ...earlyServiceEn.outcomes,
+      ...militaryLifeEn.outcomes,
     },
     titles: titlesEn,
     zoids: zoidsEn,
@@ -56,18 +61,21 @@ export const resources = {
       ...decisions,
       ...academyEs.decisions,
       ...earlyService.decisions,
+      ...militaryLife.decisions,
     },
     interface: { ...interfaceTranslations, ...academyUiEs },
     narrative: {
       ...narrative,
       ...academyEs.narrative,
       ...earlyService.narrative,
+      ...militaryLife.narrative,
     },
     nicknames,
     outcomes: {
       ...outcomes,
       ...academyEs.outcomes,
       ...earlyService.outcomes,
+      ...militaryLife.outcomes,
     },
     titles,
     zoids,

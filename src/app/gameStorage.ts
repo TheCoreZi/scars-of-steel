@@ -216,6 +216,8 @@ function isResolvedYear(
     const outcome = getOutcome(outcomeId);
     return (
       value.outcome.narrativeKey === outcome.narrativeKey &&
+      JSON.stringify(value.outcome.narrativeVariants) ===
+        JSON.stringify(outcome.narrativeVariants) &&
       JSON.stringify(value.outcome.effects) ===
         JSON.stringify(outcome.effects) &&
       event.decisions.some((decision) =>

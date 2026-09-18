@@ -40,11 +40,7 @@ import {
   type StatName,
 } from "../domain/types";
 import { resolveYear } from "../domain/year";
-import {
-  academyRewardPools,
-  zoidPools,
-  selectRewardZoid,
-} from "../domain/zoidPools";
+import { selectRewardZoid, zoidPools } from "../domain/zoidPools";
 import { getZoid, getEffectiveZoidPower } from "../domain/zoids";
 import { i18n } from "../i18n";
 
@@ -88,8 +84,8 @@ afterEach(() => window.localStorage.clear());
 describe("academy catalog", () => {
   test("validates all events and their Spanish and English text", () => {
     expect(academyEvents).toHaveLength(34);
-    expect(events).toHaveLength(49);
-    expect(events.flatMap(({ decisions }) => decisions)).toHaveLength(147);
+    expect(events).toHaveLength(59);
+    expect(events.flatMap(({ decisions }) => decisions)).toHaveLength(177);
     expect(() => validateEvents(events)).not.toThrow();
     for (const event of events) {
       const keys: string[] = [event.titleKey, event.introductionKey];
@@ -530,14 +526,14 @@ describe("rewards and saves", () => {
         ...randomWithRolls(),
         weighted: <T>(entries: readonly { value: T }[]) => entries[0].value,
       };
-      expect(selectRewardZoid("academy-replacement", faction, random).id).toBe(
-        zoidPools[faction].weak[0].id,
+      expect(selectRewardZoid("academy-replacement", faction, random)!.id).toBe(
+        zoidPools.weak[faction][0].id,
       );
       for (const reward of ["herd", "aerial-academy"] as const) {
-        expect(selectRewardZoid(reward, faction, random).id).toBe(
-          academyRewardPools[reward][faction][0].id,
+        expect(selectRewardZoid(reward, faction, random)!.id).toBe(
+          zoidPools[reward][faction][0].id,
         );
-        for (const { id } of academyRewardPools[reward][faction])
+        for (const { id } of zoidPools[reward][faction])
           expect(getZoid(id).faction).toBe(faction);
       }
     }
