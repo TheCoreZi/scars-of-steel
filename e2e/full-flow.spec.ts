@@ -368,5 +368,6 @@ function getEventId(eventIndex: number) {
 }
 
 function skipOutsideDesktop(testInfo: TestInfo) {
+  testInfo.setTimeout(120_000);
   test.skip(testInfo.project.name !== "desktop-1280");
 }

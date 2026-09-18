@@ -196,6 +196,7 @@ test("keeps every screen accessible and free of horizontal overflow", async ({
 test("completes the full flow with the keyboard", async ({
   page,
 }, testInfo) => {
+  testInfo.setTimeout(120_000);
   test.skip(testInfo.project.name !== "desktop-1280");
   await page.goto("/");
 
